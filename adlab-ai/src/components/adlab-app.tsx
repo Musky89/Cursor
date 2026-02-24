@@ -1,0 +1,865 @@
+"use client";
+
+import { Channel } from "@/generated/prisma/client";
+import { FormEvent, useCallback, useEffect, useMemo, useState } from "react";
+
+type UserSummary = {
+  id: string;
+  fullName: string;
+  email: string;
+};
+
+type WorkspaceSummary = {
+  id: string;
+  name: string;
+};
+
+type Product = {
+  id: string;
+  name: string;
+  description: string;
+  price: number;
+  marginPct: number;
+  landingUrl: string;
+  isActive: boolean;
+};
+
+type Audience = {
+  id: string;
+  name: string;
+  painPoints: string;
+  desires: string;
+  notes: string | null;
+};
+
+type Concept = {
+  id: string;
+  channel: Channel;
+  angle: string;
+  hook: string;
+  painDesire: string;
+  promise: string;
+  proof: string;
+  offer: string;
+  cta: string;
+  primaryText: string;
+  headline: string;
+  script: string;
+  imagePrompt: string;
+  score: number;
+  product: {
+    id: string;
+    name: string;
+    price: number;
+    marginPct: number;
+  };
+  audience: {
+    id: string;
+    name: string;
+  };
+  performance: {
+    spend: number;
+    revenue: number;
+    conversions: number;
+    clicks: number;
+    impressions: number;
+    roas: number;
+    ctr: number;
+    cpa: number;
+  };
+};
+
+type Experiment = {
+  id: string;
+  name: string;
+  channel: Channel;
+  status: "RUNNING" | "PAUSED" | "COMPLETED";
+  dailyBudget: number;
+  summary: {
+    impressions: number;
+    clicks: number;
+    spend: number;
+    conversions: number;
+    revenue: number;
+    roas: number;
+  };
+  conceptLinks: Array<{
+    id: string;
+    conceptId: string;
+    allocationPct: number;
+    isEnabled: boolean;
+    concept: {
+      id: string;
+      headline: string;
+      angle: string;
+      score: number;
+    };
+  }>;
+};
+
+type DashboardData = {
+  totals: {
+    impressions: number;
+    clicks: number;
+    spend: number;
+    conversions: number;
+    revenue: number;
+    roas: number;
+    ctr: number;
+    cpa: number;
+  };
+  conceptCount: number;
+  experimentCount: number;
+  topConcepts: Array<{
+    conceptId: string;
+    headline: string;
+    angle: string;
+    spend: number;
+    revenue: number;
+    conversions: number;
+    roas: number;
+    cpa: number;
+  }>;
+  dailyTrend: Array<{
+    date: string;
+    spend: number;
+    revenue: number;
+    conversions: number;
+    roas: number;
+  }>;
+  optimizationLogs: Array<{
+    id: string;
+    decision: "SCALE" | "HOLD" | "PAUSE";
+    rationale: string;
+    createdAt: string;
+    concept: {
+      id: string;
+      headline: string;
+    };
+    experiment: {
+      id: string;
+      name: string;
+    };
+  }>;
+};
+
+type ApiErrorPayload = {
+  error?: string;
+};
+
+const channelOptions = [Channel.META, Channel.TIKTOK, Channel.GOOGLE];
+
+async function requestJson<T>(url: string, init?: RequestInit) {
+  const response = await fetch(url, {
+    ...init,
+    headers: {
+      "Content-Type": "application/json",
+      ...(init?.headers ?? {}),
+    },
+  });
+
+  const payload = (await response.json().catch(() => ({}))) as ApiErrorPayload & T;
+  if (!response.ok) {
+    throw new Error(payload.error ?? "Request failed.");
+  }
+
+  return payload as T;
+}
+
+function formatCurrency(value: number) {
+  return new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency: "USD",
+    maximumFractionDigits: 2,
+  }).format(value);
+}
+
+type AdLabAppProps = {
+  initialUser: UserSummary;
+  initialWorkspace: WorkspaceSummary;
+};
+
+export function AdLabApp({ initialUser, initialWorkspace }: AdLabAppProps) {
+  const [dashboard, setDashboard] = useState<DashboardData | null>(null);
+  const [products, setProducts] = useState<Product[]>([]);
+  const [audiences, setAudiences] = useState<Audience[]>([]);
+  const [concepts, setConcepts] = useState<Concept[]>([]);
+  const [experiments, setExperiments] = useState<Experiment[]>([]);
+  const [selectedConceptIds, setSelectedConceptIds] = useState<string[]>([]);
+  const [statusMessage, setStatusMessage] = useState<string | null>(null);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [isGenerating, setIsGenerating] = useState(false);
+  const [isOptimizing, setIsOptimizing] = useState(false);
+
+  const [productForm, setProductForm] = useState({
+    name: "",
+    description: "",
+    price: "199",
+    marginPct: "70",
+    landingUrl: "https://",
+  });
+
+  const [audienceForm, setAudienceForm] = useState({
+    name: "",
+    painPoints: "",
+    desires: "",
+    notes: "",
+  });
+
+  const [conceptForm, setConceptForm] = useState({
+    productId: "",
+    audienceId: "",
+    channel: Channel.META,
+    objective: "Increase profitable conversions with lower blended CPA.",
+    count: "4",
+  });
+
+  const [experimentForm, setExperimentForm] = useState({
+    name: "Weekly Creative Test",
+    channel: Channel.META,
+    dailyBudget: "300",
+  });
+
+  const visibleConcepts = useMemo(
+    () => concepts.filter((concept) => concept.channel === experimentForm.channel),
+    [concepts, experimentForm.channel],
+  );
+
+  const selectedVisibleConceptCount = useMemo(
+    () => selectedConceptIds.filter((id) => visibleConcepts.some((concept) => concept.id === id)).length,
+    [selectedConceptIds, visibleConcepts],
+  );
+
+  const setMessage = useCallback((message: string) => {
+    setStatusMessage(message);
+    setErrorMessage(null);
+  }, []);
+
+  const setError = useCallback((message: string) => {
+    setErrorMessage(message);
+    setStatusMessage(null);
+  }, []);
+
+  const loadAllData = useCallback(async () => {
+    setIsLoading(true);
+    try {
+      const [dashboardResponse, productsResponse, audiencesResponse, conceptsResponse, experimentsResponse] =
+        await Promise.all([
+          requestJson<DashboardData>("/api/dashboard"),
+          requestJson<{ products: Product[] }>("/api/products"),
+          requestJson<{ audiences: Audience[] }>("/api/audiences"),
+          requestJson<{ concepts: Concept[] }>("/api/concepts"),
+          requestJson<{ experiments: Experiment[] }>("/api/experiments"),
+        ]);
+
+      setDashboard(dashboardResponse);
+      setProducts(productsResponse.products);
+      setAudiences(audiencesResponse.audiences);
+      setConcepts(conceptsResponse.concepts);
+      setExperiments(experimentsResponse.experiments);
+
+      if (!conceptForm.productId && productsResponse.products[0]) {
+        setConceptForm((previous) => ({
+          ...previous,
+          productId: productsResponse.products[0].id,
+        }));
+      }
+
+      if (!conceptForm.audienceId && audiencesResponse.audiences[0]) {
+        setConceptForm((previous) => ({
+          ...previous,
+          audienceId: audiencesResponse.audiences[0].id,
+        }));
+      }
+    } catch (error) {
+      setError(error instanceof Error ? error.message : "Failed to load data.");
+    } finally {
+      setIsLoading(false);
+    }
+  }, [conceptForm.audienceId, conceptForm.productId, setError]);
+
+  useEffect(() => {
+    void loadAllData();
+  }, [loadAllData]);
+
+  async function createProduct(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    try {
+      await requestJson<{ product: Product }>("/api/products", {
+        method: "POST",
+        body: JSON.stringify({
+          ...productForm,
+          price: Number(productForm.price),
+          marginPct: Number(productForm.marginPct),
+        }),
+      });
+      setMessage("Product created.");
+      setProductForm({
+        name: "",
+        description: "",
+        price: productForm.price,
+        marginPct: productForm.marginPct,
+        landingUrl: "https://",
+      });
+      await loadAllData();
+    } catch (error) {
+      setError(error instanceof Error ? error.message : "Failed to create product.");
+    }
+  }
+
+  async function createAudience(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    try {
+      await requestJson<{ audience: Audience }>("/api/audiences", {
+        method: "POST",
+        body: JSON.stringify(audienceForm),
+      });
+      setMessage("Audience created.");
+      setAudienceForm({
+        name: "",
+        painPoints: "",
+        desires: "",
+        notes: "",
+      });
+      await loadAllData();
+    } catch (error) {
+      setError(error instanceof Error ? error.message : "Failed to create audience.");
+    }
+  }
+
+  async function generateConcepts(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    setIsGenerating(true);
+    try {
+      const response = await requestJson<{ generatedCount: number }>("/api/concepts/generate", {
+        method: "POST",
+        body: JSON.stringify({
+          ...conceptForm,
+          count: Number(conceptForm.count),
+        }),
+      });
+      setMessage(`Generated ${response.generatedCount} ad concepts.`);
+      await loadAllData();
+    } catch (error) {
+      setError(error instanceof Error ? error.message : "Failed to generate concepts.");
+    } finally {
+      setIsGenerating(false);
+    }
+  }
+
+  async function launchExperiment(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    const channelScopedConceptIds = selectedConceptIds.filter((id) =>
+      visibleConcepts.some((concept) => concept.id === id),
+    );
+
+    if (channelScopedConceptIds.length === 0) {
+      setError("Select at least one concept matching the experiment channel.");
+      return;
+    }
+
+    try {
+      await requestJson<{ experiment: Experiment }>("/api/experiments", {
+        method: "POST",
+        body: JSON.stringify({
+          ...experimentForm,
+          dailyBudget: Number(experimentForm.dailyBudget),
+          conceptIds: channelScopedConceptIds,
+        }),
+      });
+      setSelectedConceptIds([]);
+      setMessage("Experiment launched.");
+      await loadAllData();
+    } catch (error) {
+      setError(error instanceof Error ? error.message : "Failed to launch experiment.");
+    }
+  }
+
+  async function simulateExperiment(experimentId: string) {
+    try {
+      await requestJson<{ ok: boolean }>(`/api/experiments/${experimentId}/simulate`, {
+        method: "POST",
+      });
+      setMessage("Simulation run completed.");
+      await loadAllData();
+    } catch (error) {
+      setError(error instanceof Error ? error.message : "Failed to simulate experiment.");
+    }
+  }
+
+  async function runOptimizer(experimentId?: string) {
+    setIsOptimizing(true);
+    try {
+      const payload = experimentId ? { experimentId } : {};
+      await requestJson<{ optimizedExperimentCount: number }>("/api/optimizer/run", {
+        method: "POST",
+        body: JSON.stringify(payload),
+      });
+      setMessage("Optimizer completed and allocations updated.");
+      await loadAllData();
+    } catch (error) {
+      setError(error instanceof Error ? error.message : "Failed to run optimizer.");
+    } finally {
+      setIsOptimizing(false);
+    }
+  }
+
+  async function runBootstrap() {
+    try {
+      await requestJson<{ ok: boolean }>("/api/bootstrap", { method: "POST", body: JSON.stringify({}) });
+      setMessage("Demo data ensured.");
+      await loadAllData();
+    } catch (error) {
+      setError(error instanceof Error ? error.message : "Failed to seed demo data.");
+    }
+  }
+
+  async function logout() {
+    await requestJson<{ ok: boolean }>("/api/auth/logout", {
+      method: "POST",
+      body: JSON.stringify({}),
+    });
+    window.location.href = "/login";
+  }
+
+  return (
+    <div className="mx-auto max-w-7xl space-y-6 px-4 py-6 text-zinc-100 md:px-6">
+      <header className="rounded-2xl border border-zinc-800 bg-zinc-900/70 p-5">
+        <div className="flex flex-wrap items-start justify-between gap-4">
+          <div>
+            <h1 className="text-2xl font-bold">AdLab AI</h1>
+            <p className="text-sm text-zinc-400">
+              Workspace: <span className="text-zinc-200">{initialWorkspace.name}</span> · {initialUser.fullName}
+            </p>
+          </div>
+
+          <div className="flex flex-wrap gap-2">
+            <button
+              type="button"
+              onClick={() => void runBootstrap()}
+              className="rounded-lg border border-zinc-700 px-3 py-2 text-sm hover:bg-zinc-800"
+            >
+              Seed demo data
+            </button>
+            <button
+              type="button"
+              onClick={() => void runOptimizer()}
+              disabled={isOptimizing}
+              className="rounded-lg bg-cyan-500 px-3 py-2 text-sm font-semibold text-zinc-950 hover:bg-cyan-400 disabled:opacity-60"
+            >
+              {isOptimizing ? "Optimizing..." : "Run optimizer"}
+            </button>
+            <button
+              type="button"
+              onClick={() => void logout()}
+              className="rounded-lg border border-zinc-700 px-3 py-2 text-sm hover:bg-zinc-800"
+            >
+              Logout
+            </button>
+          </div>
+        </div>
+
+        {statusMessage ? <p className="mt-4 rounded-lg bg-emerald-900/30 px-3 py-2 text-sm text-emerald-200">{statusMessage}</p> : null}
+        {errorMessage ? <p className="mt-4 rounded-lg bg-red-900/30 px-3 py-2 text-sm text-red-200">{errorMessage}</p> : null}
+      </header>
+
+      <section className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+        <KpiCard label="Revenue" value={formatCurrency(dashboard?.totals.revenue ?? 0)} />
+        <KpiCard label="Spend" value={formatCurrency(dashboard?.totals.spend ?? 0)} />
+        <KpiCard label="ROAS" value={`${(dashboard?.totals.roas ?? 0).toFixed(2)}x`} />
+        <KpiCard label="CPA" value={formatCurrency(dashboard?.totals.cpa ?? 0)} />
+        <KpiCard label="Conversions" value={`${dashboard?.totals.conversions ?? 0}`} />
+        <KpiCard label="CTR" value={`${((dashboard?.totals.ctr ?? 0) * 100).toFixed(2)}%`} />
+        <KpiCard label="Concepts" value={`${dashboard?.conceptCount ?? 0}`} />
+        <KpiCard label="Experiments" value={`${dashboard?.experimentCount ?? 0}`} />
+      </section>
+
+      <section className="grid gap-4 xl:grid-cols-2">
+        <form className="space-y-3 rounded-2xl border border-zinc-800 bg-zinc-900/70 p-5" onSubmit={createProduct}>
+          <h2 className="text-lg font-semibold">Add product</h2>
+          <Input label="Name" value={productForm.name} onChange={(value) => setProductForm((previous) => ({ ...previous, name: value }))} />
+          <TextArea
+            label="Description"
+            value={productForm.description}
+            onChange={(value) => setProductForm((previous) => ({ ...previous, description: value }))}
+          />
+          <div className="grid gap-3 md:grid-cols-2">
+            <Input
+              label="Price (USD)"
+              value={productForm.price}
+              onChange={(value) => setProductForm((previous) => ({ ...previous, price: value }))}
+            />
+            <Input
+              label="Margin %"
+              value={productForm.marginPct}
+              onChange={(value) => setProductForm((previous) => ({ ...previous, marginPct: value }))}
+            />
+          </div>
+          <Input
+            label="Landing URL"
+            value={productForm.landingUrl}
+            onChange={(value) => setProductForm((previous) => ({ ...previous, landingUrl: value }))}
+          />
+          <button type="submit" className="rounded-lg bg-zinc-100 px-4 py-2 text-sm font-semibold text-zinc-950 hover:bg-white">
+            Save product
+          </button>
+        </form>
+
+        <form className="space-y-3 rounded-2xl border border-zinc-800 bg-zinc-900/70 p-5" onSubmit={createAudience}>
+          <h2 className="text-lg font-semibold">Add audience</h2>
+          <Input label="Audience name" value={audienceForm.name} onChange={(value) => setAudienceForm((previous) => ({ ...previous, name: value }))} />
+          <TextArea
+            label="Pain points"
+            value={audienceForm.painPoints}
+            onChange={(value) => setAudienceForm((previous) => ({ ...previous, painPoints: value }))}
+          />
+          <TextArea
+            label="Desires"
+            value={audienceForm.desires}
+            onChange={(value) => setAudienceForm((previous) => ({ ...previous, desires: value }))}
+          />
+          <TextArea
+            label="Notes (optional)"
+            value={audienceForm.notes}
+            onChange={(value) => setAudienceForm((previous) => ({ ...previous, notes: value }))}
+          />
+          <button type="submit" className="rounded-lg bg-zinc-100 px-4 py-2 text-sm font-semibold text-zinc-950 hover:bg-white">
+            Save audience
+          </button>
+        </form>
+      </section>
+
+      <section className="space-y-4 rounded-2xl border border-zinc-800 bg-zinc-900/70 p-5">
+        <form className="grid gap-3 lg:grid-cols-6" onSubmit={generateConcepts}>
+          <h2 className="col-span-full text-lg font-semibold">Generate ad concepts</h2>
+
+          <label className="space-y-1 lg:col-span-2">
+            <span className="text-sm text-zinc-400">Product</span>
+            <select
+              required
+              className="w-full rounded-lg border border-zinc-700 bg-zinc-950 px-3 py-2 text-sm"
+              value={conceptForm.productId}
+              onChange={(event) =>
+                setConceptForm((previous) => ({
+                  ...previous,
+                  productId: event.target.value,
+                }))
+              }
+            >
+              <option value="">Select product</option>
+              {products.map((product) => (
+                <option key={product.id} value={product.id}>
+                  {product.name}
+                </option>
+              ))}
+            </select>
+          </label>
+
+          <label className="space-y-1 lg:col-span-2">
+            <span className="text-sm text-zinc-400">Audience</span>
+            <select
+              required
+              className="w-full rounded-lg border border-zinc-700 bg-zinc-950 px-3 py-2 text-sm"
+              value={conceptForm.audienceId}
+              onChange={(event) =>
+                setConceptForm((previous) => ({
+                  ...previous,
+                  audienceId: event.target.value,
+                }))
+              }
+            >
+              <option value="">Select audience</option>
+              {audiences.map((audience) => (
+                <option key={audience.id} value={audience.id}>
+                  {audience.name}
+                </option>
+              ))}
+            </select>
+          </label>
+
+          <label className="space-y-1">
+            <span className="text-sm text-zinc-400">Channel</span>
+            <select
+              className="w-full rounded-lg border border-zinc-700 bg-zinc-950 px-3 py-2 text-sm"
+              value={conceptForm.channel}
+              onChange={(event) =>
+                setConceptForm((previous) => ({
+                  ...previous,
+                  channel: event.target.value as Channel,
+                }))
+              }
+            >
+              {channelOptions.map((channel) => (
+                <option key={channel} value={channel}>
+                  {channel}
+                </option>
+              ))}
+            </select>
+          </label>
+
+          <label className="space-y-1">
+            <span className="text-sm text-zinc-400">Count</span>
+            <input
+              className="w-full rounded-lg border border-zinc-700 bg-zinc-950 px-3 py-2 text-sm"
+              value={conceptForm.count}
+              onChange={(event) =>
+                setConceptForm((previous) => ({
+                  ...previous,
+                  count: event.target.value,
+                }))
+              }
+            />
+          </label>
+
+          <label className="space-y-1 lg:col-span-5">
+            <span className="text-sm text-zinc-400">Objective</span>
+            <input
+              required
+              className="w-full rounded-lg border border-zinc-700 bg-zinc-950 px-3 py-2 text-sm"
+              value={conceptForm.objective}
+              onChange={(event) =>
+                setConceptForm((previous) => ({
+                  ...previous,
+                  objective: event.target.value,
+                }))
+              }
+            />
+          </label>
+
+          <div className="flex items-end">
+            <button
+              type="submit"
+              disabled={isGenerating || products.length === 0 || audiences.length === 0}
+              className="w-full rounded-lg bg-cyan-500 px-4 py-2 text-sm font-semibold text-zinc-950 hover:bg-cyan-400 disabled:opacity-60"
+            >
+              {isGenerating ? "Generating..." : "Generate"}
+            </button>
+          </div>
+        </form>
+
+        <div className="grid gap-3 lg:grid-cols-2">
+          {concepts.map((concept) => {
+            const selected = selectedConceptIds.includes(concept.id);
+            const channelMismatch = concept.channel !== experimentForm.channel;
+            return (
+              <article
+                key={concept.id}
+                className="space-y-2 rounded-xl border border-zinc-800 bg-zinc-950/70 p-4"
+              >
+                <div className="flex items-start justify-between gap-2">
+                  <div>
+                    <p className="text-xs uppercase text-zinc-500">
+                      {concept.channel} · {concept.product.name} → {concept.audience.name}
+                    </p>
+                    <h3 className="text-base font-semibold">{concept.headline}</h3>
+                  </div>
+                  <label className="inline-flex items-center gap-2 text-xs text-zinc-400">
+                    <input
+                      type="checkbox"
+                      checked={selected}
+                      disabled={channelMismatch}
+                      onChange={() =>
+                        setSelectedConceptIds((previous) => {
+                          if (previous.includes(concept.id)) {
+                            return previous.filter((item) => item !== concept.id);
+                          }
+                          return [...previous, concept.id];
+                        })
+                      }
+                    />
+                    Select
+                  </label>
+                </div>
+                <p className="text-sm text-zinc-300">{concept.hook}</p>
+                <p className="text-xs text-zinc-500">{concept.angle}</p>
+                <div className="grid grid-cols-3 gap-2 text-xs">
+                  <StatChip label="Score" value={concept.score.toFixed(0)} />
+                  <StatChip label="ROAS" value={concept.performance.roas.toFixed(2)} />
+                  <StatChip label="CPA" value={formatCurrency(concept.performance.cpa)} />
+                </div>
+              </article>
+            );
+          })}
+        </div>
+      </section>
+
+      <section className="space-y-4 rounded-2xl border border-zinc-800 bg-zinc-900/70 p-5">
+        <form className="grid gap-3 lg:grid-cols-4" onSubmit={launchExperiment}>
+          <h2 className="col-span-full text-lg font-semibold">Launch experiment</h2>
+          <Input
+            label="Experiment name"
+            value={experimentForm.name}
+            onChange={(value) => setExperimentForm((previous) => ({ ...previous, name: value }))}
+          />
+          <label className="space-y-1">
+            <span className="text-sm text-zinc-400">Channel</span>
+            <select
+              className="w-full rounded-lg border border-zinc-700 bg-zinc-950 px-3 py-2 text-sm"
+              value={experimentForm.channel}
+              onChange={(event) =>
+                setExperimentForm((previous) => ({
+                  ...previous,
+                  channel: event.target.value as Channel,
+                }))
+              }
+            >
+              {channelOptions.map((channel) => (
+                <option key={channel} value={channel}>
+                  {channel}
+                </option>
+              ))}
+            </select>
+          </label>
+          <Input
+            label="Daily budget (USD)"
+            value={experimentForm.dailyBudget}
+            onChange={(value) => setExperimentForm((previous) => ({ ...previous, dailyBudget: value }))}
+          />
+          <div className="flex items-end">
+            <button
+              type="submit"
+              className="w-full rounded-lg bg-zinc-100 px-4 py-2 text-sm font-semibold text-zinc-950 hover:bg-white"
+            >
+              Launch ({selectedVisibleConceptCount} selected)
+            </button>
+          </div>
+        </form>
+
+        <div className="grid gap-3">
+          {experiments.map((experiment) => (
+            <article key={experiment.id} className="rounded-xl border border-zinc-800 bg-zinc-950/70 p-4">
+              <div className="flex flex-wrap items-start justify-between gap-3">
+                <div>
+                  <h3 className="text-base font-semibold">{experiment.name}</h3>
+                  <p className="text-xs uppercase text-zinc-500">
+                    {experiment.channel} · {experiment.status}
+                  </p>
+                </div>
+                <div className="flex gap-2">
+                  <button
+                    type="button"
+                    onClick={() => void simulateExperiment(experiment.id)}
+                    className="rounded-lg border border-zinc-700 px-3 py-1.5 text-xs hover:bg-zinc-800"
+                  >
+                    Simulate day
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => void runOptimizer(experiment.id)}
+                    className="rounded-lg border border-cyan-700 px-3 py-1.5 text-xs text-cyan-300 hover:bg-cyan-900/40"
+                  >
+                    Optimize
+                  </button>
+                </div>
+              </div>
+              <div className="mt-3 grid grid-cols-2 gap-2 text-xs md:grid-cols-6">
+                <StatChip label="Budget" value={formatCurrency(experiment.dailyBudget)} />
+                <StatChip label="Spend" value={formatCurrency(experiment.summary.spend)} />
+                <StatChip label="Revenue" value={formatCurrency(experiment.summary.revenue)} />
+                <StatChip label="ROAS" value={`${experiment.summary.roas.toFixed(2)}x`} />
+                <StatChip label="Conversions" value={`${experiment.summary.conversions}`} />
+                <StatChip label="Concepts" value={`${experiment.conceptLinks.length}`} />
+              </div>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      <section className="grid gap-4 xl:grid-cols-2">
+        <div className="space-y-3 rounded-2xl border border-zinc-800 bg-zinc-900/70 p-5">
+          <h2 className="text-lg font-semibold">Top concepts</h2>
+          {(dashboard?.topConcepts ?? []).map((concept) => (
+            <div key={concept.conceptId} className="rounded-lg border border-zinc-800 bg-zinc-950/70 p-3">
+              <p className="text-sm font-medium">{concept.headline}</p>
+              <p className="text-xs text-zinc-500">{concept.angle}</p>
+              <div className="mt-2 grid grid-cols-3 gap-2 text-xs">
+                <StatChip label="ROAS" value={`${concept.roas.toFixed(2)}x`} />
+                <StatChip label="Spend" value={formatCurrency(concept.spend)} />
+                <StatChip label="Revenue" value={formatCurrency(concept.revenue)} />
+              </div>
+            </div>
+          ))}
+        </div>
+
+        <div className="space-y-3 rounded-2xl border border-zinc-800 bg-zinc-900/70 p-5">
+          <h2 className="text-lg font-semibold">Optimizer log</h2>
+          {(dashboard?.optimizationLogs ?? []).map((log) => (
+            <div key={log.id} className="rounded-lg border border-zinc-800 bg-zinc-950/70 p-3">
+              <p className="text-sm font-medium">
+                {log.decision} · {log.concept.headline}
+              </p>
+              <p className="text-xs text-zinc-500">{log.experiment.name}</p>
+              <p className="mt-1 text-sm text-zinc-300">{log.rationale}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {isLoading ? <p className="text-sm text-zinc-500">Refreshing data...</p> : null}
+    </div>
+  );
+}
+
+function KpiCard({ label, value }: { label: string; value: string }) {
+  return (
+    <div className="rounded-xl border border-zinc-800 bg-zinc-900/70 p-4">
+      <p className="text-xs uppercase text-zinc-500">{label}</p>
+      <p className="mt-2 text-xl font-semibold">{value}</p>
+    </div>
+  );
+}
+
+function StatChip({ label, value }: { label: string; value: string }) {
+  return (
+    <div className="rounded-md border border-zinc-800 bg-zinc-900 px-2 py-1">
+      <p className="text-[10px] uppercase text-zinc-500">{label}</p>
+      <p className="text-sm font-medium">{value}</p>
+    </div>
+  );
+}
+
+function Input({
+  label,
+  value,
+  onChange,
+}: {
+  label: string;
+  value: string;
+  onChange: (value: string) => void;
+}) {
+  return (
+    <label className="space-y-1">
+      <span className="text-sm text-zinc-400">{label}</span>
+      <input
+        required
+        className="w-full rounded-lg border border-zinc-700 bg-zinc-950 px-3 py-2 text-sm"
+        value={value}
+        onChange={(event) => onChange(event.target.value)}
+      />
+    </label>
+  );
+}
+
+function TextArea({
+  label,
+  value,
+  onChange,
+}: {
+  label: string;
+  value: string;
+  onChange: (value: string) => void;
+}) {
+  return (
+    <label className="space-y-1">
+      <span className="text-sm text-zinc-400">{label}</span>
+      <textarea
+        required
+        rows={3}
+        className="w-full rounded-lg border border-zinc-700 bg-zinc-950 px-3 py-2 text-sm"
+        value={value}
+        onChange={(event) => onChange(event.target.value)}
+      />
+    </label>
+  );
+}
