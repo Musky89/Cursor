@@ -2,39 +2,58 @@
 
 ## Cursor Cloud specific instructions
 
-This repo contains two independent Next.js applications on separate feature branches. The current dev branch merges both into a single workspace.
+Scoped to **adlab-ai** — an ad-campaign management platform (Next.js 16, Prisma 7, SQLite via `better-sqlite3`).
 
-### Projects
+### Environment baseline
 
-| App | Directory | Framework | Port | Notes |
-|-----|-----------|-----------|------|-------|
-| **AdLab AI** | `adlab-ai/` | Next.js 16 + Prisma 7 + SQLite | 3000 | Auth, ad campaign management, AI concept generation |
-| **NexusAI** | `nexus-ai/` | Next.js 15 | 3001 | Stateless revenue intelligence tools, no database |
+| Requirement | Detail |
+|---|---|
+| Node.js | 22 (provided by the VM image) |
+| Native toolchain | `build-essential`, `g++`, `make`, `python3` — needed by `better-sqlite3` when prebuilt binaries are unavailable |
+| Package manager | npm (`package-lock.json`) |
 
-### Running the apps
+The **update script** runs `npm ci` and `npm run db:generate` on every VM boot, so dependencies and the Prisma client are always current.
+
+### .env setup
+
+`.env` is **not** managed by the update script or committed to git.
+Before first run, copy the checked-in template:
 
 ```bash
-# AdLab AI (requires .env with DATABASE_URL and Prisma setup)
-cd adlab-ai && npm run dev -- -p 3000
-
-# NexusAI (no setup needed beyond npm install)
-cd nexus-ai && npm run dev -- -p 3001
+cp adlab-ai/.env.example adlab-ai/.env
 ```
 
-### AdLab AI setup caveats
+The example ships sensible development defaults (`DATABASE_URL=file:./dev.db`).
+`JWT_SECRET` auto-defaults in non-production mode. `OPENAI_API_KEY` is optional — the app falls back to a deterministic concept generator.
 
-- Requires `DATABASE_URL=file:./dev.db` in `adlab-ai/.env` before running.
-- Run `npx prisma generate` then `npx prisma migrate deploy` before first dev server start.
-- `JWT_SECRET` defaults to `dev-insecure-secret-change-this` in development mode — no env var needed for dev.
-- `OPENAI_API_KEY` is optional; the app uses a deterministic fallback generator when absent.
+### Database
 
-### Lint / Build / Test
+SQLite is file-based (no external server). After creating `.env`, apply migrations once:
 
-- **AdLab AI**: `npm run lint` (ESLint), `npm run build` (Next.js build). No automated tests.
-- **NexusAI**: `npm run lint` triggers interactive ESLint setup (no `eslint.config` exists). `npm run build` works. No automated tests.
+```bash
+cd adlab-ai && npx prisma migrate deploy
+```
 
-### Gotchas
+The dev database file (`dev.db`) is gitignored and survives VM snapshots.
 
-- The two projects originate from different branches (`origin/cursor/global-revenue-ai-app-bc90` for adlab-ai, `origin/cursor/global-revenue-ai-app-f7bf` for nexus-ai). They share no code.
-- AdLab AI uses Prisma with `@prisma/adapter-better-sqlite3` — the generated client outputs to `src/generated/prisma/`. If the schema changes, re-run `npx prisma generate`.
-- When running both apps simultaneously, use different ports (e.g., 3000 and 3001).
+### Running
+
+```bash
+cd adlab-ai && npm run dev          # default port 3000
+```
+
+### Lint / Build
+
+```bash
+cd adlab-ai && npm run lint         # ESLint 9 + eslint-config-next
+cd adlab-ai && npm run build        # Next.js production build
+```
+
+No automated test suite exists in this project.
+
+### Key gotchas
+
+- `better-sqlite3` compiles a native addon. If `npm ci` fails on it, verify `build-essential` and `python3` are installed.
+- Prisma client is generated into `src/generated/prisma/` (gitignored). The update script regenerates it, but after any schema change you should also re-run `npm run db:generate`.
+- `prisma.config.ts` imports `dotenv/config` — this resolves through Prisma's transitive dependency; no explicit `dotenv` install is needed.
+- The NexusAI app (`nexus-ai/`) is a separate, stateless Next.js 15 project on a different branch. It has no database or native deps and only needs `npm install && npm run dev -- -p 3001` if you need to run it alongside AdLab AI.
