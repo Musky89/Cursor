@@ -1,0 +1,189 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+enum Channel {
+  META
+  TIKTOK
+  GOOGLE
+}
+
+enum ExperimentStatus {
+  RUNNING
+  PAUSED
+  COMPLETED
+}
+
+enum Decision {
+  SCALE
+  HOLD
+  PAUSE
+}
+
+model User {
+  id           String      @id @default(cuid())
+  email        String      @unique
+  fullName     String
+  passwordHash String
+  createdAt    DateTime    @default(now())
+  updatedAt    DateTime    @updatedAt
+  workspaces   Workspace[]
+}
+
+model Workspace {
+  id               String            @id @default(cuid())
+  name             String
+  ownerId          String
+  owner            User              @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  products         Product[]
+  audiences        Audience[]
+  concepts         AdConcept[]
+  experiments      Experiment[]
+  metricSnapshots  MetricSnapshot[]
+  optimizationLogs OptimizationLog[]
+  createdAt        DateTime          @default(now())
+  updatedAt        DateTime          @updatedAt
+
+  @@index([ownerId])
+}
+
+model Product {
+  id          String     @id @default(cuid())
+  workspaceId String
+  workspace   Workspace  @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  name        String
+  description String
+  price       Float
+  marginPct   Float
+  landingUrl  String
+  isActive    Boolean    @default(true)
+  concepts    AdConcept[]
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+
+  @@index([workspaceId])
+}
+
+model Audience {
+  id          String     @id @default(cuid())
+  workspaceId String
+  workspace   Workspace  @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  name        String
+  painPoints  String
+  desires     String
+  notes       String?
+  concepts    AdConcept[]
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+
+  @@index([workspaceId])
+}
+
+model AdConcept {
+  id              String             @id @default(cuid())
+  workspaceId     String
+  workspace       Workspace          @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  productId       String
+  product         Product            @relation(fields: [productId], references: [id], onDelete: Cascade)
+  audienceId      String
+  audience        Audience           @relation(fields: [audienceId], references: [id], onDelete: Cascade)
+  channel         Channel
+  angle           String
+  hook            String
+  painDesire      String
+  promise         String
+  proof           String
+  offer           String
+  cta             String
+  primaryText     String
+  headline        String
+  script          String
+  imagePrompt     String
+  score           Float
+  createdAt       DateTime           @default(now())
+  experimentLinks ExperimentConcept[]
+  metricSnapshots MetricSnapshot[]
+  optimizationLog OptimizationLog[]
+
+  @@index([workspaceId, productId, audienceId, channel])
+}
+
+model Experiment {
+  id               String             @id @default(cuid())
+  workspaceId      String
+  workspace        Workspace          @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  name             String
+  channel          Channel
+  status           ExperimentStatus   @default(RUNNING)
+  dailyBudget      Float
+  conceptLinks     ExperimentConcept[]
+  metricSnapshots  MetricSnapshot[]
+  optimizationLogs OptimizationLog[]
+  createdAt        DateTime           @default(now())
+  startedAt        DateTime           @default(now())
+  endedAt          DateTime?
+  updatedAt        DateTime           @updatedAt
+
+  @@index([workspaceId, status])
+}
+
+model ExperimentConcept {
+  id            String     @id @default(cuid())
+  experimentId  String
+  experiment    Experiment @relation(fields: [experimentId], references: [id], onDelete: Cascade)
+  conceptId     String
+  concept       AdConcept  @relation(fields: [conceptId], references: [id], onDelete: Cascade)
+  allocationPct Float      @default(0)
+  isEnabled     Boolean    @default(true)
+  createdAt     DateTime   @default(now())
+  updatedAt     DateTime   @updatedAt
+
+  @@unique([experimentId, conceptId])
+  @@index([conceptId])
+}
+
+model MetricSnapshot {
+  id           String      @id @default(cuid())
+  workspaceId  String
+  workspace    Workspace   @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  experimentId String
+  experiment   Experiment  @relation(fields: [experimentId], references: [id], onDelete: Cascade)
+  conceptId    String
+  concept      AdConcept   @relation(fields: [conceptId], references: [id], onDelete: Cascade)
+  date         DateTime
+  impressions  Int
+  clicks       Int
+  spend        Float
+  conversions  Int
+  revenue      Float
+  ctr          Float
+  cpc          Float
+  cpa          Float
+  roas         Float
+  createdAt    DateTime    @default(now())
+
+  @@index([workspaceId, date])
+  @@index([conceptId, date])
+  @@index([experimentId, date])
+}
+
+model OptimizationLog {
+  id           String      @id @default(cuid())
+  workspaceId  String
+  workspace    Workspace   @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  experimentId String
+  experiment   Experiment  @relation(fields: [experimentId], references: [id], onDelete: Cascade)
+  conceptId    String
+  concept      AdConcept   @relation(fields: [conceptId], references: [id], onDelete: Cascade)
+  decision     Decision
+  rationale    String
+  createdAt    DateTime    @default(now())
+
+  @@index([workspaceId, createdAt])
+  @@index([experimentId, createdAt])
+}
