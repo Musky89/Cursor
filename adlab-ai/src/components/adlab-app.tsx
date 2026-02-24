@@ -1,7 +1,8 @@
 "use client";
 
-import { Channel } from "@/generated/prisma/client";
 import { FormEvent, useCallback, useEffect, useMemo, useState } from "react";
+
+type Channel = "META" | "TIKTOK" | "GOOGLE";
 
 type UserSummary = {
   id: string;
@@ -147,7 +148,7 @@ type ApiErrorPayload = {
   error?: string;
 };
 
-const channelOptions = [Channel.META, Channel.TIKTOK, Channel.GOOGLE];
+const channelOptions: Channel[] = ["META", "TIKTOK", "GOOGLE"];
 
 async function requestJson<T>(url: string, init?: RequestInit) {
   const response = await fetch(url, {
@@ -210,14 +211,14 @@ export function AdLabApp({ initialUser, initialWorkspace }: AdLabAppProps) {
   const [conceptForm, setConceptForm] = useState({
     productId: "",
     audienceId: "",
-    channel: Channel.META,
+    channel: "META" as Channel,
     objective: "Increase profitable conversions with lower blended CPA.",
     count: "4",
   });
 
   const [experimentForm, setExperimentForm] = useState({
     name: "Weekly Creative Test",
-    channel: Channel.META,
+    channel: "META" as Channel,
     dailyBudget: "300",
   });
 
