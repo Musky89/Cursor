@@ -30,7 +30,7 @@ function getOpenAi() {
 
 async function generateWithGemini(gemini: GoogleGenAI, prompt: string) {
   const response = await gemini.models.generateContent({
-    model: "gemini-2.5-flash-preview-05-20",
+    model: "gemini-2.5-flash-image",
     contents: prompt,
     config: {
       responseModalities: ["image", "text"],
