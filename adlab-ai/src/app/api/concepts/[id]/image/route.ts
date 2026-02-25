@@ -4,13 +4,24 @@ import { errorResponse, unauthorizedResponse } from "@/lib/http";
 import { prisma } from "@/lib/prisma";
 import { GoogleGenAI } from "@google/genai";
 import OpenAI from "openai";
+import Replicate from "replicate";
 import { z } from "zod";
+
+const TRIGGER_WORD = "RAZZBUZZ_AD";
 
 const requestSchema = z
   .object({
     brandStyle: z.string().optional(),
   })
   .optional();
+
+let _replicate: Replicate | null = null;
+function getReplicate() {
+  if (!_replicate && process.env.REPLICATE_API_TOKEN && process.env.REPLICATE_MODEL) {
+    _replicate = new Replicate({ auth: process.env.REPLICATE_API_TOKEN });
+  }
+  return _replicate;
+}
 
 let _gemini: GoogleGenAI | null = null;
 function getGemini() {
@@ -28,13 +39,31 @@ function getOpenAi() {
   return _openai;
 }
 
+async function generateWithFineTuned(replicate: Replicate, prompt: string) {
+  const model = process.env.REPLICATE_MODEL!;
+  const output = await replicate.run(model as `${string}/${string}`, {
+    input: {
+      prompt: `${TRIGGER_WORD} ${prompt}`,
+      num_outputs: 1,
+      guidance_scale: 7.5,
+      num_inference_steps: 28,
+      output_format: "png",
+      output_quality: 100,
+    },
+  });
+
+  if (Array.isArray(output) && output.length > 0) {
+    const url = typeof output[0] === "string" ? output[0] : (output[0] as { url?: string })?.url;
+    return url ?? null;
+  }
+  return null;
+}
+
 async function generateWithGemini(gemini: GoogleGenAI, prompt: string) {
   const response = await gemini.models.generateContent({
     model: "gemini-2.5-flash-image",
     contents: prompt,
-    config: {
-      responseModalities: ["image", "text"],
-    },
+    config: { responseModalities: ["image", "text"] },
   });
 
   const parts = response.candidates?.[0]?.content?.parts;
@@ -44,8 +73,7 @@ async function generateWithGemini(gemini: GoogleGenAI, prompt: string) {
     if (part.inlineData?.mimeType?.startsWith("image/")) {
       const base64 = part.inlineData.data;
       if (!base64) continue;
-      const dataUrl = `data:${part.inlineData.mimeType};base64,${base64}`;
-      return dataUrl;
+      return `data:${part.inlineData.mimeType};base64,${base64}`;
     }
   }
   return null;
@@ -63,6 +91,13 @@ async function generateWithDalle(openai: OpenAI, prompt: string, style: "vivid" 
   return response.data[0]?.url ?? null;
 }
 
+function getActiveModel() {
+  if (process.env.REPLICATE_API_TOKEN && process.env.REPLICATE_MODEL) return `fine-tuned (${process.env.REPLICATE_MODEL})`;
+  if (process.env.GEMINI_API_KEY) return "gemini-2.5-flash-image (Nano Banana)";
+  if (process.env.OPENAI_API_KEY) return "dall-e-3";
+  return "none";
+}
+
 export async function POST(
   request: Request,
   { params }: { params: Promise<{ id: string }> },
@@ -70,10 +105,11 @@ export async function POST(
   const auth = await getAuthContext();
   if (!auth) return unauthorizedResponse();
 
+  const replicate = getReplicate();
   const gemini = getGemini();
   const openai = getOpenAi();
-  if (!gemini && !openai) {
-    return errorResponse("No image generation API configured. Set GEMINI_API_KEY or OPENAI_API_KEY.", 503);
+  if (!replicate && !gemini && !openai) {
+    return errorResponse("No image generation API configured.", 503);
   }
 
   const { id } = await params;
@@ -100,6 +136,15 @@ export async function POST(
       : concept.imagePrompt;
 
   try {
+    // Priority 1: Fine-tuned model on Replicate
+    if (replicate) {
+      const imageUrl = await generateWithFineTuned(replicate, prompt);
+      if (imageUrl) {
+        return Response.json({ imageUrl, model: `fine-tuned:${process.env.REPLICATE_MODEL}`, brandStyle: brandStyleKey ?? "default" });
+      }
+    }
+
+    // Priority 2: Gemini Nano Banana
     if (gemini) {
       const imageUrl = await generateWithGemini(gemini, prompt);
       if (imageUrl) {
@@ -107,8 +152,9 @@ export async function POST(
       }
     }
 
+    // Priority 3: DALL-E 3
     if (openai) {
-      const style = brandStyleKey === "coke-inspired" ? "natural" as const : "vivid" as const;
+      const style = brandStyleKey === "coke-inspired" ? ("natural" as const) : ("vivid" as const);
       const imageUrl = await generateWithDalle(openai, prompt, style);
       if (imageUrl) {
         return Response.json({ imageUrl, model: "dall-e-3", brandStyle: brandStyleKey ?? "default" });
@@ -129,6 +175,6 @@ export async function GET() {
       name: style.name,
       description: style.description,
     })),
-    activeModel: process.env.GEMINI_API_KEY ? "gemini-2.5-flash-image (Nano Banana)" : process.env.OPENAI_API_KEY ? "dall-e-3" : "none",
+    activeModel: getActiveModel(),
   });
 }
