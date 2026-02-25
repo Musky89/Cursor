@@ -1,16 +1,21 @@
 import type { Metadata } from "next";
-import { Geist } from "next/font/google";
+import { Inter } from "next/font/google";
 import "./globals.css";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const inter = Inter({
+  variable: "--font-inter",
   subsets: ["latin"],
 });
 
 export const metadata: Metadata = {
-  title: "AdLab AI",
+  title: "AdLab AI — AI Ad Creative That Actually Converts",
   description:
-    "Revenue-focused generative advertising platform with concept generation, experiment orchestration, and autonomous optimization.",
+    "Generate studio-quality ad copy, images, and campaigns in seconds. Art-directed by GPT. Rendered by Google Nano Banana. Optimized by AI.",
+  openGraph: {
+    title: "AdLab AI — AI Ad Creative That Actually Converts",
+    description: "Generate studio-quality ad creative in seconds. GPT art direction + Nano Banana rendering.",
+    type: "website",
+  },
 };
 
 export default function RootLayout({
@@ -19,8 +24,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body className={`${geistSans.variable} antialiased`}>
+    <html lang="en" className="scroll-smooth">
+      <body className={`${inter.variable} font-sans antialiased`}>
         {children}
       </body>
     </html>
