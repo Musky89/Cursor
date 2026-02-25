@@ -12,6 +12,7 @@
     "db:studio": "prisma studio"
   },
   "dependencies": {
+    "@google/genai": "^1.42.0",
     "@prisma/adapter-better-sqlite3": "^7.4.1",
     "@prisma/client": "^7.4.1",
     "bcryptjs": "^3.0.3",
