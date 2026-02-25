@@ -1,5 +1,6 @@
+import { artDirectPrompt } from "@/lib/art-director";
 import { getAuthContext } from "@/lib/auth";
-import { buildCreativeBrief, brandStyles } from "@/lib/brand-styles";
+import { brandStyles } from "@/lib/brand-styles";
 import { errorResponse, unauthorizedResponse } from "@/lib/http";
 import { prisma } from "@/lib/prisma";
 import { GoogleGenAI } from "@google/genai";
@@ -124,16 +125,28 @@ export async function POST(
 
   if (!concept) return errorResponse("Concept not found.", 404);
 
-  const prompt =
-    brandStyleKey && brandStyles[brandStyleKey]
-      ? buildCreativeBrief(
-          concept.imagePrompt,
-          brandStyleKey,
-          concept.channel,
-          { name: concept.product.name, description: concept.product.description },
-          { name: concept.audience.name, notes: concept.audience.notes },
-        )
-      : concept.imagePrompt;
+  const prompt = await artDirectPrompt({
+    concept: {
+      headline: concept.headline,
+      hook: concept.hook,
+      angle: concept.angle,
+      cta: concept.cta,
+      imagePrompt: concept.imagePrompt,
+      channel: concept.channel,
+    },
+    product: {
+      name: concept.product.name,
+      description: concept.product.description,
+      price: concept.product.price,
+    },
+    audience: {
+      name: concept.audience.name,
+      painPoints: concept.audience.painPoints,
+      desires: concept.audience.desires,
+      notes: concept.audience.notes,
+    },
+    brandStyleKey,
+  });
 
   try {
     // Priority 1: Fine-tuned model on Replicate
