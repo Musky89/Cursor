@@ -192,6 +192,8 @@ export function AdLabApp({ initialUser, initialWorkspace }: AdLabAppProps) {
   const [isLoading, setIsLoading] = useState(false);
   const [isGenerating, setIsGenerating] = useState(false);
   const [isOptimizing, setIsOptimizing] = useState(false);
+  const [conceptImages, setConceptImages] = useState<Record<string, string>>({});
+  const [generatingImages, setGeneratingImages] = useState<Record<string, boolean>>({});
 
   const [productForm, setProductForm] = useState({
     name: "",
@@ -413,6 +415,20 @@ export function AdLabApp({ initialUser, initialWorkspace }: AdLabAppProps) {
       await loadAllData();
     } catch (error) {
       setError(error instanceof Error ? error.message : "Failed to seed demo data.");
+    }
+  }
+
+  async function generateImage(conceptId: string) {
+    setGeneratingImages((prev) => ({ ...prev, [conceptId]: true }));
+    try {
+      const result = await requestJson<{ imageUrl: string }>(`/api/concepts/${conceptId}/image`, {
+        method: "POST",
+      });
+      setConceptImages((prev) => ({ ...prev, [conceptId]: result.imageUrl }));
+    } catch (error) {
+      setError(error instanceof Error ? error.message : "Image generation failed.");
+    } finally {
+      setGeneratingImages((prev) => ({ ...prev, [conceptId]: false }));
     }
   }
 
@@ -643,6 +659,8 @@ export function AdLabApp({ initialUser, initialWorkspace }: AdLabAppProps) {
           {concepts.map((concept) => {
             const selected = selectedConceptIds.includes(concept.id);
             const channelMismatch = concept.channel !== experimentForm.channel;
+            const imageUrl = conceptImages[concept.id];
+            const isImageGenerating = generatingImages[concept.id];
             return (
               <article
                 key={concept.id}
@@ -672,6 +690,33 @@ export function AdLabApp({ initialUser, initialWorkspace }: AdLabAppProps) {
                     Select
                   </label>
                 </div>
+
+                {imageUrl ? (
+                  <div className="overflow-hidden rounded-lg border border-zinc-700">
+                    <img
+                      src={imageUrl}
+                      alt={concept.headline}
+                      className="h-auto w-full object-cover"
+                    />
+                  </div>
+                ) : (
+                  <button
+                    type="button"
+                    disabled={isImageGenerating}
+                    onClick={() => void generateImage(concept.id)}
+                    className="flex w-full items-center justify-center gap-2 rounded-lg border border-dashed border-zinc-600 bg-zinc-900/50 px-4 py-6 text-sm text-zinc-400 transition-colors hover:border-cyan-500 hover:text-cyan-300 disabled:opacity-60"
+                  >
+                    {isImageGenerating ? (
+                      <>
+                        <span className="inline-block h-4 w-4 animate-spin rounded-full border-2 border-cyan-400 border-t-transparent" />
+                        Generating image…
+                      </>
+                    ) : (
+                      <>🎨 Generate Ad Image</>
+                    )}
+                  </button>
+                )}
+
                 <p className="text-sm text-zinc-300">{concept.hook}</p>
                 <p className="text-xs text-zinc-500">{concept.angle}</p>
                 <div className="grid grid-cols-3 gap-2 text-xs">
