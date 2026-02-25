@@ -1,8 +1,9 @@
 import { getAuthContext } from "@/lib/auth";
 import { errorResponse, unauthorizedResponse } from "@/lib/http";
 import { prisma } from "@/lib/prisma";
+import OpenAI from "openai";
 
-const IMAGE_SERVICE_URL = process.env.IMAGE_SERVICE_URL ?? "http://localhost:8100";
+const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
 export async function POST(
   _request: Request,
@@ -11,6 +12,10 @@ export async function POST(
   const auth = await getAuthContext();
   if (!auth) {
     return unauthorizedResponse();
+  }
+
+  if (!process.env.OPENAI_API_KEY) {
+    return errorResponse("OPENAI_API_KEY is not configured.", 503);
   }
 
   const { id } = await params;
@@ -25,26 +30,22 @@ export async function POST(
   }
 
   try {
-    const response = await fetch(`${IMAGE_SERVICE_URL}/generate`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        prompt: concept.imagePrompt,
-        width: 512,
-        height: 512,
-        steps: 4,
-      }),
+    const response = await openai.images.generate({
+      model: "dall-e-3",
+      prompt: concept.imagePrompt,
+      n: 1,
+      size: "1024x1024",
+      quality: "hd",
     });
 
-    if (!response.ok) {
-      return errorResponse("Image generation failed.", 502);
+    const imageUrl = response.data[0]?.url;
+    if (!imageUrl) {
+      return errorResponse("No image returned from DALL-E.", 502);
     }
 
-    const data = (await response.json()) as { url: string; cached: boolean };
-    const imageUrl = `${IMAGE_SERVICE_URL}${data.url}`;
-
-    return Response.json({ imageUrl, cached: data.cached });
-  } catch {
-    return errorResponse("Image service unavailable. Start it with: cd image-service && python3 -m uvicorn server:app --port 8100", 503);
+    return Response.json({ imageUrl, model: "dall-e-3", quality: "hd" });
+  } catch (err) {
+    const message = err instanceof Error ? err.message : "Image generation failed.";
+    return errorResponse(message, 502);
   }
 }

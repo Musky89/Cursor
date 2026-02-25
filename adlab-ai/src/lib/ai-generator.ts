@@ -92,18 +92,24 @@ function buildFallbackConcepts(input: GeneratorInput): GeneratedConcept[] {
   });
 }
 
-const openaiClient = process.env.OPENAI_API_KEY
-  ? new OpenAI({
-      apiKey: process.env.OPENAI_API_KEY,
-    })
-  : null;
+let _openaiClient: OpenAI | null | undefined;
+
+function getOpenAiClient() {
+  if (_openaiClient === undefined) {
+    _openaiClient = process.env.OPENAI_API_KEY
+      ? new OpenAI({ apiKey: process.env.OPENAI_API_KEY })
+      : null;
+  }
+  return _openaiClient;
+}
 
 async function tryOpenAiGeneration(input: GeneratorInput) {
-  if (!openaiClient) {
+  const client = getOpenAiClient();
+  if (!client) {
     return null;
   }
 
-  const completion = await openaiClient.chat.completions.create({
+  const completion = await client.chat.completions.create({
     model: process.env.OPENAI_MODEL ?? "gpt-4.1-mini",
     temperature: 0.9,
     response_format: { type: "json_object" },
@@ -111,7 +117,7 @@ async function tryOpenAiGeneration(input: GeneratorInput) {
       {
         role: "system",
         content:
-          "You are an elite direct-response creative strategist. Generate ad concepts that prioritize profitable growth and clear conversion psychology.",
+          "You are an elite direct-response creative strategist. Generate ad concepts that use authentic language matching the target audience. If audience notes mention specific cultural context, slang, or local references, weave them naturally into every piece of copy. Prioritize bold, memorable creative that stops the scroll.",
       },
       {
         role: "user",
@@ -120,9 +126,16 @@ async function tryOpenAiGeneration(input: GeneratorInput) {
           strictRequirements: [
             "Return valid JSON with key `concepts` only",
             `Return exactly ${input.count} concepts`,
-            "Follow hook > pain/desire > promise > proof > offer > CTA",
-            "Make claims realistic and specific",
-            "Use concise, high-conversion language",
+            "Each concept MUST have exactly these keys: angle, hook, painDesire, promise, proof, offer, cta, primaryText, headline, script, imagePrompt, score",
+            "score must be a number between 50 and 99",
+            "headline: 8-120 chars",
+            "hook: 10-220 chars",
+            "primaryText: 30-1000 chars — write genuine ad body copy, not a summary",
+            "script: 40-1400 chars — write a scene-by-scene video storyboard",
+            "imagePrompt: 10-600 chars — describe the ideal ad visual in detail",
+            "Make each concept have a distinct creative angle and tone",
+            `Optimize copy for ${input.channel} platform conventions`,
+            "Use the audience's own language — match their slang, cultural refs, and tone from the notes",
           ],
           context: input,
         }),
@@ -135,8 +148,34 @@ async function tryOpenAiGeneration(input: GeneratorInput) {
     return null;
   }
 
-  const parsed = generatedConceptListSchema.safeParse(JSON.parse(content));
+  let parsedJson;
+  try {
+    parsedJson = JSON.parse(content);
+  } catch {
+    return null;
+  }
+
+  const parsed = generatedConceptListSchema.safeParse(parsedJson);
   if (!parsed.success) {
+    // Zod rejected GPT's output — truncate fields that exceed limits and retry parse
+    if (Array.isArray(parsedJson.concepts)) {
+      for (const c of parsedJson.concepts) {
+        if (typeof c.hook === "string" && c.hook.length > 220) c.hook = c.hook.slice(0, 220);
+        if (typeof c.headline === "string" && c.headline.length > 120) c.headline = c.headline.slice(0, 120);
+        if (typeof c.primaryText === "string" && c.primaryText.length > 1000) c.primaryText = c.primaryText.slice(0, 1000);
+        if (typeof c.script === "string" && c.script.length > 1400) c.script = c.script.slice(0, 1400);
+        if (typeof c.imagePrompt === "string" && c.imagePrompt.length > 600) c.imagePrompt = c.imagePrompt.slice(0, 600);
+        if (typeof c.painDesire === "string" && c.painDesire.length > 280) c.painDesire = c.painDesire.slice(0, 280);
+        if (typeof c.promise === "string" && c.promise.length > 220) c.promise = c.promise.slice(0, 220);
+        if (typeof c.proof === "string" && c.proof.length > 220) c.proof = c.proof.slice(0, 220);
+        if (typeof c.offer === "string" && c.offer.length > 220) c.offer = c.offer.slice(0, 220);
+        if (typeof c.cta === "string" && c.cta.length > 120) c.cta = c.cta.slice(0, 120);
+        if (typeof c.angle === "string" && c.angle.length > 120) c.angle = c.angle.slice(0, 120);
+        if (typeof c.score === "number") c.score = Math.min(99, Math.max(50, Math.round(c.score)));
+      }
+      const retry = generatedConceptListSchema.safeParse(parsedJson);
+      if (retry.success) return retry.data.concepts;
+    }
     return null;
   }
 
@@ -144,14 +183,11 @@ async function tryOpenAiGeneration(input: GeneratorInput) {
 }
 
 export async function generateAdConcepts(input: GeneratorInput) {
-  if (openaiClient) {
-    try {
-      const concepts = await tryOpenAiGeneration(input);
-      if (concepts && concepts.length > 0) {
-        return concepts;
-      }
-    } catch {
-      // Fall back to deterministic generation if model call fails.
+  const client = getOpenAiClient();
+  if (client) {
+    const concepts = await tryOpenAiGeneration(input);
+    if (concepts && concepts.length > 0) {
+      return concepts;
     }
   }
 
