@@ -51,6 +51,18 @@ cd adlab-ai && npm run build        # Next.js production build
 
 No automated test suite exists in this project.
 
+### Image generation service (optional)
+
+A local Stable Diffusion (SDXL-Turbo) service generates ad creative images with no API keys. It runs on CPU (~30-60s per image).
+
+```bash
+pip install torch torchvision --index-url https://download.pytorch.org/whl/cpu
+pip install diffusers==0.30.3 transformers==4.44.2 accelerate safetensors fastapi uvicorn pillow
+cd adlab-ai/image-service && python3 -m uvicorn server:app --host 0.0.0.0 --port 8100
+```
+
+The Next.js app calls `http://localhost:8100/generate` when users click "Generate Ad Image" on concept cards. The model (~5GB) downloads on first request. Generated images are cached in `image-service/generated/`.
+
 ### Key gotchas
 
 - `better-sqlite3` compiles a native addon. If `npm ci` fails on it, verify `build-essential` and `python3` are installed.
