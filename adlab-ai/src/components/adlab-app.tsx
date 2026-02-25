@@ -194,6 +194,7 @@ export function AdLabApp({ initialUser, initialWorkspace }: AdLabAppProps) {
   const [isOptimizing, setIsOptimizing] = useState(false);
   const [conceptImages, setConceptImages] = useState<Record<string, string>>({});
   const [generatingImages, setGeneratingImages] = useState<Record<string, boolean>>({});
+  const [selectedBrandStyle, setSelectedBrandStyle] = useState("pepsi-inspired");
 
   const [productForm, setProductForm] = useState({
     name: "",
@@ -423,6 +424,7 @@ export function AdLabApp({ initialUser, initialWorkspace }: AdLabAppProps) {
     try {
       const result = await requestJson<{ imageUrl: string }>(`/api/concepts/${conceptId}/image`, {
         method: "POST",
+        body: JSON.stringify({ brandStyle: selectedBrandStyle }),
       });
       setConceptImages((prev) => ({ ...prev, [conceptId]: result.imageUrl }));
     } catch (error) {
@@ -655,6 +657,18 @@ export function AdLabApp({ initialUser, initialWorkspace }: AdLabAppProps) {
           </div>
         </form>
 
+        <div className="flex items-center gap-4 rounded-lg border border-zinc-800 bg-zinc-950/70 p-3">
+          <span className="text-sm font-medium text-zinc-400">Brand Style:</span>
+          <label className="inline-flex items-center gap-2 cursor-pointer">
+            <input type="radio" name="brandStyle" value="pepsi-inspired" checked={selectedBrandStyle === "pepsi-inspired"} onChange={() => setSelectedBrandStyle("pepsi-inspired")} className="accent-blue-500" />
+            <span className="text-sm text-blue-400">⚡ Pepsi — Electric Youth</span>
+          </label>
+          <label className="inline-flex items-center gap-2 cursor-pointer">
+            <input type="radio" name="brandStyle" value="coke-inspired" checked={selectedBrandStyle === "coke-inspired"} onChange={() => setSelectedBrandStyle("coke-inspired")} className="accent-red-500" />
+            <span className="text-sm text-red-400">🔥 Coke — Authentic Moments</span>
+          </label>
+        </div>
+
         <div className="grid gap-3 lg:grid-cols-2">
           {concepts.map((concept) => {
             const selected = selectedConceptIds.includes(concept.id);
@@ -692,12 +706,20 @@ export function AdLabApp({ initialUser, initialWorkspace }: AdLabAppProps) {
                 </div>
 
                 {imageUrl ? (
-                  <div className="overflow-hidden rounded-lg border border-zinc-700">
+                  <div className="group relative overflow-hidden rounded-lg border border-zinc-700">
                     <img
                       src={imageUrl}
                       alt={concept.headline}
                       className="h-auto w-full object-cover"
                     />
+                    <button
+                      type="button"
+                      disabled={isImageGenerating}
+                      onClick={() => { setConceptImages((prev) => { const next = {...prev}; delete next[concept.id]; return next; }); void generateImage(concept.id); }}
+                      className="absolute bottom-2 right-2 rounded-lg bg-black/70 px-3 py-1.5 text-xs text-white opacity-0 backdrop-blur transition-opacity group-hover:opacity-100 hover:bg-black/90"
+                    >
+                      {isImageGenerating ? "Regenerating…" : "🔄 Regenerate"}
+                    </button>
                   </div>
                 ) : (
                   <button
@@ -709,10 +731,10 @@ export function AdLabApp({ initialUser, initialWorkspace }: AdLabAppProps) {
                     {isImageGenerating ? (
                       <>
                         <span className="inline-block h-4 w-4 animate-spin rounded-full border-2 border-cyan-400 border-t-transparent" />
-                        Generating image…
+                        Generating with {selectedBrandStyle === "pepsi-inspired" ? "⚡ Pepsi" : "🔥 Coke"} style…
                       </>
                     ) : (
-                      <>🎨 Generate Ad Image</>
+                      <>🎨 Generate Ad Image ({selectedBrandStyle === "pepsi-inspired" ? "⚡ Pepsi Style" : "🔥 Coke Style"})</>
                     )}
                   </button>
                 )}
