@@ -11,12 +11,13 @@ export default async function LandingPage() {
     <div className="min-h-screen bg-zinc-950 text-zinc-100">
       <Nav />
       <Hero />
-      <Logos />
-      <Features />
+      <SocialProof />
+      <BeforeAfter />
+      <ProductShowcase />
       <HowItWorks />
-      <AdShowcase />
+      <Features />
       <Pricing />
-      <CTA />
+      <FinalCTA />
       <Footer />
     </div>
   );
@@ -24,23 +25,22 @@ export default async function LandingPage() {
 
 function Nav() {
   return (
-    <nav className="sticky top-0 z-50 border-b border-zinc-800/50 bg-zinc-950/80 backdrop-blur-xl">
-      <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
-        <Link href="/" className="flex items-center gap-2">
-          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-cyan-400 to-fuchsia-500">
-            <span className="text-sm font-black text-white">A</span>
+    <nav className="fixed top-0 z-50 w-full border-b border-white/5 bg-zinc-950/60 backdrop-blur-2xl">
+      <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-3">
+        <Link href="/" className="flex items-center gap-2.5">
+          <div className="flex h-7 w-7 items-center justify-center rounded-md bg-gradient-to-br from-cyan-400 to-fuchsia-500">
+            <span className="text-xs font-black text-white">A</span>
           </div>
-          <span className="text-lg font-bold">AdLab AI</span>
+          <span className="text-[15px] font-semibold tracking-tight">AdLab AI</span>
         </Link>
-        <div className="hidden items-center gap-8 text-sm text-zinc-400 md:flex">
-          <a href="#features" className="transition hover:text-white">Features</a>
-          <a href="#how-it-works" className="transition hover:text-white">How it works</a>
+        <div className="hidden items-center gap-7 text-[13px] text-zinc-500 md:flex">
+          <a href="#product" className="transition hover:text-white">Product</a>
           <a href="#pricing" className="transition hover:text-white">Pricing</a>
         </div>
         <div className="flex items-center gap-3">
-          <Link href="/login" className="text-sm text-zinc-400 transition hover:text-white">Log in</Link>
-          <Link href="/login" className="rounded-lg bg-gradient-to-r from-cyan-500 to-fuchsia-500 px-4 py-2 text-sm font-semibold text-white transition hover:opacity-90">
-            Start Free
+          <Link href="/login" className="text-[13px] text-zinc-400 transition hover:text-white">Sign in</Link>
+          <Link href="/login" className="rounded-lg bg-white px-3.5 py-1.5 text-[13px] font-medium text-zinc-950 transition hover:bg-zinc-200">
+            Get started
           </Link>
         </div>
       </div>
@@ -50,101 +50,103 @@ function Nav() {
 
 function Hero() {
   return (
-    <section className="relative overflow-hidden">
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(6,182,212,0.15),transparent_50%)]" />
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom_right,rgba(217,70,239,0.1),transparent_50%)]" />
-      <div className="relative mx-auto max-w-7xl px-6 pb-20 pt-20 text-center md:pt-32">
-        <div className="mx-auto mb-6 inline-flex items-center gap-2 rounded-full border border-cyan-500/20 bg-cyan-500/10 px-4 py-1.5 text-sm text-cyan-300">
-          <span className="h-1.5 w-1.5 rounded-full bg-cyan-400 animate-pulse" />
-          Powered by GPT-4 + Google Nano Banana
+    <section className="relative overflow-hidden pt-28 pb-4">
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_60%_50%_at_50%_-10%,rgba(6,182,212,0.12),transparent)]" />
+      <div className="relative mx-auto max-w-6xl px-6 text-center">
+        <div className="mx-auto mb-8 inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1 text-[12px] text-zinc-400">
+          <span className="rounded-full bg-emerald-500 px-1.5 py-0.5 text-[10px] font-bold text-white">NEW</span>
+          Now with Google Nano Banana — #1 AI image model
         </div>
-        <h1 className="mx-auto max-w-4xl text-5xl font-extrabold leading-tight tracking-tight md:text-7xl">
-          AI Ad Creative That
-          <span className="bg-gradient-to-r from-cyan-400 via-fuchsia-400 to-orange-400 bg-clip-text text-transparent"> Actually Converts</span>
+
+        <h1 className="mx-auto max-w-3xl text-[clamp(2.5rem,6vw,4.5rem)] font-extrabold leading-[1.05] tracking-tight">
+          Your creative agency<br />
+          <span className="bg-gradient-to-r from-cyan-400 to-fuchsia-400 bg-clip-text text-transparent">costs $0/month</span>
         </h1>
-        <p className="mx-auto mt-6 max-w-2xl text-lg text-zinc-400 md:text-xl">
-          Generate studio-quality ad copy, images, and campaigns in seconds.
-          Art-directed by GPT. Rendered by Nano Banana. Optimized by AI.
+
+        <p className="mx-auto mt-5 max-w-lg text-[17px] leading-relaxed text-zinc-400">
+          AdLab generates studio-quality ad copy and images for META, TikTok, and Google — in seconds, not weeks. No designers. No agencies. No briefs.
         </p>
-        <div className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
-          <Link href="/login" className="rounded-xl bg-gradient-to-r from-cyan-500 to-fuchsia-500 px-8 py-3.5 text-base font-bold text-white shadow-lg shadow-cyan-500/25 transition hover:shadow-cyan-500/40 hover:opacity-95">
-            Start Creating Ads — Free
+
+        <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
+          <Link href="/login" className="group rounded-xl bg-white px-6 py-3 text-[15px] font-semibold text-zinc-950 shadow-lg shadow-white/10 transition hover:shadow-white/20">
+            Start for free
+            <span className="ml-1.5 inline-block transition-transform group-hover:translate-x-0.5">→</span>
           </Link>
-          <a href="#how-it-works" className="rounded-xl border border-zinc-700 px-8 py-3.5 text-base font-semibold text-zinc-300 transition hover:border-zinc-500 hover:text-white">
-            See How It Works
+          <a href="#product" className="rounded-xl px-6 py-3 text-[15px] text-zinc-500 transition hover:text-white">
+            See it in action
           </a>
         </div>
-        <div className="relative mx-auto mt-16 max-w-5xl">
-          <div className="absolute -inset-4 rounded-2xl bg-gradient-to-r from-cyan-500/20 via-fuchsia-500/20 to-orange-500/20 blur-xl" />
-          <div className="relative overflow-hidden rounded-2xl border border-zinc-800 shadow-2xl">
-            <Image src="/hero-dashboard.png" alt="AdLab AI Dashboard" width={1200} height={675} className="w-full" priority />
-          </div>
-        </div>
+
+        <p className="mt-4 text-[12px] text-zinc-600">No credit card required · Free tier available</p>
       </div>
     </section>
   );
 }
 
-function Logos() {
-  const brands = ["Meta Ads", "TikTok Ads", "Google Ads", "Instagram", "YouTube"];
+function SocialProof() {
   return (
-    <section className="border-y border-zinc-800/50 bg-zinc-900/30 py-8">
-      <p className="text-center text-xs font-medium uppercase tracking-widest text-zinc-500">Generate ads for every major platform</p>
-      <div className="mx-auto mt-4 flex max-w-3xl flex-wrap items-center justify-center gap-8 text-zinc-500">
-        {brands.map((b) => (
-          <span key={b} className="text-sm font-semibold">{b}</span>
+    <section className="mx-auto max-w-6xl px-6 py-10">
+      <div className="flex flex-wrap items-center justify-center gap-x-12 gap-y-4 text-[13px] text-zinc-600">
+        <span>Trusted by teams at</span>
+        {["DTC brands", "Performance agencies", "Solo marketers", "E-commerce", "SaaS companies"].map(t => (
+          <span key={t} className="font-medium text-zinc-500">{t}</span>
         ))}
       </div>
     </section>
   );
 }
 
-function Features() {
-  const features = [
-    {
-      icon: "🎯",
-      title: "GPT Art Director",
-      description: "GPT-4 transforms your brief into a hyper-specific photographic brief — camera angles, lighting rigs, talent direction, wardrobe. Agency-grade art direction, automated.",
-    },
-    {
-      icon: "🎨",
-      title: "Nano Banana Image Gen",
-      description: "Google's #1 ranked image model renders your art-directed briefs into photorealistic ad creative. 9.5/10 quality rated. Not stock photos — studio-grade originals.",
-    },
-    {
-      icon: "✍️",
-      title: "AI Copywriter",
-      description: "GPT writes culturally-aware ad copy that matches your audience's language, slang, and vibes. SA township culture? Gen-Z campus lingo? It adapts.",
-    },
-    {
-      icon: "🧪",
-      title: "Experiment Engine",
-      description: "Launch A/B experiments across META, TikTok, and Google. Assign budgets, allocate concepts, and simulate campaign outcomes before spending a cent.",
-    },
-    {
-      icon: "🤖",
-      title: "Autonomous Optimizer",
-      description: "AI monitors ROAS, CPA, and CTR in real-time. Automatically scales winners and pauses losers to protect your budget. No manual babysitting.",
-    },
-    {
-      icon: "🎭",
-      title: "Brand Style System",
-      description: "Switch between brand aesthetics instantly. Pepsi energy? Coke warmth? Custom profiles? Your visual identity stays consistent across every asset.",
-    },
-  ];
-
+function BeforeAfter() {
   return (
-    <section id="features" className="mx-auto max-w-7xl px-6 py-24">
-      <div className="text-center">
-        <p className="text-sm font-semibold uppercase tracking-widest text-cyan-400">Features</p>
-        <h2 className="mt-3 text-3xl font-bold md:text-4xl">Everything a creative agency does.<br /><span className="text-zinc-500">At 1/100th the cost.</span></h2>
+    <section className="mx-auto max-w-6xl px-6 py-16">
+      <div className="grid gap-4 md:grid-cols-2">
+        <div className="rounded-2xl border border-zinc-800 bg-zinc-900/50 p-8">
+          <span className="text-[12px] font-semibold uppercase tracking-widest text-red-400">Before AdLab</span>
+          <ul className="mt-5 space-y-3 text-[15px] text-zinc-400">
+            <li className="flex gap-3"><span className="text-red-500/70">✕</span> 2-4 weeks for a campaign creative deck</li>
+            <li className="flex gap-3"><span className="text-red-500/70">✕</span> $5,000–$50,000 per agency retainer</li>
+            <li className="flex gap-3"><span className="text-red-500/70">✕</span> 3 rounds of revisions, still mediocre</li>
+            <li className="flex gap-3"><span className="text-red-500/70">✕</span> Generic stock photos that scream &quot;ad&quot;</li>
+            <li className="flex gap-3"><span className="text-red-500/70">✕</span> No idea which creative will convert until you spend</li>
+          </ul>
+        </div>
+        <div className="rounded-2xl border border-cyan-500/20 bg-gradient-to-br from-cyan-500/5 to-fuchsia-500/5 p-8">
+          <span className="text-[12px] font-semibold uppercase tracking-widest text-cyan-400">With AdLab</span>
+          <ul className="mt-5 space-y-3 text-[15px] text-zinc-300">
+            <li className="flex gap-3"><span className="text-cyan-400">✓</span> Full campaign in under 60 seconds</li>
+            <li className="flex gap-3"><span className="text-cyan-400">✓</span> Starts at $0. Pro at $49/month.</li>
+            <li className="flex gap-3"><span className="text-cyan-400">✓</span> Unlimited variations until you love it</li>
+            <li className="flex gap-3"><span className="text-cyan-400">✓</span> Photorealistic images rated 9.5/10 by reviewers</li>
+            <li className="flex gap-3"><span className="text-cyan-400">✓</span> AI optimizer tells you which creative wins before you spend</li>
+          </ul>
+        </div>
       </div>
-      <div className="mt-16 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-        {features.map((f) => (
-          <div key={f.title} className="group rounded-2xl border border-zinc-800 bg-zinc-900/40 p-6 transition hover:border-zinc-700 hover:bg-zinc-900/70">
-            <span className="text-3xl">{f.icon}</span>
-            <h3 className="mt-4 text-lg font-semibold">{f.title}</h3>
-            <p className="mt-2 text-sm leading-relaxed text-zinc-400">{f.description}</p>
+    </section>
+  );
+}
+
+function ProductShowcase() {
+  return (
+    <section id="product" className="mx-auto max-w-6xl px-6 py-16">
+      <div className="text-center">
+        <p className="text-[12px] font-semibold uppercase tracking-widest text-fuchsia-400">The output</p>
+        <h2 className="mt-3 text-3xl font-bold tracking-tight md:text-4xl">This is what AdLab generates.</h2>
+        <p className="mx-auto mt-3 max-w-md text-[15px] text-zinc-500">Real output from a real prompt. Not mocked up. Not designed. AI-generated in under 30 seconds each.</p>
+      </div>
+      <div className="mt-12 grid gap-3 md:grid-cols-3">
+        {[
+          { src: "/showcase-1.png", label: "META Feed Ad", sublabel: "Pepsi-style · Neon energy" },
+          { src: "/showcase-2.png", label: "Lifestyle Campaign", sublabel: "Coke-style · Golden hour" },
+          { src: "/showcase-3.png", label: "Product Hero Shot", sublabel: "Studio · Commercial grade" },
+        ].map((img) => (
+          <div key={img.src} className="group overflow-hidden rounded-xl border border-zinc-800 bg-zinc-900/50 transition hover:border-zinc-700">
+            <div className="aspect-square overflow-hidden">
+              <Image src={img.src} alt={img.label} width={600} height={600} className="h-full w-full object-cover transition duration-500 group-hover:scale-105" />
+            </div>
+            <div className="p-4">
+              <p className="text-[14px] font-medium">{img.label}</p>
+              <p className="text-[12px] text-zinc-500">{img.sublabel}</p>
+            </div>
           </div>
         ))}
       </div>
@@ -153,26 +155,23 @@ function Features() {
 }
 
 function HowItWorks() {
-  const steps = [
-    { step: "01", title: "Define your product & audience", description: "Enter your product details, target audience pain points, desires, and cultural context. The more specific, the better the output." },
-    { step: "02", title: "AI generates ad concepts", description: "GPT creates multiple ad concepts with headlines, hooks, body copy, video scripts, and image prompts — all tailored to your audience's language." },
-    { step: "03", title: "Art Director renders visuals", description: "GPT writes a studio-grade creative brief, then Nano Banana renders photorealistic ad images that look like they came from a $500K shoot." },
-    { step: "04", title: "Launch, simulate & optimize", description: "Select your best concepts, launch experiments, simulate campaign performance, and let the AI optimizer auto-allocate budget to winners." },
-  ];
-
   return (
-    <section id="how-it-works" className="border-y border-zinc-800/50 bg-zinc-900/20 py-24">
-      <div className="mx-auto max-w-7xl px-6">
-        <div className="text-center">
-          <p className="text-sm font-semibold uppercase tracking-widest text-fuchsia-400">How it works</p>
-          <h2 className="mt-3 text-3xl font-bold md:text-4xl">From brief to billboard in minutes</h2>
-        </div>
-        <div className="mt-16 grid gap-8 md:grid-cols-2 lg:grid-cols-4">
-          {steps.map((s) => (
-            <div key={s.step} className="relative">
-              <span className="text-5xl font-black text-zinc-800">{s.step}</span>
-              <h3 className="mt-2 text-lg font-semibold">{s.title}</h3>
-              <p className="mt-2 text-sm leading-relaxed text-zinc-400">{s.description}</p>
+    <section id="how" className="border-y border-white/5 bg-zinc-900/30 py-20">
+      <div className="mx-auto max-w-6xl px-6">
+        <p className="text-[12px] font-semibold uppercase tracking-widest text-zinc-500">How it works</p>
+        <h2 className="mt-3 text-2xl font-bold tracking-tight md:text-3xl">Brief → Copy → Image → Launch.<br /><span className="text-zinc-600">All in one place.</span></h2>
+
+        <div className="mt-14 grid gap-12 md:grid-cols-4">
+          {[
+            { n: "1", t: "Describe", d: "Enter your product, audience, and cultural context. The richer the input, the sharper the output." },
+            { n: "2", t: "Generate", d: "GPT writes ad copy in your audience's voice — their slang, their references, their vibe. Not corporate-speak." },
+            { n: "3", t: "Render", d: "GPT acts as art director. Nano Banana renders the brief into images that look like a $500K shoot." },
+            { n: "4", t: "Optimize", d: "Launch experiments. Simulate performance. AI pauses losers and scales winners automatically." },
+          ].map((s) => (
+            <div key={s.n}>
+              <span className="text-[42px] font-black text-zinc-800">{s.n}</span>
+              <h3 className="mt-1 text-[16px] font-semibold">{s.t}</h3>
+              <p className="mt-2 text-[13px] leading-relaxed text-zinc-500">{s.d}</p>
             </div>
           ))}
         </div>
@@ -181,124 +180,102 @@ function HowItWorks() {
   );
 }
 
-function AdShowcase() {
+function Features() {
   return (
-    <section className="mx-auto max-w-7xl px-6 py-24">
-      <div className="text-center">
-        <p className="text-sm font-semibold uppercase tracking-widest text-orange-400">Real output</p>
-        <h2 className="mt-3 text-3xl font-bold md:text-4xl">Generated by AdLab AI. Not a designer.</h2>
-        <p className="mx-auto mt-4 max-w-xl text-zinc-400">These ads were generated in seconds using our GPT Art Director + Nano Banana pipeline. Zero human design work.</p>
-      </div>
-      <div className="mt-12 grid gap-4 md:grid-cols-2">
-        <div className="overflow-hidden rounded-2xl border border-zinc-800">
-          <Image src="/hero-concepts.png" alt="AI generated ad concepts" width={600} height={600} className="w-full" />
-        </div>
-        <div className="overflow-hidden rounded-2xl border border-zinc-800">
-          <Image src="/hero-abstract.png" alt="AI advertising technology" width={600} height={600} className="w-full" />
-        </div>
+    <section className="mx-auto max-w-6xl px-6 py-20">
+      <div className="grid gap-6 md:grid-cols-3">
+        {[
+          { icon: "⚡", t: "GPT Art Director", d: "Transforms your brief into camera angles, lighting setups, talent direction, and color grades. The brief IS the difference between AI slop and agency output." },
+          { icon: "🎨", t: "Nano Banana Rendering", d: "Google's #1 ranked image model. Photorealistic output that human reviewers rated 9.5/10. Legible text, accurate products, real humans." },
+          { icon: "🧠", t: "Cultural Intelligence", d: "Feeds your audience's slang, music references, and cultural context directly into copy and visuals. Township lingo? Amapiano vibes? It gets it." },
+          { icon: "🧪", t: "Campaign Simulator", d: "Run 5 days of simulated ad performance before spending a cent. Know which creative wins before you open your wallet." },
+          { icon: "🔄", t: "Brand Style Switching", d: "Pepsi energy or Coke warmth? Define your visual identity once. Every image stays on-brand automatically." },
+          { icon: "📊", t: "Autonomous Optimizer", d: "ROAS below threshold? The AI pauses it. CTR spiking? It scales budget. You set the rules, AI enforces them." },
+        ].map((f) => (
+          <div key={f.t} className="rounded-xl border border-zinc-800/50 bg-zinc-900/30 p-5 transition hover:border-zinc-700">
+            <span className="text-2xl">{f.icon}</span>
+            <h3 className="mt-3 text-[15px] font-semibold">{f.t}</h3>
+            <p className="mt-1.5 text-[13px] leading-relaxed text-zinc-500">{f.d}</p>
+          </div>
+        ))}
       </div>
     </section>
   );
 }
 
 function Pricing() {
-  const plans = [
-    {
-      name: "Starter",
-      price: "Free",
-      period: "",
-      description: "Try AdLab AI with limited generations",
-      features: ["5 ad concepts/month", "2 image generations/month", "1 workspace", "META channel only", "Basic optimizer"],
-      cta: "Start Free",
-      highlight: false,
-    },
-    {
-      name: "Pro",
-      price: "$49",
-      period: "/mo",
-      description: "For growing brands and solo marketers",
-      features: ["Unlimited ad concepts", "100 image generations/month", "5 workspaces", "All channels (META, TikTok, Google)", "GPT Art Director", "Brand Style System", "Priority support"],
-      cta: "Start Pro Trial",
-      highlight: true,
-    },
-    {
-      name: "Agency",
-      price: "$199",
-      period: "/mo",
-      description: "For agencies managing multiple brands",
-      features: ["Everything in Pro", "Unlimited image generations", "Unlimited workspaces", "Custom brand styles", "API access", "Team collaboration", "White-label exports", "Dedicated support"],
-      cta: "Contact Sales",
-      highlight: false,
-    },
-  ];
-
   return (
-    <section id="pricing" className="border-y border-zinc-800/50 bg-zinc-900/20 py-24">
-      <div className="mx-auto max-w-7xl px-6">
+    <section id="pricing" className="border-y border-white/5 bg-zinc-900/30 py-20">
+      <div className="mx-auto max-w-6xl px-6">
         <div className="text-center">
-          <p className="text-sm font-semibold uppercase tracking-widest text-cyan-400">Pricing</p>
-          <h2 className="mt-3 text-3xl font-bold md:text-4xl">Start free. Scale when ready.</h2>
-          <p className="mx-auto mt-4 max-w-lg text-zinc-400">No credit card required. Stripe integration coming soon.</p>
+          <h2 className="text-2xl font-bold tracking-tight md:text-3xl">Simple pricing. Start free.</h2>
+          <p className="mt-2 text-[15px] text-zinc-500">No credit card required. Upgrade when you&apos;re ready.</p>
         </div>
-        <div className="mt-12 grid gap-6 md:grid-cols-3">
-          {plans.map((plan) => (
-            <div
-              key={plan.name}
-              className={`relative rounded-2xl border p-8 ${
-                plan.highlight
-                  ? "border-cyan-500/50 bg-gradient-to-b from-cyan-500/10 to-transparent shadow-lg shadow-cyan-500/10"
-                  : "border-zinc-800 bg-zinc-900/40"
-              }`}
-            >
-              {plan.highlight && (
-                <span className="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-gradient-to-r from-cyan-500 to-fuchsia-500 px-4 py-1 text-xs font-bold text-white">
-                  Most Popular
-                </span>
-              )}
-              <h3 className="text-lg font-semibold">{plan.name}</h3>
-              <div className="mt-4 flex items-baseline gap-1">
-                <span className="text-4xl font-extrabold">{plan.price}</span>
-                {plan.period && <span className="text-zinc-500">{plan.period}</span>}
-              </div>
-              <p className="mt-2 text-sm text-zinc-400">{plan.description}</p>
-              <ul className="mt-6 space-y-3">
-                {plan.features.map((f) => (
-                  <li key={f} className="flex items-start gap-2 text-sm text-zinc-300">
-                    <span className="mt-0.5 text-cyan-400">✓</span>
-                    {f}
-                  </li>
-                ))}
-              </ul>
-              <Link
-                href="/login"
-                className={`mt-8 block rounded-xl px-6 py-3 text-center text-sm font-semibold transition ${
-                  plan.highlight
-                    ? "bg-gradient-to-r from-cyan-500 to-fuchsia-500 text-white hover:opacity-90"
-                    : "border border-zinc-700 text-zinc-300 hover:border-zinc-500 hover:text-white"
-                }`}
-              >
-                {plan.cta}
-              </Link>
-            </div>
-          ))}
+
+        <div className="mx-auto mt-12 grid max-w-4xl gap-6 md:grid-cols-3">
+          <PricingCard
+            name="Free"
+            price="$0"
+            features={["5 concepts/month", "2 images/month", "1 workspace", "META only"]}
+            cta="Get started"
+          />
+          <PricingCard
+            name="Pro"
+            price="$49"
+            period="/mo"
+            features={["Unlimited concepts", "100 images/month", "All channels", "Art Director", "Brand styles", "Optimizer"]}
+            cta="Start free trial"
+            highlight
+          />
+          <PricingCard
+            name="Agency"
+            price="$199"
+            period="/mo"
+            features={["Everything in Pro", "Unlimited images", "Unlimited workspaces", "API access", "Team seats", "White-label"]}
+            cta="Talk to us"
+          />
         </div>
       </div>
     </section>
   );
 }
 
-function CTA() {
+function PricingCard({ name, price, period, features, cta, highlight }: {
+  name: string; price: string; period?: string; features: string[]; cta: string; highlight?: boolean;
+}) {
   return (
-    <section className="mx-auto max-w-7xl px-6 py-24 text-center">
-      <h2 className="text-3xl font-bold md:text-5xl">
-        Stop paying agencies.<br />
-        <span className="bg-gradient-to-r from-cyan-400 to-fuchsia-400 bg-clip-text text-transparent">Start generating revenue.</span>
+    <div className={`rounded-2xl border p-6 ${highlight ? "border-white/20 bg-white/5 shadow-lg shadow-white/5" : "border-zinc-800/50 bg-zinc-900/30"}`}>
+      <p className="text-[13px] font-medium text-zinc-400">{name}</p>
+      <div className="mt-2 flex items-baseline gap-0.5">
+        <span className="text-3xl font-bold">{price}</span>
+        {period && <span className="text-[13px] text-zinc-500">{period}</span>}
+      </div>
+      <ul className="mt-5 space-y-2">
+        {features.map((f) => (
+          <li key={f} className="flex items-center gap-2 text-[13px] text-zinc-400">
+            <span className="text-zinc-600">—</span>{f}
+          </li>
+        ))}
+      </ul>
+      <Link href="/login" className={`mt-6 block rounded-lg py-2.5 text-center text-[13px] font-medium transition ${highlight ? "bg-white text-zinc-950 hover:bg-zinc-200" : "border border-zinc-800 text-zinc-400 hover:border-zinc-600 hover:text-white"}`}>
+        {cta}
+      </Link>
+    </div>
+  );
+}
+
+function FinalCTA() {
+  return (
+    <section className="mx-auto max-w-6xl px-6 py-24 text-center">
+      <h2 className="text-3xl font-bold tracking-tight md:text-4xl">
+        Your competitors are still waiting<br />for their agency to deliver.
       </h2>
-      <p className="mx-auto mt-6 max-w-xl text-lg text-zinc-400">
-        Join the brands using AI to produce ad creative that actually performs. Your first campaign is free.
+      <p className="mx-auto mt-4 max-w-md text-[15px] text-zinc-500">
+        You could have 50 ad concepts with studio-quality images by the time they schedule a kickoff call.
       </p>
-      <Link href="/login" className="mt-10 inline-block rounded-xl bg-gradient-to-r from-cyan-500 to-fuchsia-500 px-10 py-4 text-lg font-bold text-white shadow-lg shadow-cyan-500/25 transition hover:shadow-cyan-500/40">
-        Create Your First Ad →
+      <Link href="/login" className="group mt-8 inline-block rounded-xl bg-white px-8 py-3.5 text-[15px] font-semibold text-zinc-950 shadow-lg shadow-white/10 transition hover:shadow-white/20">
+        Start creating now
+        <span className="ml-1.5 inline-block transition-transform group-hover:translate-x-0.5">→</span>
       </Link>
     </section>
   );
@@ -306,22 +283,20 @@ function CTA() {
 
 function Footer() {
   return (
-    <footer className="border-t border-zinc-800/50 bg-zinc-900/30 py-12">
-      <div className="mx-auto max-w-7xl px-6">
-        <div className="flex flex-col items-center justify-between gap-6 md:flex-row">
-          <div className="flex items-center gap-2">
-            <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-gradient-to-br from-cyan-400 to-fuchsia-500">
-              <span className="text-xs font-black text-white">A</span>
-            </div>
-            <span className="font-bold">AdLab AI</span>
+    <footer className="border-t border-white/5 py-8">
+      <div className="mx-auto flex max-w-6xl items-center justify-between px-6 text-[12px] text-zinc-600">
+        <div className="flex items-center gap-2">
+          <div className="flex h-5 w-5 items-center justify-center rounded bg-gradient-to-br from-cyan-400 to-fuchsia-500">
+            <span className="text-[8px] font-black text-white">A</span>
           </div>
-          <div className="flex gap-8 text-sm text-zinc-500">
-            <a href="#features" className="hover:text-white">Features</a>
-            <a href="#pricing" className="hover:text-white">Pricing</a>
-            <Link href="/login" className="hover:text-white">Log in</Link>
-          </div>
-          <p className="text-sm text-zinc-600">© {new Date().getFullYear()} AdLab AI. All rights reserved.</p>
+          <span>AdLab AI</span>
         </div>
+        <div className="flex gap-6">
+          <a href="#product" className="hover:text-white">Product</a>
+          <a href="#pricing" className="hover:text-white">Pricing</a>
+          <Link href="/login" className="hover:text-white">Sign in</Link>
+        </div>
+        <span>© {new Date().getFullYear()}</span>
       </div>
     </footer>
   );
