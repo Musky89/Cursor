@@ -62,7 +62,7 @@ async function generateWithFineTuned(replicate: Replicate, prompt: string) {
 
 async function generateWithGemini(gemini: GoogleGenAI, prompt: string) {
   const response = await gemini.models.generateContent({
-    model: "gemini-2.5-flash-image",
+    model: process.env.GEMINI_IMAGE_MODEL ?? "gemini-3-pro-image-preview",
     contents: prompt,
     config: { responseModalities: ["image", "text"] },
   });
@@ -94,7 +94,7 @@ async function generateWithDalle(openai: OpenAI, prompt: string, style: "vivid" 
 
 function getActiveModel() {
   if (process.env.REPLICATE_API_TOKEN && process.env.REPLICATE_MODEL) return `fine-tuned (${process.env.REPLICATE_MODEL})`;
-  if (process.env.GEMINI_API_KEY) return "gemini-2.5-flash-image (Nano Banana)";
+  if (process.env.GEMINI_API_KEY) return `${process.env.GEMINI_IMAGE_MODEL ?? "gemini-3-pro-image-preview"} (Nano Banana Pro)`;
   if (process.env.OPENAI_API_KEY) return "dall-e-3";
   return "none";
 }

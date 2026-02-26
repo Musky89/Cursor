@@ -664,6 +664,10 @@ export function AdLabApp({ initialUser, initialWorkspace }: AdLabAppProps) {
             <span className="text-sm text-blue-400">⚡ Pepsi — Electric Youth</span>
           </label>
           <label className="inline-flex items-center gap-2 cursor-pointer">
+            <input type="radio" name="brandStyle" value="hot-chicken" checked={selectedBrandStyle === "hot-chicken"} onChange={() => setSelectedBrandStyle("hot-chicken")} className="accent-orange-500" />
+            <span className="text-sm text-orange-400">🍗 Hot Chicken — Streetfood</span>
+          </label>
+          <label className="inline-flex items-center gap-2 cursor-pointer">
             <input type="radio" name="brandStyle" value="coke-inspired" checked={selectedBrandStyle === "coke-inspired"} onChange={() => setSelectedBrandStyle("coke-inspired")} className="accent-red-500" />
             <span className="text-sm text-red-400">🔥 Coke — Authentic Moments</span>
           </label>

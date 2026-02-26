@@ -37,6 +37,25 @@ export const brandStyles: Record<string, BrandStyle> = {
     negativePrompt: "No clip art, no cartoons, no flat design, no stock photo watermarks, no amateur photography, no harsh flash, no cluttered compositions, no small product shots, no boring static poses",
   },
 
+  "hot-chicken": {
+    name: "Hot Chicken (Dave's-Inspired Streetfood)",
+    description: "Fiery, unapologetic, streetfood swagger. Think Dave's Hot Chicken — red-hot branding, dripping sauces, in-your-face attitude, queue-around-the-block energy.",
+    visualIdentity: {
+      colorPalette: "Flame red (#E31837), charcoal black, mustard yellow accents. White for text contrast. Grease-splatter textures. Hot sauce orange gradients.",
+      typography: "Bold condensed sans-serif, ALL CAPS headlines. Distressed/stamp textures welcome. Hand-painted chalkboard aesthetic for specials. Numbers in oversized slab serif.",
+      photographyStyle: "Food photography that makes you salivate. Extreme close-up macro shots of crispy golden crumb texture, sauce dripping in slow motion. Steam rising from freshly fried chicken. Hands tearing apart a piece showing juicy interior. Shot on 100mm macro lens, f/2.8, focus-stacked for maximum crunch detail. Dark moody backgrounds with single dramatic light source. David Chang meets food porn aesthetics.",
+      compositionRules: "Food always hero — fill 60-70% of frame. Shoot slightly above or at table level, never clinical overhead. Sauce drips create leading lines. Hands in frame add humanity and scale. Paper-lined baskets, kraft paper, metal trays as props. Messy is intentional — perfection looks fake.",
+      moodAndTone: "Unapologetic indulgence. 'You can't handle this heat' energy. Street cred, not corporate polish. The kind of food that makes you close your eyes on first bite. Queue culture — if people aren't waiting, you're not hot enough.",
+      lighting: "Single hard key light from camera-left creating dramatic shadows. Warm tungsten color temperature (3200K). Practical lights — heat lamps, neon open signs. Specular highlights on crispy surfaces and glossy sauces. Dark, moody, appetite-inducing.",
+    },
+    adFormats: {
+      meta: "1:1 square or 4:5 portrait. Hero food shot dominating frame. Bold price/offer callout in corner. Location tag. 'Order Now' CTA.",
+      tiktok: "9:16 vertical. POV of biting into chicken. Sauce drip close-up. Reaction shot. Feels like user-generated content, not a produced ad.",
+      google: "1200x628 landscape. Split — food left, offer right. Clean, appetizing, immediate understanding.",
+    },
+    negativePrompt: "No clean sterile fast-food styling, no overhead flat-lays, no garnish-heavy plating, no stock photo smiles, no bright even lighting, no corporate restaurant interiors, no plastic-looking food",
+  },
+
   "coke-inspired": {
     name: "Coke-Inspired (Authentic Moments)",
     description: "Warm, real, emotionally resonant. Think Coca-Cola's 'Share a Coke' and 'Open Happiness' — genuine human connection, golden-hour warmth, everyday magic.",
