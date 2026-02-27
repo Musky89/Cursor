@@ -494,13 +494,29 @@ export function AdLabApp({ initialUser, initialWorkspace }: AdLabAppProps) {
         <KpiCard label="Experiments" value={`${dashboard?.experimentCount ?? 0}`} />
       </section>
 
-      {/* AI Tools Section */}
-      <section className="grid gap-4 xl:grid-cols-2">
-        <AudienceGenerator onGenerated={(persona) => {
-          setAudienceForm({ name: persona.name, painPoints: persona.painPoints, desires: persona.desires, notes: persona.notes ?? "" });
-          setMessage("Audience persona generated! Review and save below.");
-        }} />
-        <CompetitorAnalysis />
+      {/* Agent Command Center */}
+      <section className="rounded-2xl border border-cyan-500/20 bg-gradient-to-br from-cyan-500/5 via-transparent to-fuchsia-500/5 p-5">
+        <div className="mb-4 flex items-center gap-3">
+          <span className="text-xl">🤖</span>
+          <div>
+            <h2 className="text-lg font-bold">Agent Command Center</h2>
+            <p className="text-xs text-zinc-500">Autonomous AI agents that do the research, strategy, and execution for you.</p>
+          </div>
+        </div>
+
+        <div className="grid gap-4 xl:grid-cols-2">
+          <AutoCampaignAgent onComplete={() => { setMessage("Auto-campaign complete! Scroll down to see your concepts."); void loadAllData(); }} />
+          <BrandIntelAgent />
+        </div>
+
+        <div className="mt-4 grid gap-4 xl:grid-cols-3">
+          <AudienceGenerator onGenerated={(persona) => {
+            setAudienceForm({ name: persona.name, painPoints: persona.painPoints, desires: persona.desires, notes: persona.notes ?? "" });
+            setMessage("Audience persona generated! Review and save below.");
+          }} />
+          <CompetitorAnalysis />
+          <FatigueCheck />
+        </div>
       </section>
 
       <section className="grid gap-4 xl:grid-cols-2">
@@ -920,6 +936,167 @@ function Input({
         onChange={(event) => onChange(event.target.value)}
       />
     </label>
+  );
+}
+
+function AutoCampaignAgent({ onComplete }: { onComplete: () => void }) {
+  const [url, setUrl] = useState("");
+  const [channel, setChannel] = useState("META");
+  const [loading, setLoading] = useState(false);
+  const [result, setResult] = useState<{ brand: { name: string; tagline: string }; concepts: { headline: string; score: number }[] } | null>(null);
+
+  async function run() {
+    setLoading(true);
+    try {
+      const res = await fetch("/api/agents/auto-campaign", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ url, channel, conceptCount: 4 }),
+      });
+      const data = await res.json();
+      if (data.success) { setResult(data); onComplete(); }
+    } catch { /* ignore */ } finally { setLoading(false); }
+  }
+
+  return (
+    <div className="space-y-3 rounded-xl border border-emerald-500/20 bg-emerald-500/5 p-4">
+      <div className="flex items-center gap-2">
+        <span className="text-lg">🚀</span>
+        <h3 className="text-[14px] font-semibold">Auto-Campaign Agent</h3>
+      </div>
+      <p className="text-[11px] text-zinc-500">Paste any website URL. The agent scrapes the brand, builds an audience, and generates a full campaign — autonomously.</p>
+      <input className="w-full rounded-lg border border-zinc-700 bg-zinc-950 px-3 py-2 text-sm" placeholder="https://example.com" value={url} onChange={(e) => setUrl(e.target.value)} />
+      <div className="flex gap-2">
+        <select className="rounded-lg border border-zinc-700 bg-zinc-950 px-3 py-2 text-sm" value={channel} onChange={(e) => setChannel(e.target.value)}>
+          <option value="META">META</option>
+          <option value="TIKTOK">TIKTOK</option>
+          <option value="GOOGLE">GOOGLE</option>
+        </select>
+        <button type="button" onClick={run} disabled={loading || url.length < 10} className="flex-1 rounded-lg bg-emerald-500 px-4 py-2 text-sm font-semibold text-zinc-950 disabled:opacity-50">
+          {loading ? "Agent working… (30-60s)" : "Launch Agent"}
+        </button>
+      </div>
+      {result && (
+        <div className="rounded-lg border border-zinc-800 bg-zinc-950/70 p-3 text-xs">
+          <p className="font-semibold text-emerald-300">✅ Campaign ready for {result.brand.name}</p>
+          <p className="text-zinc-500">{result.brand.tagline}</p>
+          <div className="mt-2 space-y-1">
+            {result.concepts.map((c, i) => <p key={i} className="text-zinc-400">#{i + 1} (Score: {c.score}) {c.headline}</p>)}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+function BrandIntelAgent() {
+  const [url, setUrl] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [result, setResult] = useState<{
+    name: string; tagline: string; description: string;
+    brandVoice: { tone: string; personality: string; vocabulary: string[] };
+    visualIdentity: { primaryColors: string[]; style: string; mood: string };
+    targetAudience: string; socialProof: string[];
+  } | null>(null);
+
+  async function run() {
+    setLoading(true);
+    try {
+      const res = await fetch("/api/agents/brand-intel", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ url }),
+      });
+      const data = await res.json();
+      if (data.profile) setResult(data.profile);
+    } catch { /* ignore */ } finally { setLoading(false); }
+  }
+
+  return (
+    <div className="space-y-3 rounded-xl border border-violet-500/20 bg-violet-500/5 p-4">
+      <div className="flex items-center gap-2">
+        <span className="text-lg">🔍</span>
+        <h3 className="text-[14px] font-semibold">Brand Intelligence Agent</h3>
+      </div>
+      <p className="text-[11px] text-zinc-500">Paste a URL. The agent crawls the site and extracts brand voice, colors, products, audience, and positioning.</p>
+      <input className="w-full rounded-lg border border-zinc-700 bg-zinc-950 px-3 py-2 text-sm" placeholder="https://competitor.com" value={url} onChange={(e) => setUrl(e.target.value)} />
+      <button type="button" onClick={run} disabled={loading || url.length < 10} className="w-full rounded-lg bg-violet-500 px-4 py-2 text-sm font-semibold text-white disabled:opacity-50">
+        {loading ? "Scraping & analyzing…" : "Analyze Brand"}
+      </button>
+      {result && (
+        <div className="max-h-52 space-y-2 overflow-y-auto rounded-lg border border-zinc-800 bg-zinc-950/70 p-3 text-xs">
+          <p className="font-semibold text-violet-300">{result.name}</p>
+          <p className="text-zinc-400">{result.tagline}</p>
+          <p className="text-zinc-500">{result.description}</p>
+          <div className="flex gap-1">
+            {result.visualIdentity.primaryColors.map((c, i) => (
+              <span key={i} className="inline-block h-4 w-4 rounded border border-zinc-700" style={{ background: c }} title={c} />
+            ))}
+          </div>
+          <p className="text-zinc-500"><span className="text-zinc-400">Voice:</span> {result.brandVoice.personality}</p>
+          <p className="text-zinc-500"><span className="text-zinc-400">Audience:</span> {result.targetAudience}</p>
+          <p className="text-zinc-500"><span className="text-zinc-400">Keywords:</span> {result.brandVoice.vocabulary.join(", ")}</p>
+        </div>
+      )}
+    </div>
+  );
+}
+
+function FatigueCheck() {
+  const [loading, setLoading] = useState(false);
+  const [result, setResult] = useState<{
+    fatigueDetected: boolean;
+    overusedAngles?: { angle: string; count: number; risk: string }[];
+    underexploredAngles?: string[];
+    recommendations?: string[];
+    freshConceptIdeas?: string[];
+  } | null>(null);
+
+  async function check() {
+    setLoading(true);
+    try {
+      const res = await fetch("/api/agents/fatigue-check");
+      const data = await res.json();
+      setResult(data);
+    } catch { /* ignore */ } finally { setLoading(false); }
+  }
+
+  return (
+    <div className="space-y-3 rounded-xl border border-amber-500/20 bg-amber-500/5 p-4">
+      <div className="flex items-center gap-2">
+        <span className="text-lg">🔋</span>
+        <h3 className="text-[14px] font-semibold">Creative Fatigue Check</h3>
+      </div>
+      <p className="text-[11px] text-zinc-500">Analyzes your concept portfolio for repetitive angles and suggests fresh directions.</p>
+      <button type="button" onClick={check} disabled={loading} className="w-full rounded-lg bg-amber-500 px-4 py-2 text-sm font-semibold text-zinc-950 disabled:opacity-50">
+        {loading ? "Checking…" : "Run Fatigue Check"}
+      </button>
+      {result && (
+        <div className="max-h-52 space-y-2 overflow-y-auto rounded-lg border border-zinc-800 bg-zinc-950/70 p-3 text-xs">
+          <p className={`font-semibold ${result.fatigueDetected ? "text-amber-300" : "text-emerald-300"}`}>
+            {result.fatigueDetected ? "⚠ Creative fatigue detected" : "✅ Portfolio looks fresh"}
+          </p>
+          {result.overusedAngles && result.overusedAngles.length > 0 && (
+            <div>
+              <p className="text-zinc-400">Overused angles:</p>
+              {result.overusedAngles.map((a, i) => <p key={i} className="text-zinc-500">• {a.angle} ({a.count}x) — {a.risk}</p>)}
+            </div>
+          )}
+          {result.freshConceptIdeas && (
+            <div>
+              <p className="text-zinc-400">Try these fresh ideas:</p>
+              {result.freshConceptIdeas.map((idea, i) => <p key={i} className="text-emerald-400/70">💡 {idea}</p>)}
+            </div>
+          )}
+          {result.recommendations && (
+            <div>
+              <p className="text-zinc-400">Recommendations:</p>
+              {result.recommendations.map((r, i) => <p key={i} className="text-zinc-500">→ {r}</p>)}
+            </div>
+          )}
+        </div>
+      )}
+    </div>
   );
 }
 
