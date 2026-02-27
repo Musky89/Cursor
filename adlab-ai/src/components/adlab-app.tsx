@@ -494,6 +494,15 @@ export function AdLabApp({ initialUser, initialWorkspace }: AdLabAppProps) {
         <KpiCard label="Experiments" value={`${dashboard?.experimentCount ?? 0}`} />
       </section>
 
+      {/* AI Tools Section */}
+      <section className="grid gap-4 xl:grid-cols-2">
+        <AudienceGenerator onGenerated={(persona) => {
+          setAudienceForm({ name: persona.name, painPoints: persona.painPoints, desires: persona.desires, notes: persona.notes ?? "" });
+          setMessage("Audience persona generated! Review and save below.");
+        }} />
+        <CompetitorAnalysis />
+      </section>
+
       <section className="grid gap-4 xl:grid-cols-2">
         <form className="space-y-3 rounded-2xl border border-zinc-800 bg-zinc-900/70 p-5" onSubmit={createProduct}>
           <h2 className="text-lg font-semibold">Add product</h2>
@@ -682,7 +691,7 @@ export function AdLabApp({ initialUser, initialWorkspace }: AdLabAppProps) {
             return (
               <article
                 key={concept.id}
-                className="space-y-2 rounded-xl border border-zinc-800 bg-zinc-950/70 p-4"
+                className="space-y-2 rounded-xl border border-zinc-800 bg-zinc-950/70 p-4 transition hover:border-zinc-700"
               >
                 <div className="flex items-start justify-between gap-2">
                   <div>
@@ -744,6 +753,7 @@ export function AdLabApp({ initialUser, initialWorkspace }: AdLabAppProps) {
                 )}
 
                 <p className="text-sm text-zinc-300">{concept.hook}</p>
+                <a href={`/app/concepts/${concept.id}`} className="inline-block text-[11px] text-cyan-500 transition hover:text-cyan-300">View full concept →</a>
                 <p className="text-xs text-zinc-500">{concept.angle}</p>
                 <div className="grid grid-cols-3 gap-2 text-xs">
                   <StatChip label="Score" value={concept.score.toFixed(0)} />
@@ -910,6 +920,120 @@ function Input({
         onChange={(event) => onChange(event.target.value)}
       />
     </label>
+  );
+}
+
+function AudienceGenerator({ onGenerated }: { onGenerated: (persona: { name: string; painPoints: string; desires: string; notes: string }) => void }) {
+  const [desc, setDesc] = useState("");
+  const [market, setMarket] = useState("South Africa");
+  const [loading, setLoading] = useState(false);
+  const [result, setResult] = useState<{ name: string; painPoints: string; desires: string; notes: string } | null>(null);
+
+  async function generate() {
+    setLoading(true);
+    try {
+      const res = await fetch("/api/audience-generator", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ description: desc, market }),
+      });
+      const data = await res.json();
+      if (data.persona) {
+        setResult(data.persona);
+        onGenerated(data.persona);
+      }
+    } catch { /* ignore */ } finally { setLoading(false); }
+  }
+
+  return (
+    <div className="space-y-3 rounded-2xl border border-cyan-500/20 bg-gradient-to-br from-cyan-500/5 to-transparent p-5">
+      <div className="flex items-center gap-2">
+        <span className="text-lg">🧠</span>
+        <h2 className="text-lg font-semibold">AI Audience Generator</h2>
+      </div>
+      <p className="text-xs text-zinc-500">Describe your target customer in plain English. GPT generates a full persona with pain points, desires, and cultural context.</p>
+      <input className="w-full rounded-lg border border-zinc-700 bg-zinc-950 px-3 py-2 text-sm" placeholder='e.g. "Young professionals who love spicy food and follow food TikTok"' value={desc} onChange={(e) => setDesc(e.target.value)} />
+      <div className="flex gap-2">
+        <input className="flex-1 rounded-lg border border-zinc-700 bg-zinc-950 px-3 py-2 text-sm" placeholder="Market" value={market} onChange={(e) => setMarket(e.target.value)} />
+        <button type="button" onClick={generate} disabled={loading || desc.length < 10} className="rounded-lg bg-cyan-500 px-4 py-2 text-sm font-semibold text-zinc-950 disabled:opacity-50">
+          {loading ? "Generating…" : "Generate Persona"}
+        </button>
+      </div>
+      {result && (
+        <div className="rounded-lg border border-zinc-800 bg-zinc-950/70 p-3 text-xs">
+          <p className="font-semibold text-cyan-300">{result.name}</p>
+          <p className="mt-1 text-zinc-500">Persona auto-filled in the audience form below. Review and save.</p>
+        </div>
+      )}
+    </div>
+  );
+}
+
+function CompetitorAnalysis() {
+  const [competitor, setCompetitor] = useState("");
+  const [product, setProduct] = useState("");
+  const [market, setMarket] = useState("South Africa");
+  const [loading, setLoading] = useState(false);
+  const [result, setResult] = useState<{
+    competitorWeaknesses: string[];
+    attackAngles: { angle: string; headline: string; hook: string; tone: string }[];
+    differentiators: string[];
+    avoidTopics: string[];
+  } | null>(null);
+
+  async function analyze() {
+    setLoading(true);
+    try {
+      const res = await fetch("/api/competitor-analysis", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ competitor, yourProduct: product, market }),
+      });
+      const data = await res.json();
+      if (data.analysis) setResult(data.analysis);
+    } catch { /* ignore */ } finally { setLoading(false); }
+  }
+
+  return (
+    <div className="space-y-3 rounded-2xl border border-orange-500/20 bg-gradient-to-br from-orange-500/5 to-transparent p-5">
+      <div className="flex items-center gap-2">
+        <span className="text-lg">⚔️</span>
+        <h2 className="text-lg font-semibold">Competitor Attack Angles</h2>
+      </div>
+      <p className="text-xs text-zinc-500">Name a competitor. GPT identifies their weaknesses and generates ad angles to steal their market share.</p>
+      <div className="grid grid-cols-2 gap-2">
+        <input className="rounded-lg border border-zinc-700 bg-zinc-950 px-3 py-2 text-sm" placeholder="Competitor (e.g. KFC)" value={competitor} onChange={(e) => setCompetitor(e.target.value)} />
+        <input className="rounded-lg border border-zinc-700 bg-zinc-950 px-3 py-2 text-sm" placeholder="Your product (e.g. Crumbed)" value={product} onChange={(e) => setProduct(e.target.value)} />
+      </div>
+      <div className="flex gap-2">
+        <input className="flex-1 rounded-lg border border-zinc-700 bg-zinc-950 px-3 py-2 text-sm" placeholder="Market" value={market} onChange={(e) => setMarket(e.target.value)} />
+        <button type="button" onClick={analyze} disabled={loading || competitor.length < 2 || product.length < 2} className="rounded-lg bg-orange-500 px-4 py-2 text-sm font-semibold text-zinc-950 disabled:opacity-50">
+          {loading ? "Analyzing…" : "Find Weaknesses"}
+        </button>
+      </div>
+      {result && (
+        <div className="max-h-64 space-y-3 overflow-y-auto rounded-lg border border-zinc-800 bg-zinc-950/70 p-3 text-xs">
+          <div>
+            <p className="font-semibold text-orange-300">Weaknesses to Exploit</p>
+            <ul className="mt-1 space-y-1">{result.competitorWeaknesses.map((w, i) => <li key={i} className="text-zinc-400">• {w}</li>)}</ul>
+          </div>
+          <div>
+            <p className="font-semibold text-orange-300">Attack Angles</p>
+            {result.attackAngles.map((a, i) => (
+              <div key={i} className="mt-2 rounded border border-zinc-800 bg-zinc-900/50 p-2">
+                <p className="font-medium text-zinc-200">{a.headline}</p>
+                <p className="text-zinc-500">{a.hook}</p>
+                <p className="mt-0.5 text-zinc-600">Tone: {a.tone}</p>
+              </div>
+            ))}
+          </div>
+          <div>
+            <p className="font-semibold text-red-400">Avoid These Topics</p>
+            <ul className="mt-1 space-y-1">{result.avoidTopics.map((t, i) => <li key={i} className="text-zinc-500">⚠ {t}</li>)}</ul>
+          </div>
+        </div>
+      )}
+    </div>
   );
 }
 
