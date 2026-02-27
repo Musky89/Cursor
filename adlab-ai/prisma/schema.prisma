@@ -36,18 +36,22 @@ model User {
 }
 
 model Workspace {
-  id               String            @id @default(cuid())
-  name             String
-  ownerId          String
-  owner            User              @relation(fields: [ownerId], references: [id], onDelete: Cascade)
-  products         Product[]
-  audiences        Audience[]
-  concepts         AdConcept[]
-  experiments      Experiment[]
-  metricSnapshots  MetricSnapshot[]
-  optimizationLogs OptimizationLog[]
-  createdAt        DateTime          @default(now())
-  updatedAt        DateTime          @updatedAt
+  id                 String              @id @default(cuid())
+  name               String
+  ownerId            String
+  owner              User                @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  products           Product[]
+  audiences          Audience[]
+  concepts           AdConcept[]
+  experiments        Experiment[]
+  metricSnapshots    MetricSnapshot[]
+  optimizationLogs   OptimizationLog[]
+  brandAssets        BrandAsset[]
+  generatedImages    GeneratedImage[]
+  campaigns          Campaign[]
+  influencerProfiles InfluencerProfile[]
+  createdAt          DateTime            @default(now())
+  updatedAt          DateTime            @updatedAt
 
   @@index([ownerId])
 }
@@ -109,6 +113,7 @@ model AdConcept {
   experimentLinks ExperimentConcept[]
   metricSnapshots MetricSnapshot[]
   optimizationLog OptimizationLog[]
+  generatedImages GeneratedImage[]
 
   @@index([workspaceId, productId, audienceId, channel])
 }
@@ -186,4 +191,104 @@ model OptimizationLog {
 
   @@index([workspaceId, createdAt])
   @@index([experimentId, createdAt])
+}
+
+// ─── Brand Asset Library ────────────────────────────────────────
+
+model BrandAsset {
+  id          String    @id @default(cuid())
+  workspaceId String
+  workspace   Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  type        String    // "product_photo" | "logo" | "brand_guide" | "reference"
+  name        String
+  description String?
+  fileData    Bytes
+  mimeType    String
+  width       Int?
+  height      Int?
+  createdAt   DateTime  @default(now())
+
+  @@index([workspaceId, type])
+}
+
+// ─── Saved Generated Images ─────────────────────────────────────
+
+model GeneratedImage {
+  id          String     @id @default(cuid())
+  workspaceId String
+  workspace   Workspace  @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  conceptId   String?
+  concept     AdConcept? @relation(fields: [conceptId], references: [id], onDelete: SetNull)
+  campaignId  String?
+  campaign    Campaign?  @relation(fields: [campaignId], references: [id], onDelete: SetNull)
+  imageData   Bytes
+  mimeType    String
+  prompt      String
+  model       String
+  brandStyle  String?
+  width       Int        @default(1024)
+  height      Int        @default(1024)
+  format      String     @default("1:1") // "1:1" | "4:5" | "9:16" | "16:9"
+  status      String     @default("draft") // "draft" | "pending_review" | "approved" | "rejected"
+  reviewNote  String?
+  createdAt   DateTime   @default(now())
+
+  @@index([workspaceId, status])
+  @@index([campaignId])
+  @@index([conceptId])
+}
+
+// ─── Campaigns ──────────────────────────────────────────────────
+
+model Campaign {
+  id          String           @id @default(cuid())
+  workspaceId String
+  workspace   Workspace        @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  name        String
+  description String?
+  status      String           @default("draft") // "draft" | "active" | "completed" | "archived"
+  startDate   DateTime?
+  endDate     DateTime?
+  channel     Channel?
+  images      GeneratedImage[]
+  posts       CampaignPost[]
+  createdAt   DateTime         @default(now())
+  updatedAt   DateTime         @updatedAt
+
+  @@index([workspaceId, status])
+}
+
+// ─── Campaign Posts (Calendar) ──────────────────────────────────
+
+model CampaignPost {
+  id          String    @id @default(cuid())
+  campaignId  String
+  campaign    Campaign  @relation(fields: [campaignId], references: [id], onDelete: Cascade)
+  scheduledAt DateTime
+  caption     String
+  hashtags    String?
+  channel     Channel
+  format      String    @default("1:1")
+  imageUrl    String?
+  status      String    @default("scheduled") // "scheduled" | "posted" | "cancelled"
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  @@index([campaignId, scheduledAt])
+}
+
+// ─── Influencer Profiles ────────────────────────────────────────
+
+model InfluencerProfile {
+  id          String    @id @default(cuid())
+  workspaceId String
+  workspace   Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  name        String
+  description String    // Detailed physical description for AI consistency
+  personality String?   // Tone, style, catchphrases
+  referenceImageData Bytes?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  @@index([workspaceId])
 }
