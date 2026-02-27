@@ -1,0 +1,763 @@
+<!DOCTYPE html>
+<!--[if (IE 8)&!(IEMobile)]><html lang="en-ZA" class="no-js lt-ie9"><![endif]-->
+<!--[if gt IE 8]><!--> <html lang="en-ZA" class="no-js"><!--<![endif]-->
+<head>
+	<meta charset="utf-8">
+<meta name="HandheldFriendly" content="True">
+<meta name="MobileOptimized" content="320">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="format-detection" content="telephone=no">
+<meta name="viewport" content="initial-scale=1,user-scalable=no,maximum-scale=1,width=device-width, minimal-ui">
+<meta name="msapplication-TileColor" content="#FFF">
+<meta name="theme-color" content="#FFF">
+<link rel="pingback" href="https://rclfoods.com/xmlrpc.php">
+<script>
+	var html = document.getElementsByTagName("html");
+	html[0].classList.remove("no-js");
+	html[0].classList.add("js");
+</script>
+<meta name='robots' content='noindex, follow' />
+	<style>img:is([sizes="auto" i], [sizes^="auto," i]) { contain-intrinsic-size: 3000px 1500px }</style>
+	
+	<!-- This site is optimized with the Yoast SEO plugin v27.0 - https://yoast.com/product/yoast-seo-wordpress/ -->
+	<title>Page not found - RCL FOODS</title>
+	<meta property="og:locale" content="en_US" />
+	<meta property="og:title" content="Page not found - RCL FOODS" />
+	<meta property="og:site_name" content="RCL FOODS" />
+	<script type="application/ld+json" class="yoast-schema-graph">{"@context":"https://schema.org","@graph":[{"@type":"WebSite","@id":"https://rclfoods.com/#website","url":"https://rclfoods.com/","name":"RCL FOODS","description":"","publisher":{"@id":"https://rclfoods.com/#organization"},"potentialAction":[{"@type":"SearchAction","target":{"@type":"EntryPoint","urlTemplate":"https://rclfoods.com/?s={search_term_string}"},"query-input":{"@type":"PropertyValueSpecification","valueRequired":true,"valueName":"search_term_string"}}],"inLanguage":"en-ZA"},{"@type":"Organization","@id":"https://rclfoods.com/#organization","name":"RCL FOODS","url":"https://rclfoods.com/","logo":{"@type":"ImageObject","inLanguage":"en-ZA","@id":"https://rclfoods.com/#/schema/logo/image/","url":"https://rclfoods.com/wp-content/uploads/2019/07/rcl-logo-updated.svg","contentUrl":"https://rclfoods.com/wp-content/uploads/2019/07/rcl-logo-updated.svg","caption":"RCL FOODS"},"image":{"@id":"https://rclfoods.com/#/schema/logo/image/"}}]}</script>
+	<!-- / Yoast SEO plugin. -->
+
+
+<link rel='dns-prefetch' href='//ajax.googleapis.com' />
+<link rel="alternate" type="application/rss+xml" title="RCL FOODS &raquo; Feed" href="https://rclfoods.com/feed/" />
+<link rel="alternate" type="application/rss+xml" title="RCL FOODS &raquo; Comments Feed" href="https://rclfoods.com/comments/feed/" />
+<script type="text/javascript">
+/* <![CDATA[ */
+window._wpemojiSettings = {"baseUrl":"https:\/\/s.w.org\/images\/core\/emoji\/16.0.1\/72x72\/","ext":".png","svgUrl":"https:\/\/s.w.org\/images\/core\/emoji\/16.0.1\/svg\/","svgExt":".svg","source":{"concatemoji":"https:\/\/rclfoods.com\/wp-includes\/js\/wp-emoji-release.min.js"}};
+/*! This file is auto-generated */
+!function(s,n){var o,i,e;function c(e){try{var t={supportTests:e,timestamp:(new Date).valueOf()};sessionStorage.setItem(o,JSON.stringify(t))}catch(e){}}function p(e,t,n){e.clearRect(0,0,e.canvas.width,e.canvas.height),e.fillText(t,0,0);var t=new Uint32Array(e.getImageData(0,0,e.canvas.width,e.canvas.height).data),a=(e.clearRect(0,0,e.canvas.width,e.canvas.height),e.fillText(n,0,0),new Uint32Array(e.getImageData(0,0,e.canvas.width,e.canvas.height).data));return t.every(function(e,t){return e===a[t]})}function u(e,t){e.clearRect(0,0,e.canvas.width,e.canvas.height),e.fillText(t,0,0);for(var n=e.getImageData(16,16,1,1),a=0;a<n.data.length;a++)if(0!==n.data[a])return!1;return!0}function f(e,t,n,a){switch(t){case"flag":return n(e,"\ud83c\udff3\ufe0f\u200d\u26a7\ufe0f","\ud83c\udff3\ufe0f\u200b\u26a7\ufe0f")?!1:!n(e,"\ud83c\udde8\ud83c\uddf6","\ud83c\udde8\u200b\ud83c\uddf6")&&!n(e,"\ud83c\udff4\udb40\udc67\udb40\udc62\udb40\udc65\udb40\udc6e\udb40\udc67\udb40\udc7f","\ud83c\udff4\u200b\udb40\udc67\u200b\udb40\udc62\u200b\udb40\udc65\u200b\udb40\udc6e\u200b\udb40\udc67\u200b\udb40\udc7f");case"emoji":return!a(e,"\ud83e\udedf")}return!1}function g(e,t,n,a){var r="undefined"!=typeof WorkerGlobalScope&&self instanceof WorkerGlobalScope?new OffscreenCanvas(300,150):s.createElement("canvas"),o=r.getContext("2d",{willReadFrequently:!0}),i=(o.textBaseline="top",o.font="600 32px Arial",{});return e.forEach(function(e){i[e]=t(o,e,n,a)}),i}function t(e){var t=s.createElement("script");t.src=e,t.defer=!0,s.head.appendChild(t)}"undefined"!=typeof Promise&&(o="wpEmojiSettingsSupports",i=["flag","emoji"],n.supports={everything:!0,everythingExceptFlag:!0},e=new Promise(function(e){s.addEventListener("DOMContentLoaded",e,{once:!0})}),new Promise(function(t){var n=function(){try{var e=JSON.parse(sessionStorage.getItem(o));if("object"==typeof e&&"number"==typeof e.timestamp&&(new Date).valueOf()<e.timestamp+604800&&"object"==typeof e.supportTests)return e.supportTests}catch(e){}return null}();if(!n){if("undefined"!=typeof Worker&&"undefined"!=typeof OffscreenCanvas&&"undefined"!=typeof URL&&URL.createObjectURL&&"undefined"!=typeof Blob)try{var e="postMessage("+g.toString()+"("+[JSON.stringify(i),f.toString(),p.toString(),u.toString()].join(",")+"));",a=new Blob([e],{type:"text/javascript"}),r=new Worker(URL.createObjectURL(a),{name:"wpTestEmojiSupports"});return void(r.onmessage=function(e){c(n=e.data),r.terminate(),t(n)})}catch(e){}c(n=g(i,f,p,u))}t(n)}).then(function(e){for(var t in e)n.supports[t]=e[t],n.supports.everything=n.supports.everything&&n.supports[t],"flag"!==t&&(n.supports.everythingExceptFlag=n.supports.everythingExceptFlag&&n.supports[t]);n.supports.everythingExceptFlag=n.supports.everythingExceptFlag&&!n.supports.flag,n.DOMReady=!1,n.readyCallback=function(){n.DOMReady=!0}}).then(function(){return e}).then(function(){var e;n.supports.everything||(n.readyCallback(),(e=n.source||{}).concatemoji?t(e.concatemoji):e.wpemoji&&e.twemoji&&(t(e.twemoji),t(e.wpemoji)))}))}((window,document),window._wpemojiSettings);
+/* ]]> */
+</script>
+<style id='wp-emoji-styles-inline-css' type='text/css'>
+
+	img.wp-smiley, img.emoji {
+		display: inline !important;
+		border: none !important;
+		box-shadow: none !important;
+		height: 1em !important;
+		width: 1em !important;
+		margin: 0 0.07em !important;
+		vertical-align: -0.1em !important;
+		background: none !important;
+		padding: 0 !important;
+	}
+</style>
+<link rel='stylesheet' id='wp-block-library-css' href='https://rclfoods.com/wp-includes/css/dist/block-library/style.min.css' type='text/css' media='all' />
+<style id='classic-theme-styles-inline-css' type='text/css'>
+/*! This file is auto-generated */
+.wp-block-button__link{color:#fff;background-color:#32373c;border-radius:9999px;box-shadow:none;text-decoration:none;padding:calc(.667em + 2px) calc(1.333em + 2px);font-size:1.125em}.wp-block-file__button{background:#32373c;color:#fff;text-decoration:none}
+</style>
+<style id='global-styles-inline-css' type='text/css'>
+:root{--wp--preset--aspect-ratio--square: 1;--wp--preset--aspect-ratio--4-3: 4/3;--wp--preset--aspect-ratio--3-4: 3/4;--wp--preset--aspect-ratio--3-2: 3/2;--wp--preset--aspect-ratio--2-3: 2/3;--wp--preset--aspect-ratio--16-9: 16/9;--wp--preset--aspect-ratio--9-16: 9/16;--wp--preset--color--black: #000;--wp--preset--color--cyan-bluish-gray: #abb8c3;--wp--preset--color--white: #fff;--wp--preset--color--pale-pink: #f78da7;--wp--preset--color--vivid-red: #cf2e2e;--wp--preset--color--luminous-vivid-orange: #ff6900;--wp--preset--color--luminous-vivid-amber: #fcb900;--wp--preset--color--light-green-cyan: #7bdcb5;--wp--preset--color--vivid-green-cyan: #00d084;--wp--preset--color--pale-cyan-blue: #8ed1fc;--wp--preset--color--vivid-cyan-blue: #0693e3;--wp--preset--color--vivid-purple: #9b51e0;--wp--preset--color--primary: #474052;--wp--preset--color--secondary: #ed706f;--wp--preset--color--success: #378d5f;--wp--preset--color--info: #4eaebe;--wp--preset--color--warning: #FAB513;--wp--preset--color--danger: #eb1c23;--wp--preset--color--teal: #199eda;--wp--preset--color--blue: #0f6bb4;--wp--preset--color--navy: #005280;--wp--preset--color--indigo: #083c65;--wp--preset--color--green: #26b787;--wp--preset--color--yellow: #fed24c;--wp--preset--gradient--vivid-cyan-blue-to-vivid-purple: linear-gradient(135deg,rgba(6,147,227,1) 0%,rgb(155,81,224) 100%);--wp--preset--gradient--light-green-cyan-to-vivid-green-cyan: linear-gradient(135deg,rgb(122,220,180) 0%,rgb(0,208,130) 100%);--wp--preset--gradient--luminous-vivid-amber-to-luminous-vivid-orange: linear-gradient(135deg,rgba(252,185,0,1) 0%,rgba(255,105,0,1) 100%);--wp--preset--gradient--luminous-vivid-orange-to-vivid-red: linear-gradient(135deg,rgba(255,105,0,1) 0%,rgb(207,46,46) 100%);--wp--preset--gradient--very-light-gray-to-cyan-bluish-gray: linear-gradient(135deg,rgb(238,238,238) 0%,rgb(169,184,195) 100%);--wp--preset--gradient--cool-to-warm-spectrum: linear-gradient(135deg,rgb(74,234,220) 0%,rgb(151,120,209) 20%,rgb(207,42,186) 40%,rgb(238,44,130) 60%,rgb(251,105,98) 80%,rgb(254,248,76) 100%);--wp--preset--gradient--blush-light-purple: linear-gradient(135deg,rgb(255,206,236) 0%,rgb(152,150,240) 100%);--wp--preset--gradient--blush-bordeaux: linear-gradient(135deg,rgb(254,205,165) 0%,rgb(254,45,45) 50%,rgb(107,0,62) 100%);--wp--preset--gradient--luminous-dusk: linear-gradient(135deg,rgb(255,203,112) 0%,rgb(199,81,192) 50%,rgb(65,88,208) 100%);--wp--preset--gradient--pale-ocean: linear-gradient(135deg,rgb(255,245,203) 0%,rgb(182,227,212) 50%,rgb(51,167,181) 100%);--wp--preset--gradient--electric-grass: linear-gradient(135deg,rgb(202,248,128) 0%,rgb(113,206,126) 100%);--wp--preset--gradient--midnight: linear-gradient(135deg,rgb(2,3,129) 0%,rgb(40,116,252) 100%);--wp--preset--font-size--small: 13px;--wp--preset--font-size--medium: 20px;--wp--preset--font-size--large: 36px;--wp--preset--font-size--x-large: 42px;--wp--preset--spacing--20: 0.44rem;--wp--preset--spacing--30: 0.67rem;--wp--preset--spacing--40: 1rem;--wp--preset--spacing--50: 1.5rem;--wp--preset--spacing--60: 2.25rem;--wp--preset--spacing--70: 3.38rem;--wp--preset--spacing--80: 5.06rem;--wp--preset--shadow--natural: 6px 6px 9px rgba(0, 0, 0, 0.2);--wp--preset--shadow--deep: 12px 12px 50px rgba(0, 0, 0, 0.4);--wp--preset--shadow--sharp: 6px 6px 0px rgba(0, 0, 0, 0.2);--wp--preset--shadow--outlined: 6px 6px 0px -3px rgba(255, 255, 255, 1), 6px 6px rgba(0, 0, 0, 1);--wp--preset--shadow--crisp: 6px 6px 0px rgba(0, 0, 0, 1);}:where(.is-layout-flex){gap: 0.5em;}:where(.is-layout-grid){gap: 0.5em;}body .is-layout-flex{display: flex;}.is-layout-flex{flex-wrap: wrap;align-items: center;}.is-layout-flex > :is(*, div){margin: 0;}body .is-layout-grid{display: grid;}.is-layout-grid > :is(*, div){margin: 0;}:where(.wp-block-columns.is-layout-flex){gap: 2em;}:where(.wp-block-columns.is-layout-grid){gap: 2em;}:where(.wp-block-post-template.is-layout-flex){gap: 1.25em;}:where(.wp-block-post-template.is-layout-grid){gap: 1.25em;}.has-black-color{color: var(--wp--preset--color--black) !important;}.has-cyan-bluish-gray-color{color: var(--wp--preset--color--cyan-bluish-gray) !important;}.has-white-color{color: var(--wp--preset--color--white) !important;}.has-pale-pink-color{color: var(--wp--preset--color--pale-pink) !important;}.has-vivid-red-color{color: var(--wp--preset--color--vivid-red) !important;}.has-luminous-vivid-orange-color{color: var(--wp--preset--color--luminous-vivid-orange) !important;}.has-luminous-vivid-amber-color{color: var(--wp--preset--color--luminous-vivid-amber) !important;}.has-light-green-cyan-color{color: var(--wp--preset--color--light-green-cyan) !important;}.has-vivid-green-cyan-color{color: var(--wp--preset--color--vivid-green-cyan) !important;}.has-pale-cyan-blue-color{color: var(--wp--preset--color--pale-cyan-blue) !important;}.has-vivid-cyan-blue-color{color: var(--wp--preset--color--vivid-cyan-blue) !important;}.has-vivid-purple-color{color: var(--wp--preset--color--vivid-purple) !important;}.has-black-background-color{background-color: var(--wp--preset--color--black) !important;}.has-cyan-bluish-gray-background-color{background-color: var(--wp--preset--color--cyan-bluish-gray) !important;}.has-white-background-color{background-color: var(--wp--preset--color--white) !important;}.has-pale-pink-background-color{background-color: var(--wp--preset--color--pale-pink) !important;}.has-vivid-red-background-color{background-color: var(--wp--preset--color--vivid-red) !important;}.has-luminous-vivid-orange-background-color{background-color: var(--wp--preset--color--luminous-vivid-orange) !important;}.has-luminous-vivid-amber-background-color{background-color: var(--wp--preset--color--luminous-vivid-amber) !important;}.has-light-green-cyan-background-color{background-color: var(--wp--preset--color--light-green-cyan) !important;}.has-vivid-green-cyan-background-color{background-color: var(--wp--preset--color--vivid-green-cyan) !important;}.has-pale-cyan-blue-background-color{background-color: var(--wp--preset--color--pale-cyan-blue) !important;}.has-vivid-cyan-blue-background-color{background-color: var(--wp--preset--color--vivid-cyan-blue) !important;}.has-vivid-purple-background-color{background-color: var(--wp--preset--color--vivid-purple) !important;}.has-black-border-color{border-color: var(--wp--preset--color--black) !important;}.has-cyan-bluish-gray-border-color{border-color: var(--wp--preset--color--cyan-bluish-gray) !important;}.has-white-border-color{border-color: var(--wp--preset--color--white) !important;}.has-pale-pink-border-color{border-color: var(--wp--preset--color--pale-pink) !important;}.has-vivid-red-border-color{border-color: var(--wp--preset--color--vivid-red) !important;}.has-luminous-vivid-orange-border-color{border-color: var(--wp--preset--color--luminous-vivid-orange) !important;}.has-luminous-vivid-amber-border-color{border-color: var(--wp--preset--color--luminous-vivid-amber) !important;}.has-light-green-cyan-border-color{border-color: var(--wp--preset--color--light-green-cyan) !important;}.has-vivid-green-cyan-border-color{border-color: var(--wp--preset--color--vivid-green-cyan) !important;}.has-pale-cyan-blue-border-color{border-color: var(--wp--preset--color--pale-cyan-blue) !important;}.has-vivid-cyan-blue-border-color{border-color: var(--wp--preset--color--vivid-cyan-blue) !important;}.has-vivid-purple-border-color{border-color: var(--wp--preset--color--vivid-purple) !important;}.has-vivid-cyan-blue-to-vivid-purple-gradient-background{background: var(--wp--preset--gradient--vivid-cyan-blue-to-vivid-purple) !important;}.has-light-green-cyan-to-vivid-green-cyan-gradient-background{background: var(--wp--preset--gradient--light-green-cyan-to-vivid-green-cyan) !important;}.has-luminous-vivid-amber-to-luminous-vivid-orange-gradient-background{background: var(--wp--preset--gradient--luminous-vivid-amber-to-luminous-vivid-orange) !important;}.has-luminous-vivid-orange-to-vivid-red-gradient-background{background: var(--wp--preset--gradient--luminous-vivid-orange-to-vivid-red) !important;}.has-very-light-gray-to-cyan-bluish-gray-gradient-background{background: var(--wp--preset--gradient--very-light-gray-to-cyan-bluish-gray) !important;}.has-cool-to-warm-spectrum-gradient-background{background: var(--wp--preset--gradient--cool-to-warm-spectrum) !important;}.has-blush-light-purple-gradient-background{background: var(--wp--preset--gradient--blush-light-purple) !important;}.has-blush-bordeaux-gradient-background{background: var(--wp--preset--gradient--blush-bordeaux) !important;}.has-luminous-dusk-gradient-background{background: var(--wp--preset--gradient--luminous-dusk) !important;}.has-pale-ocean-gradient-background{background: var(--wp--preset--gradient--pale-ocean) !important;}.has-electric-grass-gradient-background{background: var(--wp--preset--gradient--electric-grass) !important;}.has-midnight-gradient-background{background: var(--wp--preset--gradient--midnight) !important;}.has-small-font-size{font-size: var(--wp--preset--font-size--small) !important;}.has-medium-font-size{font-size: var(--wp--preset--font-size--medium) !important;}.has-large-font-size{font-size: var(--wp--preset--font-size--large) !important;}.has-x-large-font-size{font-size: var(--wp--preset--font-size--x-large) !important;}
+:where(.wp-block-post-template.is-layout-flex){gap: 1.25em;}:where(.wp-block-post-template.is-layout-grid){gap: 1.25em;}
+:where(.wp-block-columns.is-layout-flex){gap: 2em;}:where(.wp-block-columns.is-layout-grid){gap: 2em;}
+:root :where(.wp-block-pullquote){font-size: 1.5em;line-height: 1.6;}
+</style>
+<link rel='stylesheet' id='contact-form-7-css' href='https://rclfoods.com/wp-content/plugins/contact-form-7/includes/css/styles.css' type='text/css' media='all' />
+<style id='theme-colors-inline-css' type='text/css'>
+.has-white-color {
+			color: var(--sb-white)
+		}
+		.has-white-background-color {
+			background-color: var(--sb-white)
+		}.has-black-color {
+			color: var(--sb-black)
+		}
+		.has-black-background-color {
+			background-color: var(--sb-black)
+		}.has-primary-color {
+			color: var(--sb-primary)
+		}
+		.has-primary-background-color {
+			background-color: var(--sb-primary)
+		}.has-secondary-color {
+			color: var(--sb-secondary)
+		}
+		.has-secondary-background-color {
+			background-color: var(--sb-secondary)
+		}.has-success-color {
+			color: var(--sb-success)
+		}
+		.has-success-background-color {
+			background-color: var(--sb-success)
+		}.has-info-color {
+			color: var(--sb-info)
+		}
+		.has-info-background-color {
+			background-color: var(--sb-info)
+		}.has-warning-color {
+			color: var(--sb-warning)
+		}
+		.has-warning-background-color {
+			background-color: var(--sb-warning)
+		}.has-danger-color {
+			color: var(--sb-danger)
+		}
+		.has-danger-background-color {
+			background-color: var(--sb-danger)
+		}.has-teal-color {
+			color: var(--sb-teal)
+		}
+		.has-teal-background-color {
+			background-color: var(--sb-teal)
+		}.has-blue-color {
+			color: var(--sb-blue)
+		}
+		.has-blue-background-color {
+			background-color: var(--sb-blue)
+		}.has-navy-color {
+			color: var(--sb-navy)
+		}
+		.has-navy-background-color {
+			background-color: var(--sb-navy)
+		}.has-indigo-color {
+			color: var(--sb-indigo)
+		}
+		.has-indigo-background-color {
+			background-color: var(--sb-indigo)
+		}.has-green-color {
+			color: var(--sb-green)
+		}
+		.has-green-background-color {
+			background-color: var(--sb-green)
+		}.has-yellow-color {
+			color: var(--sb-yellow)
+		}
+		.has-yellow-background-color {
+			background-color: var(--sb-yellow)
+		}
+</style>
+<link rel='stylesheet' id='sesha-child-styles-css' href='https://rclfoods.com/wp-content/themes/rcl-website/library/css/style-child.css' type='text/css' media='all' />
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js" id="jquery-js"></script>
+<link rel="https://api.w.org/" href="https://rclfoods.com/wp-json/" />
+		<!-- GA Google Analytics @ https://m0n.co/ga -->
+		<script async src="https://www.googletagmanager.com/gtag/js?id=UA-103660746-2"></script>
+		<script>
+			window.dataLayer = window.dataLayer || [];
+			function gtag(){dataLayer.push(arguments);}
+			gtag('js', new Date());
+			gtag('config', 'UA-103660746-2');
+		</script>
+
+	<!-- HFCM by 99 Robots - Snippet # 1: Share Price fix -->
+<style>
+@media (min-width: 800px) {
+.share-price-iframe {
+    width: 450px;
+}}
+@media (max-width: 799.98px) {
+.share-price-iframe {
+    height: 150px;
+}}
+</style>
+<!-- /end HFCM by 99 Robots -->
+<!-- HFCM by 99 Robots - Snippet # 3: Button Text Wrap fix -->
+<style>
+.btn-lg, .wp-block-button__link, .wpcf7-submit {
+    white-space: pre-wrap;
+}
+</style>
+<!-- /end HFCM by 99 Robots -->
+<!-- HFCM by 99 Robots - Snippet # 4: Facebook Pixel Code -->
+<!-- Facebook Pixel Code -->
+<script>
+!function(f,b,e,v,n,t,s)
+{if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+n.queue=[];t=b.createElement(e);t.async=!0;
+t.src=v;s=b.getElementsByTagName(e)[0];
+s.parentNode.insertBefore(t,s)}(window, document,'script',
+'https://connect.facebook.net/en_US/fbevents.js');
+fbq('init', '194676365883295');
+fbq('track', 'PageView');
+</script>
+<noscript><img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=194676365883295&ev=PageView&noscript=1"/></noscript>
+<!-- End Facebook Pixel Code -->
+<!-- /end HFCM by 99 Robots -->
+<!-- HFCM by 99 Robots - Snippet # 5: LinkedIn Tracking Pixel -->
+<script type="text/javascript"> _linkedin_partner_id = "3217674"; window._linkedin_data_partner_ids = window._linkedin_data_partner_ids || []; window._linkedin_data_partner_ids.push(_linkedin_partner_id); </script><script type="text/javascript"> (function(){var s = document.getElementsByTagName("script")[0]; var b = document.createElement("script"); b.type = "text/javascript";b.async = true; b.src = "https://snap.licdn.com/li.lms-analytics/insight.min.js"; s.parentNode.insertBefore(b, s);})(); </script> <noscript> <img height="1" width="1" style="display:none;" alt="" src="https://px.ads.linkedin.com/collect/?pid=3217674&fmt=gif" /> </noscript>
+<!-- /end HFCM by 99 Robots -->
+<!-- HFCM by 99 Robots - Snippet # 7: We Grow What Matters Fix -->
+<style>
+.ps__block, .ps__block-more {
+justify-content: center;
+}	
+.ps__block:nth-of-type(2n) {
+	display: none;
+}
+	.ps__column-1 .ps__block, .ps__column-1 .ps__block-more {
+		background-color: #2EB888
+	}
+	
+
+	
+</style>
+<!-- /end HFCM by 99 Robots -->
+<style id="customiser-styles-extended">
+:root {
+	--sb-variable-name: 'value';
+}
+</style>
+<style id="customiser-styles">
+:root {
+	--sb-body-padding-desktop: 0px;
+
+	--sb-masthead-height: px;
+    --sb-masthead-height-reduced: 0px;
+
+    --sb-masthead-user-messaging-height: px;
+
+	--sb-masthead-logo-width: px;
+    --sb-masthead-logo-width-reduced: 0px;
+
+	--sb-masthead-navbar-height: px;
+}
+</style>
+<link rel="icon" href="https://rclfoods.com/wp-content/uploads/2019/07/cropped-rcl-favicon-2-32x32.png" sizes="32x32" />
+<link rel="icon" href="https://rclfoods.com/wp-content/uploads/2019/07/cropped-rcl-favicon-2-192x192.png" sizes="192x192" />
+<link rel="apple-touch-icon" href="https://rclfoods.com/wp-content/uploads/2019/07/cropped-rcl-favicon-2-180x180.png" />
+<meta name="msapplication-TileImage" content="https://rclfoods.com/wp-content/uploads/2019/07/cropped-rcl-favicon-2-270x270.png" />
+		<style type="text/css" id="wp-custom-css">
+			@media (max-width: 1200px) {
+	.site-navigation-secondary__inner:before {
+			content: "Share Price";
+			font-weight: 500;
+			color: #ffffff;
+			font-size: 20px;
+			padding-right: 20px;
+			line-height: 1;
+			white-space: pre;
+	}
+}
+
+@media (min-width: 1200px) {
+	.site-navigation-secondary__inner .share-price__wrapper:before {
+			content: "Share\A Price";
+			font-weight: 500;
+			color: #ffffff;
+			font-size: 20px;
+			padding-right: 20px;
+			line-height: 1;
+			white-space: pre;
+		}
+
+	.share-price__wrapper {
+			display: flex;
+			align-items: flex-start;
+			margin-right: 80px;
+	}
+
+	.site-navigation__buttons-wrapper a {
+			margin: 2px 0;
+	}
+}
+
+@media (min-width: 800px) {
+	.site-navigation__buttons-wrapper {
+		text-align: right;
+	}
+	
+	.site-navigation-secondary__inner {
+		display: flex;
+		justify-content: space-between;
+	}
+	
+	.share-price__wrapper {
+			display: flex;
+			align-items: center;
+			margin-right: 50px;
+	}
+}
+
+@media (min-width: 500px) {
+    .single-brand .back-to-top, .single-brand .back-to-top path, .single-brand .back-to-top:hover {
+        color: #fff;
+        fill: #fff !important;
+        margin-top: 35px;
+    }
+}
+
+.brand__buttonwrapper, .brand__buttonwrapper:hover {
+    color: #000000;
+    background-color: #272727;
+    display: none;
+}
+
+body.postid-15611 .brandsection__title {
+    font-weight: 700 !important;
+    display: none;
+}
+
+.postid-15611 .brandsection__facts {
+    height: 550px;
+}
+
+
+.postid-15611 .brandsection__products {
+    height: 580px;
+		margin-top: -20px;
+}
+
+.cam {
+	z-index: 10!important;
+	margin-top: -120px;
+	position: absolute;
+	
+}
+
+.our-prod {
+	z-index: 10!important;
+	margin-top: -220px;
+	position: absolute;
+}
+
+
+@media (min-width: 500px) {
+    .postid-15611 .single-brand .back-to-top, .single-brand .back-to-top path, .single-brand .back-to-top {
+        color: #fff;
+        fill: #fff !important;
+        margin-top: -20px;
+    }
+}
+
+@media (min-width: 500px) {
+    .postid-15611 .single-brand .back-to-top, .single-brand .back-to-top path, .single-brand .back-to-top:hover {
+        color: #fff;
+        fill: #fff !important;
+        margin-top: -20px;
+    }
+}
+
+
+
+
+.postid-15611 .site-footer-wrapper {
+    margin-top: -20px;
+}
+
+body.postid-15611 p a,
+body.postid-15611 p a:visited {
+    color: #FFBE6A !important;
+}
+
+body.postid-15611 p a:hover {
+    color: #e6a957 !important;
+}
+		</style>
+		
+	<!-- Google Tag Manager -->
+	<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+	new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+	j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+	'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+	})(window,document,'script','dataLayer','GTM-KGLDCZD');</script>
+	<!-- End Google Tag Manager -->
+</head>
+<body class="error404 wp-custom-logo wp-theme-sesha wp-child-theme-rcl-website no-banner" itemscope itemtype="http://schema.org/WebPage">
+
+<!-- Google Tag Manager (noscript) -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-KGLDCZD"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<!-- End Google Tag Manager (noscript) --><a class="skip-link sr-only" href="#site-content">Skip to content</a>
+
+<header id="site-header" class="site-header / master" role="banner" itemscope itemtype="http://schema.org/WPHeader">
+	<div class="site-navigation-secondary__wrapper / d-none d-md-block">
+	<div class="site-navigation-secondary__inner container">
+
+	<div class="share-price__wrapper">
+					<iframe src="https://irhosted.profiledata.co.za/rclfoods/2019_feeds/eod_hp.htm" frameborder="0" class="share-price-iframe"></iframe>
+			</div>
+
+
+	<div class="site-navigation__buttons-wrapper / mb-3 mb-sm-0">
+				<a href="https://rclfoods.com/governance/" class="btn btn-primary btn-block-xs">
+			Governance
+		</a>
+		
+				<a href="https://rclfoods.com/investor-center/" class="btn btn-primary btn-block-xs">
+			Investor Centre
+		</a>
+			</div>
+</div></div>
+
+<div class="branding__wrapper">
+	<div class="custom-logo__wrapper" itemscope itemtype="http://schema.org/Organization">
+	<a href="https://rclfoods.com">
+		<?xml version="1.0" encoding="utf-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 211 450.56">
+    <path d="M116.4,117.42c-.19-39.89,1-79.48,3.13-118.88h-28c2.12,39.4,3.32,79,3.12,118.88-.61,21.43-24.33,47.29-50.23,71.21C18.85,213.08,2.3,250.13,2.3,282.57c0,78.37,46,156.52,102.71,156.52l.47,0h0l.47,0c56.73,0,102.7-78.15,102.7-156.52,0-32.44-16.54-69.49-42.06-93.94C140.74,164.71,117,138.85,116.4,117.42Z" style="fill:#fff"/>
+    <path d="M159.94,359.11h2.57v.38h-1.06v3.09H161v-3.09h-1.06Zm-54.09-126.9A29.91,29.91,0,0,1,130,244.45h7.29a36,36,0,0,0-62.79,0h7.29A29.93,29.93,0,0,1,105.85,232.21Zm0,42.86A48.39,48.39,0,0,1,60.9,244.45H54.37a54.43,54.43,0,0,0,103,0H150.8A48.41,48.41,0,0,1,105.85,275.07ZM90,244.45h31.79a23.7,23.7,0,0,0-31.79,0ZM105.85,220a42.22,42.22,0,0,1,38.25,24.49h6.7a48.31,48.31,0,0,0-89.9,0h6.7A42.22,42.22,0,0,1,105.85,220ZM53.68,352.71H156.62v-6.28H53.68ZM91,368.6v0a9.18,9.18,0,0,1-9,9.21h-.94a9.1,9.1,0,0,1-9-9.16v-.05a9.47,9.47,0,0,1,18.94,0Zm-4.1,0a5.41,5.41,0,0,0-5.39-5.6,5.33,5.33,0,0,0-5.35,5.55v0a5.42,5.42,0,0,0,5.4,5.61,5.33,5.33,0,0,0,5.34-5.56Zm-20-5.35v-3.56H53.68v17.83h3.57v-6.91h8.51V367.1H57.25v-3.8Zm40.15-61.62h.08c2.34,0,3.58,1.24,3.58,3v4.87L123.56,307v-2.23c0-8.34-6.94-14.21-16.46-14.21h0c-9.57,0-16.46,5.87-16.46,14.21v20c0,8.34,6.92,13.93,16.46,14.13h0c9.54-.2,16.46-5.79,16.46-14.13v-6l-12.84,2.63v3.39c0,1.8-1.24,3-3.58,3h-.08c-2.34,0-3.59-1.24-3.59-3v-20C103.47,302.92,104.72,301.68,107.06,301.68Zm49.56,25.77H139.07V290.59l-12.5,2.56v45.54h30.05ZM85.28,314.74a9.76,9.76,0,0,1-4.79,2.7c1.78.46,3.87,3.55,4.67,5.33,0,0,2.83,5.93,4.46,9.52l2.91,6.4H84.12c-4.47,0-6.16-1.15-7.9-5.32l-.12-.29c-1.39-3.33-3.26-7.78-3.26-7.78-1.92-4.3-5.23-4.3-7.23-4.3v15.16L53.68,338.6v-48H69.83c17.71,0,19.09,10.43,19.09,13.63C88.92,307.06,88.54,311.28,85.28,314.74Zm-9.1-9.47a2.88,2.88,0,0,0-1.25-2.56,8.08,8.08,0,0,0-4.48-1H65.61v8.09h4.91C76.18,309.81,76.18,306.4,76.18,305.27Zm62.13,63.33v0c0,5-3.87,8.92-9.48,8.92h-7V359.74h7C134.44,359.74,138.31,363.59,138.31,368.6Zm-4.1,0a5.12,5.12,0,0,0-5.38-5.37h-3V374h3a5.08,5.08,0,0,0,5.38-5.33Zm17.42-1.75c-3.09-.79-3.85-1.17-3.85-2.35v-.05c0-.86.79-1.55,2.29-1.55a8.36,8.36,0,0,1,4.64,1.76l2-3a10.32,10.32,0,0,0-6.62-2.26c-3.64,0-6.24,2.13-6.24,5.37v.05c0,3.54,2.32,4.54,5.91,5.45,3,.76,3.6,1.28,3.6,2.27v.05c0,1-1,1.68-2.58,1.68a8.2,8.2,0,0,1-5.33-2.17L143.17,375a11.33,11.33,0,0,0,7.56,2.85c3.85,0,6.55-2,6.55-5.52v-.05C157.28,369.14,155.24,367.84,151.63,366.9Zm-36.08,1.7v0a9.18,9.18,0,0,1-9,9.21h-.94a9.1,9.1,0,0,1-9-9.16v-.05a9.48,9.48,0,0,1,19,0Zm-4.11,0a5.42,5.42,0,0,0-5.4-5.6,5.33,5.33,0,0,0-5.35,5.55v0a5.43,5.43,0,0,0,5.41,5.61,5.33,5.33,0,0,0,5.34-5.56Zm55-9.54h-.57l-.62,1.67c-.15.44-.27.82-.37,1.17h0c-.09-.36-.2-.74-.35-1.17l-.59-1.67h-.57l-.24,3.47h.42l.1-1.49c0-.53,0-1.1.06-1.54h0c.1.41.24.86.4,1.35l.57,1.65h.34l.61-1.68c.17-.48.31-.92.44-1.32h0c0,.43,0,1,0,1.5l.09,1.53h.44Z" style="fill:#056bb3"/>
+</svg>
+	</a>
+</div>
+	<div class="site-navigation__wrapper">
+		<div class="d-xs-block d-sm-block d-md-none">
+			<div class="site-navigation-secondary__inner container">
+
+	<div class="share-price__wrapper">
+					<iframe src="https://irhosted.profiledata.co.za/rclfoods/2019_feeds/eod_hp.htm" frameborder="0" class="share-price-iframe"></iframe>
+			</div>
+
+
+	<div class="site-navigation__buttons-wrapper / mb-3 mb-sm-0">
+				<a href="https://rclfoods.com/governance/" class="btn btn-primary btn-block-xs">
+			Governance
+		</a>
+		
+				<a href="https://rclfoods.com/investor-center/" class="btn btn-primary btn-block-xs">
+			Investor Centre
+		</a>
+			</div>
+</div>		</div>
+		<nav role="navigation" id="site-navigation"  class="navbar-primary cascade-level-1" aria-label="Top Menu">
+	<ul id="menu-main-menu" class="level-1-list nav "><li  class="level-1-item / menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children"><a class="menu-main-link level-1-link" href="https://rclfoods.com/our-business/who-we-are/">Our Business</a>
+<div class='dropdown__wrapper / level-2-wrapper'>
+
+<ul class='dropdown__menu / level-2-list / nav'>
+<li class="menu-item level-2-item ">
+			<a href="#" class="js-menu-back-button menu-main-link level-2-link">
+				Go Back
+			</a>
+		</li>	<li  class="level-2-item / menu-item menu-item-type-post_type menu-item-object-page"><a class="menu-main-link level-2-link" href="https://rclfoods.com/our-business/our-business-structure/">Our Business structure</a></li>
+	<li  class="level-2-item / menu-item menu-item-type-post_type menu-item-object-page"><a class="menu-main-link level-2-link" href="https://rclfoods.com/our-business/who-we-are/">Who we are</a></li>
+	<li  class="level-2-item / menu-item menu-item-type-custom menu-item-object-custom"><a class="menu-main-link level-2-link" href="/brand/food-partners">Food Partners</a></li>
+	<li  class="level-2-item / menu-item menu-item-type-post_type menu-item-object-page"><a class="menu-main-link level-2-link" href="https://rclfoods.com/expand-into-africa/">Expand into Africa</a></li>
+</ul>
+</div>
+</li>
+<li  class="level-1-item / menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children"><a class="menu-main-link level-1-link" href="https://rclfoods.com/our-brands/">Our Brands</a>
+<div class='dropdown__wrapper / level-2-wrapper'>
+
+<ul class='dropdown__menu / level-2-list / nav'>
+<li class="menu-item level-2-item ">
+			<a href="#" class="js-menu-back-button menu-main-link level-2-link">
+				Go Back
+			</a>
+		</li>	<li  class="level-2-item / menu-item menu-item-type-post_type menu-item-object-page"><a class="menu-main-link level-2-link" href="https://rclfoods.com/our-brands/">Brands</a></li>
+	<li  class="level-2-item / menu-item menu-item-type-post_type menu-item-object-page"><a class="menu-main-link level-2-link" href="https://rclfoods.com/our-brands/recipes/">Recipes</a></li>
+</ul>
+</div>
+</li>
+<li  class="level-1-item / menu-item menu-item-type-post_type menu-item-object-page"><a class="menu-main-link level-1-link" href="https://rclfoods.com/our-people/">Our People</a></li>
+<li  class="level-1-item / menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children"><a class="menu-main-link level-1-link" href="https://rclfoods.com/our-impact/">Our Impact</a>
+<div class='dropdown__wrapper / level-2-wrapper'>
+
+<ul class='dropdown__menu / level-2-list / nav'>
+<li class="menu-item level-2-item ">
+			<a href="#" class="js-menu-back-button menu-main-link level-2-link">
+				Go Back
+			</a>
+		</li>	<li  class="level-2-item / menu-item menu-item-type-post_type menu-item-object-page"><a class="menu-main-link level-2-link" href="https://rclfoods.com/our-impact/">Our Impact</a></li>
+	<li  class="level-2-item / menu-item menu-item-type-post_type menu-item-object-page"><a class="menu-main-link level-2-link" href="https://rclfoods.com/do-more-foundation/">Do More Foundation</a></li>
+</ul>
+</div>
+</li>
+<li  class="level-1-item / menu-item menu-item-type-post_type menu-item-object-page current_page_parent"><a class="menu-main-link level-1-link" href="https://rclfoods.com/our-stories/">Our Stories</a></li>
+<li  class="level-1-item / menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children"><a class="menu-main-link level-1-link" href="https://rclfoods.com/careeropportunities/">Careers</a>
+<div class='dropdown__wrapper / level-2-wrapper'>
+
+<ul class='dropdown__menu / level-2-list / nav'>
+<li class="menu-item level-2-item ">
+			<a href="#" class="js-menu-back-button menu-main-link level-2-link">
+				Go Back
+			</a>
+		</li>	<li  class="level-2-item / menu-item menu-item-type-post_type menu-item-object-page"><a class="menu-main-link level-2-link" href="https://rclfoods.com/careeropportunities/">RCL FOODS Career Opportunities</a></li>
+	<li  class="level-2-item / menu-item menu-item-type-custom menu-item-object-custom"><a class="menu-main-link level-2-link" href="https://rclfoods.com/management-trainees/#ouropportunities">Management Trainee Opportunities</a></li>
+</ul>
+</div>
+</li>
+<li  class="level-1-item / is-mobile menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children"><a class="menu-main-link level-1-link" href="https://rclfoods.com/governance/">Governance</a>
+<div class='dropdown__wrapper / level-2-wrapper'>
+
+<ul class='dropdown__menu / level-2-list / nav'>
+<li class="menu-item level-2-item ">
+			<a href="#" class="js-menu-back-button menu-main-link level-2-link">
+				Go Back
+			</a>
+		</li>	<li  class="level-2-item / menu-item menu-item-type-post_type menu-item-object-page"><a class="menu-main-link level-2-link" href="https://rclfoods.com/governance/executive-team/">Executive Team</a></li>
+	<li  class="level-2-item / menu-item menu-item-type-post_type menu-item-object-page"><a class="menu-main-link level-2-link" href="https://rclfoods.com/?page_id=74">Statutory Information</a></li>
+	<li  class="level-2-item / menu-item menu-item-type-post_type menu-item-object-page"><a class="menu-main-link level-2-link" href="https://rclfoods.com/governance/corporate-governance/governance-documents/">Governance Documents</a></li>
+	<li  class="level-2-item / menu-item menu-item-type-post_type menu-item-object-page"><a class="menu-main-link level-2-link" href="https://rclfoods.com/governance/corporate-governance/governance-processes/">Governance Processes</a></li>
+	<li  class="level-2-item / menu-item menu-item-type-post_type menu-item-object-page"><a class="menu-main-link level-2-link" href="https://rclfoods.com/governance/corporate-governance/our-material-risks/">Our Material Risks</a></li>
+</ul>
+</div>
+</li>
+<li  class="level-1-item / is-mobile menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children"><a class="menu-main-link level-1-link" href="https://rclfoods.com/investor-center/">Investor Centre</a>
+<div class='dropdown__wrapper / level-2-wrapper'>
+
+<ul class='dropdown__menu / level-2-list / nav'>
+<li class="menu-item level-2-item ">
+			<a href="#" class="js-menu-back-button menu-main-link level-2-link">
+				Go Back
+			</a>
+		</li>	<li  class="level-2-item / menu-item menu-item-type-post_type menu-item-object-page"><a class="menu-main-link level-2-link" href="https://rclfoods.com/?page_id=65">Investor Enquiries</a></li>
+	<li  class="level-2-item / menu-item menu-item-type-post_type menu-item-object-page"><a class="menu-main-link level-2-link" href="https://rclfoods.com/investor-center/corporate-information/">Corporate Information</a></li>
+	<li  class="level-2-item / menu-item menu-item-type-post_type menu-item-object-page"><a class="menu-main-link level-2-link" href="https://rclfoods.com/?page_id=53">SENS Announcements Archive</a></li>
+	<li  class="level-2-item / menu-item menu-item-type-post_type menu-item-object-page"><a class="menu-main-link level-2-link" href="https://rclfoods.com/investor-center/financial-results-and-investor-presentations/">Financial Results and Reports</a></li>
+	<li  class="level-2-item / menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children"><a class="menu-main-link level-2-link" href="https://rclfoods.com/?page_id=59">Share Information</a>
+<div class='dropdown__wrapper / level-3-wrapper'>
+
+<ul class='dropdown__menu / level-3-list / nav'>
+<li class="menu-item level-3-item ">
+			<a href="#" class="js-menu-back-button menu-main-link level-3-link">
+				Go Back
+			</a>
+		</li>		<li  class="level-3-item / menu-item menu-item-type-post_type menu-item-object-page"><a class="menu-main-link level-3-link" href="https://rclfoods.com/?page_id=211">Share Price Calculator</a></li>
+		<li  class="level-3-item / menu-item menu-item-type-post_type menu-item-object-page"><a class="menu-main-link level-3-link" href="https://rclfoods.com/?page_id=209">Interactive Share Statistics</a></li>
+		<li  class="level-3-item / menu-item menu-item-type-post_type menu-item-object-page"><a class="menu-main-link level-3-link" href="https://rclfoods.com/?page_id=207">Enhanced Statistics</a></li>
+		<li  class="level-3-item / menu-item menu-item-type-post_type menu-item-object-page"><a class="menu-main-link level-3-link" href="https://rclfoods.com/investor-center/share-information/">Share Information</a></li>
+		<li  class="level-3-item / menu-item menu-item-type-post_type menu-item-object-page"><a class="menu-main-link level-3-link" href="https://rclfoods.com/?page_id=198">Dividend History</a></li>
+		<li  class="level-3-item / menu-item menu-item-type-post_type menu-item-object-page"><a class="menu-main-link level-3-link" href="https://rclfoods.com/investor-center/analyst-coverage/">Analyst Coverage</a></li>
+		<li  class="level-3-item / menu-item menu-item-type-post_type menu-item-object-page"><a class="menu-main-link level-3-link" href="https://rclfoods.com/investor-center/financial-calendar/">Financial Calendar</a></li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+</li>
+</ul>	</nav>	</div>
+
+	<div class="search__dropdown / has-dropdown">
+	<button aria-label="Toggle Search" class="search__toggle masthead__button / btn-toggle-dropdown / js-toggle-search / btn btn-reset">
+		<i class="fa fa-search" aria-hidden="true"></i>
+		<i class="fa fa-times" aria-hidden="true"></i>
+	</button>
+
+	<div class="search__wrapper / dropdown__wrapper">
+		<form role="search" method="get" class="search__form" action="https://rclfoods.com/">
+	<label for="search_label" class="sr-only">Search for:</label>
+	<input type="search" id="search_label" name="s" placeholder="Search for ..." class="search__input / js-focus-search"  autocomplete="off" />
+
+<input type="hidden" name="post_type" value="post">	<button type="submit" class="search__button / btn btn-primary" >
+		<span class="sr-only">
+			Search		</span>
+
+		<i class="fa fa-search" aria-hidden="true"></i>
+
+	</button>
+</form>	</div>
+</div>
+	<a href="https://rclfoods.com/contact-us/" class="masthead__button / btn btn-reset">
+		<i class="fa fa-phone" aria-hidden="true"></i>
+		<div class="sr-only">Contact Us</div>
+	</a>
+
+	<button aria-label="Toggle Mobile Navigation" class="masthead__button navbar__toggle / js-toggle-offcanvas-menu / btn btn-reset">
+	<i class="toggle-menu-icon fa fa-bars" aria-hidden="true"></i>
+	<i class="toggle-menu-icon fa fa-times" aria-hidden="true"></i>
+</button>
+</div>
+
+</header>
+
+<div id="anchor-top" class="anchor"></div>
+
+
+<div class="container site-content__wrapper">
+	<main id="site-content" class="site-content has-menu-animation animated fadeIn fast delay-1s / clearfix" role="main" itemscope itemprop="mainContentOfPage" itemtype="http://schema.org/Blog">
+
+<div class="slideshow__banner / box-gutterless">
+	<div class="slideshow__banner-slide text-center" id="slide-404">
+		<div class="notfound__404 text-indigo">
+			4
+			<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 268.69 224.44">
+    <path d="M134.34,67.67c-26.37,0-47.74,15-47.74,33.39s21.37,33.39,47.74,33.39,47.75-14.95,47.75-33.39S160.71,67.67,134.34,67.67Zm24.33,59.06-2-3.5c1.07-.44,2.07-.91,3-1.39.52,1.18,1.11,2.34,1.72,3.49C159.72,126.27,158.67,126.73,158.67,126.73Zm4.91-2.77c-.6-1.13-1.18-2.26-1.68-3.43,8-5,9.75-11.14,9.75-11.14l4.53,1.16C172.94,116.92,167.53,121.36,163.58,124Z" style="fill:#ffd24f"/>
+    <path d="M156.63,123.23l2,3.5s1.05-.46,2.68-1.4c-.61-1.15-1.2-2.31-1.72-3.49C158.7,122.32,157.7,122.79,156.63,123.23Z" style="fill:#fff"/>
+    <path d="M161.9,120.53c.5,1.17,1.08,2.3,1.68,3.43,3.95-2.6,9.36-7,12.6-13.41l-4.53-1.16S169.9,115.51,161.9,120.53Z" style="fill:#fff"/>
+    <path d="M218,56c-19.19-2.55-22.82,1.19-62.63-39.62C144.23,4.92,134.92,0,118.07,5.27c-8.38,2.62-9.56,9-14,13.6l-7,8.07C67.26,56.32,73.58,33.06,38.46,56.32,18.24,69.71,56.61,91.4,29.24,105.63c-34.66,18-26,47.51-5.69,58.57,28.83,15.69,41-20.73,92.57,38,15.49,17.64,63.23,27,83.31,5.4,14.84-15.94,1.93-49.44,14.2-67.42,11.49-16.84,47.35-21.75,49.87-43.62C266.51,70.36,239.21,58.79,218,56Zm-83.67,78.48c-26.37,0-47.74-14.95-47.74-33.39S108,67.67,134.34,67.67s47.75,15,47.75,33.39S160.71,134.45,134.34,134.45Z" style="fill:#fff"/>
+</svg>
+			4
+		</div>
+		<div class="h1 strong text-indigo mb-0">OOPS!</div>
+		<h1 class="h2 text-indigo mb-0">That page can't be found.</h1>
+
+	</div>
+</div>
+
+<div class="box-blue box-padded text-center text-white box-gutterless text-larger">
+	<p class="mb-0">This page does not exist.</p>
+	<p>Try searching for something or visit our homepage</p>
+
+	<div class="mb-4">
+		<form role="search" method="get" class="search__form" action="https://rclfoods.com/">
+	<label for="search_label" class="sr-only">Search for:</label>
+	<input type="search" id="search_label" name="s" placeholder="Search for ..." class="search__input / js-focus-search"  autocomplete="off" />
+
+<input type="hidden" name="post_type" value="post">	<button type="submit" class="search__button / btn btn-primary" >
+		<span class="sr-only">
+			Search		</span>
+
+		<i class="fa fa-search" aria-hidden="true"></i>
+
+	</button>
+</form>	</div>
+
+	<p class="mb-0">
+		<a href="/" class="btn btn-secondary btn-lg">Go Home</a>
+	</p>
+
+
+
+</div>
+
+
+
+
+	</main>
+</div> <!--  .container-->
+
+
+<footer id="site-footer" class="site-footer / has-menu-animation  clearfix" role="contentinfo" itemscope itemtype="http://schema.org/WPFooter">
+	<h1 class="sr-only">Footer</h1>
+
+	<p class="back-to-top__wrapper / text-center mb-0">
+		<a href="#anchor-top" class="back-to-top has-scroll-animation / btn-reset">
+			<?xml version="1.0" encoding="utf-8"?>
+<svg version="1.1"  xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 viewBox="-270.1 377.5 38.9 38.9" style="enable-background:new -270.1 377.5 38.9 38.9;" xml:space="preserve">
+<path style="fill:#056BB3;" d="M-250.6,377.5c-10.7,0-19.4,8.7-19.4,19.5s8.7,19.4,19.5,19.4c10.7,0,19.4-8.7,19.4-19.5c0,0,0,0,0,0
+	C-231.2,386.2-239.9,377.5-250.6,377.5z M-241.6,401.2c-0.4,0.4-1,0.4-1.4,0c0,0,0,0,0,0l-7.6-7.5l-7.6,7.6
+	c-0.2,0.2-0.4,0.3-0.7,0.3c-0.3,0-0.5-0.1-0.7-0.3c-0.4-0.4-0.4-1,0-1.4l9-8.9l9,8.9C-241.3,400.1-241.2,400.7-241.6,401.2
+	C-241.6,401.2-241.6,401.2-241.6,401.2L-241.6,401.2z"/>
+</svg>
+			Back to Top
+		</a>
+	</p>
+
+	<div class="site-footer-wrapper">
+		<div class="container text-center">
+			<div class="row align-items-center">
+				<div class="footer__col-menu / col-12 / mb-2 ">
+					<ul id="menu-footer-menu" class="footer__menu / nav"><li class="menu-footer__item"><a class="menu-footer__link" href="https://rclfoods.com/terms-of-use/">Terms of Use</a></li>
+<li class="menu-footer__item"><a class="menu-footer__link" href="https://rclfoods.com/information-manual-of-rcl-foods/">Access to Information</a></li>
+<li class="menu-footer__item"><a class="menu-footer__link" href="https://rclfoods.com/contact-us/">Contact Us</a></li>
+</ul>				</div>
+
+				<div class="footer__col-social / col-12 / mb-3">
+					<div class="footer-social-media__wrapper / text-center">
+	<ul class="footer-social-media__menu nav / mb-2">
+			<li>
+			<a href="https://www.facebook.com/rclfoods/" class="footer-social-icon">
+				<i class="fa fa-facebook-square" aria-hidden="true"></i>
+				<span class="sr-only">Facebook</span>
+			</a>
+		</li>
+					<li>
+			<a href="https://www.instagram.com/rclfoodssouthafrica/" class="footer-social-icon">
+				<i class="fa fa-instagram" aria-hidden="true"></i>
+				<span class="sr-only">Instagram</span>
+			</a>
+		</li>
+					<li>
+			<a href="https://www.linkedin.com/company/rcl-foods1/" class="footer-social-icon">
+				<i class="fa fa-linkedin-square" aria-hidden="true"></i>
+				<span class="sr-only">LinkedIn</span>
+			</a>
+		</li>
+				<li>
+			<a href="https://www.youtube.com/@rclfoods2222" class="footer-social-icon">
+				<i class="fa fa-youtube-square" aria-hidden="true"></i>
+				<span class="sr-only">Youtube</span>
+			</a>
+		</li>
+			</ul>
+</div>				</div>
+
+				<div class="footer__col-siteinfo / col-12">
+					
+<div class="site-info / small">
+	&copy; RCL FOODS 2026
+	<a href="https://searchbar.co.za" target="_blank" rel="noreferrer">
+		<svg class="searchbar_main_logo" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 539.99 83.96">
+<defs>
+<style>.mainlogo-1{fill:#fff;}.mainlogo-2{fill:#fff;}
+</style>
+</defs>
+<path class="mainlogo-1 mainlogo-magnifying-glass" d="M519.07,23.92A25.93,25.93,0,0,0,486.79,10V18.7c.44-.24.84-.53,1.3-.74a18,18,0,1,1-1.3,32.2v8.53a25.8,25.8,0,0,0,15,.75l8.46,19L518.12,75l-8.45-19A25.89,25.89,0,0,0,519.07,23.92Z"/>
+
+<path class="mainlogo-2" d="M44.55,17.41a15,15,0,0,0-8.13,2,6.77,6.77,0,0,0-3.18,6.12,7.1,7.1,0,0,0,3.18,6.25Q39.6,34,49.94,36.47t15.59,7Q70.78,48,70.78,56.83a17.65,17.65,0,0,1-6.64,14.29q-6.64,5.49-17.42,5.49a40.92,40.92,0,0,1-28-10.88l7.12-8.57Q36,66,47,66c3.65,0,6.56-.79,8.71-2.36a7.38,7.38,0,0,0,3.22-6.26,7,7,0,0,0-3-6.06q-3-2.16-10.44-4a90.83,90.83,0,0,1-11.26-3.27,25.17,25.17,0,0,1-6.84-3.9q-6-4.52-6-13.86T28.19,12Q35,6.93,45,6.92A40.36,40.36,0,0,1,57.79,9a33.42,33.42,0,0,1,11,6L62.7,23.57a23.16,23.16,0,0,0-8.09-4.43A31.26,31.26,0,0,0,44.55,17.41Z"/>
+<path class="mainlogo-2" d="M127.84,55H87.7a11.69,11.69,0,0,0,5.1,9,17.89,17.89,0,0,0,10.78,3.42q9.63,0,14.63-6.07L124.37,68q-8.28,8.56-21.56,8.57a25.6,25.6,0,0,1-18.33-7.18q-7.56-7.16-7.56-19.25T84.62,31a25.87,25.87,0,0,1,18.14-7.12,26.25,26.25,0,0,1,17.76,6.31q7.32,6.3,7.32,17.37ZM87.7,46.48h29.36q0-6.45-4-9.91a14.76,14.76,0,0,0-10-3.47,17,17,0,0,0-10.63,3.61A11.64,11.64,0,0,0,87.7,46.48Z"/>
+<path class="mainlogo-2" d="M178.32,75.84H168.5V69q-6.34,7.6-17,7.61a19.53,19.53,0,0,1-13.23-4.53A15.13,15.13,0,0,1,133,60q0-7.55,5.59-11.31t15.11-3.75h13.95V43q0-10.2-11.35-10.2-7.12,0-14.83,5.2l-4.81-6.74a33.14,33.14,0,0,1,21.18-7.41q9,0,14.77,4.57t5.73,14.39ZM167.54,56.78V52.45H155.41q-11.64,0-11.65,7.31a6.53,6.53,0,0,0,2.89,5.73q2.9,2,8,2a14.57,14.57,0,0,0,9-2.89A9.24,9.24,0,0,0,167.54,56.78Z"/>
+<path class="mainlogo-2" d="M216.85,34.74q-8,0-12,5.19t-4,14v22H190V24.63h10.78v10.3A22.29,22.29,0,0,1,207.86,27a17,17,0,0,1,9.48-3.18l.09,10.88Z"/>
+<path class="mainlogo-2" d="M246.64,76.61a25.87,25.87,0,0,1-18.38-7.27q-7.69-7.28-7.7-19t8-19.11a28,28,0,0,1,19.58-7.36,26.57,26.57,0,0,1,19.54,8l-6.35,7.8q-6.65-5.77-13.38-5.78a16.84,16.84,0,0,0-11.69,4.48,14.82,14.82,0,0,0-5,11.55,16.77,16.77,0,0,0,17,16.89q7.17,0,13.52-6.55l6.35,6.93Q258.87,76.6,246.64,76.61Z"/>
+<path class="mainlogo-2" d="M286.25,48.12V75.84H275.47V4.52h10.78V34a17,17,0,0,1,7-7.41,19.73,19.73,0,0,1,10-2.7q8.67,0,14,5.29t5.34,15.31V75.84H311.85V47.73q0-14.15-11.74-14.15a14.11,14.11,0,0,0-9.72,3.71Q286.25,41,286.25,48.12Z"/>
+<path class="mainlogo-1" d="M365.31,75.84H335.86V8.56H362a37.87,37.87,0,0,1,11.8,1.63,16.31,16.31,0,0,1,7.36,4.43,17.22,17.22,0,0,1,4.62,11.74q0,7.91-5,11.75a21,21,0,0,1-2.5,1.68c-.45.23-1.25.59-2.41,1.11a17.61,17.61,0,0,1,10,5.63,15.66,15.66,0,0,1,3.7,10.63,18.07,18.07,0,0,1-4.81,12.42Q379.06,75.84,365.31,75.84Zm-18.1-39.37h14.44Q374,36.47,374,28.1c0-3.21-1-5.52-3-6.93s-5.07-2.12-9.24-2.12H347.21Zm0,28.87H365c4.17,0,7.36-.65,9.58-2s3.32-3.8,3.32-7.46q0-9-14.34-8.95H347.21Z"/>
+<path class="mainlogo-1" d="M409.82,60.53l-6.73,15.31H391L420.6,8.56h12.13l29.65,67.28H450.25l-6.74-15.31ZM438.89,50,426.67,22.32,414.44,50Z"/>
+<path class="mainlogo-1" d="M468.84,8.56H480.2V75.84H468.84Z"/>
+</svg>	</a>
+
+</div>				</div>
+
+			</div>
+
+		</div> <!-- END .container -->
+	</div>
+</footer>
+
+<div class="page-wrapper-overlay"></div>
+
+<div class="overlay__mobile-menu"></div>
+<div id="modal-size-guide" class="sizing-guide__wrapper"></div>
+
+<div id="RESPONSIVE_XS" class="d-xs-block / d-sm-none d-md-none d-lg-none"></div>
+<div id="RESPONSIVE_SM" class="d-none d-sm-block / d-md-none d-lg-none"></div>
+<div id="RESPONSIVE_MD" class="d-none d-md-block / d-lg-none"></div>
+<div id="RESPONSIVE_LG" class="d-none d-lg-block"></div>
+<script type="speculationrules">
+{"prefetch":[{"source":"document","where":{"and":[{"href_matches":"\/*"},{"not":{"href_matches":["\/wp-*.php","\/wp-admin\/*","\/wp-content\/uploads\/*","\/wp-content\/*","\/wp-content\/plugins\/*","\/wp-content\/themes\/rcl-website\/*","\/wp-content\/themes\/sesha\/*","\/*\\?(.+)"]}},{"not":{"selector_matches":"a[rel~=\"nofollow\"]"}},{"not":{"selector_matches":".no-prefetch, .no-prefetch a"}}]},"eagerness":"conservative"}]}
+</script>
+<!-- HFCM by 99 Robots - Snippet # 6: Mobile menu fix -->
+<div id="RESPONSIVE_XS" class="d-xs-block / d-sm-none d-md-none d-lg-none"></div>
+<div id="RESPONSIVE_SM" class="d-none d-sm-block / d-md-none d-lg-none"></div>
+<div id="RESPONSIVE_MD" class="d-none d-md-block / d-lg-none"></div>
+<div id="RESPONSIVE_LG" class="d-none d-lg-block"></div>
+<!-- /end HFCM by 99 Robots -->
+<script type="text/javascript" src="https://rclfoods.com/wp-includes/js/dist/hooks.min.js" id="wp-hooks-js"></script>
+<script type="text/javascript" src="https://rclfoods.com/wp-includes/js/dist/i18n.min.js" id="wp-i18n-js"></script>
+<script type="text/javascript" id="wp-i18n-js-after">
+/* <![CDATA[ */
+wp.i18n.setLocaleData( { 'text direction\u0004ltr': [ 'ltr' ] } );
+/* ]]> */
+</script>
+<script type="text/javascript" src="https://rclfoods.com/wp-content/plugins/contact-form-7/includes/swv/js/index.js" id="swv-js"></script>
+<script type="text/javascript" id="contact-form-7-js-before">
+/* <![CDATA[ */
+var wpcf7 = {
+    "api": {
+        "root": "https:\/\/rclfoods.com\/wp-json\/",
+        "namespace": "contact-form-7\/v1"
+    }
+};
+/* ]]> */
+</script>
+<script type="text/javascript" src="https://rclfoods.com/wp-content/plugins/contact-form-7/includes/js/index.js" id="contact-form-7-js"></script>
+<script type="text/javascript" src="https://rclfoods.com/wp-content/themes/rcl-website/library/scripts/scripts.min.js" id="sesha-js-child-js"></script>
+<script type="text/javascript" src="https://www.google.com/recaptcha/api.js?render=6LdxpdsZAAAAALpzrN4Pl_No7XbliS7yngtsNZA_" id="google-recaptcha-js"></script>
+<script type="text/javascript" src="https://rclfoods.com/wp-includes/js/dist/vendor/wp-polyfill.min.js" id="wp-polyfill-js"></script>
+<script type="text/javascript" id="wpcf7-recaptcha-js-before">
+/* <![CDATA[ */
+var wpcf7_recaptcha = {
+    "sitekey": "6LdxpdsZAAAAALpzrN4Pl_No7XbliS7yngtsNZA_",
+    "actions": {
+        "homepage": "homepage",
+        "contactform": "contactform"
+    }
+};
+/* ]]> */
+</script>
+<script type="text/javascript" src="https://rclfoods.com/wp-content/plugins/contact-form-7/modules/recaptcha/index.js" id="wpcf7-recaptcha-js"></script>
+
+</body>
+</html>
