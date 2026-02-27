@@ -7,7 +7,7 @@ import OpenAI from "openai";
 import { z } from "zod";
 
 const requestSchema = z.object({
-  url: z.string().url(),
+  url: z.string().min(3).max(500),
   channel: z.enum(["META", "TIKTOK", "GOOGLE"]).optional(),
   market: z.string().min(2).max(100).optional(),
   conceptCount: z.number().min(1).max(8).optional(),

@@ -4,7 +4,7 @@ import { errorResponse, unauthorizedResponse } from "@/lib/http";
 import { z } from "zod";
 
 const requestSchema = z.object({
-  url: z.string().url(),
+  url: z.string().min(3).max(500),
 });
 
 export async function POST(request: Request) {

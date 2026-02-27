@@ -118,15 +118,61 @@ function extractSiteContent(html: string, url: string) {
   };
 }
 
-export async function analyzeBrand(url: string): Promise<BrandProfile> {
+function resolveUrl(input: string): string {
+  const trimmed = input.trim();
+  if (trimmed.startsWith("@")) return `https://www.instagram.com/${trimmed.slice(1)}/`;
+  if (trimmed.match(/^[a-zA-Z0-9._]+$/) && !trimmed.includes(".")) return `https://www.instagram.com/${trimmed}/`;
+  if (!trimmed.startsWith("http")) return `https://${trimmed}`;
+  return trimmed;
+}
+
+function extractInstagramHandle(url: string): string | null {
+  const match = url.match(/instagram\.com\/([a-zA-Z0-9._]+)/);
+  return match ? match[1] : null;
+}
+
+export async function analyzeBrand(rawInput: string): Promise<BrandProfile> {
   const client = getClient();
   if (!client) throw new Error("OPENAI_API_KEY required for brand analysis.");
 
-  const html = await fetchPage(url);
-  const siteData = extractSiteContent(html, url);
+  const url = resolveUrl(rawInput);
+  const instaHandle = extractInstagramHandle(url);
+
+  let html: string;
+  let actualUrl = url;
+
+  if (instaHandle) {
+    const websiteGuesses = [
+      `https://www.${instaHandle.replace(/[_.]sa$|[_.]za$/i, "")}.co.za`,
+      `https://${instaHandle.replace(/[_.]sa$|[_.]za$/i, "")}.co.za`,
+      `https://www.${instaHandle}.com`,
+    ];
+
+    let found = false;
+    for (const guess of websiteGuesses) {
+      try {
+        const testHtml = await fetchPage(guess);
+        if (testHtml.length > 1000 && !testHtml.includes("404") && !testHtml.includes("not found")) {
+          html = testHtml;
+          actualUrl = guess;
+          found = true;
+          break;
+        }
+      } catch { /* try next */ }
+    }
+
+    if (!found) {
+      html = await fetchPage(url);
+    } else {
+      html = html!;
+    }
+  } else {
+    html = await fetchPage(url);
+  }
+  const siteData = extractSiteContent(html, actualUrl);
 
   const subPages: string[] = [];
-  const baseUrl = new URL(url);
+  const baseUrl = new URL(actualUrl);
   const $ = cheerio.load(html);
   $("a[href]").each((_, el) => {
     const href = $(el).attr("href") || "";
