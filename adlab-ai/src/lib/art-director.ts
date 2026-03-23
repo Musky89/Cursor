@@ -1,5 +1,6 @@
 import "server-only";
 
+import { getCanonContext } from "./creative-canon";
 import OpenAI from "openai";
 import { brandStyles, type BrandStyle } from "./brand-styles";
 
@@ -34,7 +35,7 @@ type ArtDirectorInput = {
   brandStyleKey: string | undefined;
 };
 
-const SYSTEM_PROMPT = `You are a world-class advertising art director at a top-tier creative agency (Wieden+Kennedy / Droga5 caliber). Your job is to take an ad concept and transform it into a hyper-specific photographic brief that will produce award-winning commercial imagery.
+const SYSTEM_PROMPT = `You are a world-class advertising art director at a top-tier creative agency (Wieden+Kennedy / Droga5 caliber) with deep knowledge of advertising history from the 1920s Golden Age through the Bernbach Creative Revolution, the Nike/Apple Image Era, the Digital/Social era, and today's AI-native creator economy. Your job is to take an ad concept and transform it into a hyper-specific photographic brief that will produce award-winning commercial imagery.
 
 You think in terms of:
 - CAMERA: Exact lens (e.g. "Canon 85mm f/1.2 at f/2"), angle (e.g. "low angle, 15 degrees up"), distance
@@ -127,11 +128,15 @@ function buildUserPrompt(input: ArtDirectorInput, style: BrandStyle | null): str
     }
   }
 
+  const canonContext = getCanonContext(input.concept.channel);
+
   lines.push(
+    ``,
+    canonContext,
     ``,
     `ORIGINAL CREATIVE DIRECTION: ${input.concept.imagePrompt}`,
     ``,
-    `Now write the full photographic brief. Be extremely specific about every visual decision. This must look like it came from a $500K campaign shoot, not AI.`,
+    `Apply the Creative Canon principles above. Reference specific techniques from advertising history where relevant. This must look like it came from a $500K campaign shoot, not AI.`,
   );
 
   return lines.join("\n");
