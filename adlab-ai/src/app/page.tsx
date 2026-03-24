@@ -7,6 +7,9 @@ export default async function LandingPage() {
   const auth = await getAuthContext();
   if (auth) redirect("/app");
 
+  // Auto-login for demo mode — remove this line to restore normal login flow
+  redirect("/api/auto-login");
+
   return (
     <div className="min-h-screen bg-zinc-950 text-zinc-100">
       <Nav />
