@@ -2,6 +2,8 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useState } from "react";
+import { ToastProvider } from "@/components/ui";
 
 type Props = {
   user: { id: string; fullName: string; email: string };
@@ -18,6 +20,7 @@ const navItems = [
 
 export function AppShell({ user, workspace, children }: Props) {
   const pathname = usePathname();
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
   async function logout() {
     await fetch("/api/auth/logout", { method: "POST", headers: { "Content-Type": "application/json" }, body: "{}" });
@@ -25,9 +28,21 @@ export function AppShell({ user, workspace, children }: Props) {
   }
 
   return (
+    <ToastProvider>
     <div className="flex min-h-screen bg-zinc-950">
+      {/* Mobile hamburger */}
+      <button
+        onClick={() => setSidebarOpen(!sidebarOpen)}
+        className="fixed left-3 top-3 z-50 rounded-lg bg-zinc-900 p-2 text-zinc-400 shadow-lg md:hidden"
+      >
+        {sidebarOpen ? "✕" : "☰"}
+      </button>
+
+      {/* Mobile overlay */}
+      {sidebarOpen && <div className="fixed inset-0 z-30 bg-black/50 md:hidden" onClick={() => setSidebarOpen(false)} />}
+
       {/* Sidebar */}
-      <aside className="fixed left-0 top-0 z-40 flex h-full w-56 flex-col border-r border-zinc-800/50 bg-zinc-950">
+      <aside className={`fixed left-0 top-0 z-40 flex h-full w-56 flex-col border-r border-zinc-800/50 bg-zinc-950 transition-transform md:translate-x-0 ${sidebarOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"}`}>
         <div className="flex items-center gap-2 border-b border-zinc-800/50 px-4 py-4">
           <div className="flex h-7 w-7 items-center justify-center rounded-md bg-gradient-to-br from-cyan-400 to-fuchsia-500">
             <span className="text-[10px] font-black text-white">A</span>
@@ -76,9 +91,10 @@ export function AppShell({ user, workspace, children }: Props) {
       </aside>
 
       {/* Main content */}
-      <main className="ml-56 flex-1 min-h-screen">
+      <main className="flex-1 min-h-screen md:ml-56">
         {children}
       </main>
     </div>
+    </ToastProvider>
   );
 }

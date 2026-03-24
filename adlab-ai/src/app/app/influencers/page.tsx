@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
+import { Button, PageHeader, EmptyState, useToast } from "@/components/ui";
 
 type Profile = {
   id: string;
@@ -16,6 +17,7 @@ export default function InfluencersPage() {
   const [form, setForm] = useState({ name: "", description: "", personality: "" });
   const [loading, setLoading] = useState(false);
   const [generating, setGenerating] = useState(false);
+  const { addToast } = useToast();
 
   const load = useCallback(async () => {
     const res = await fetch("/api/influencers");
@@ -36,6 +38,7 @@ export default function InfluencersPage() {
     setForm({ name: "", description: "", personality: "" });
     await load();
     setLoading(false);
+    addToast("Influencer profile saved");
   }
 
   async function autoGenerate() {

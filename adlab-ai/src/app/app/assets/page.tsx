@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
+import { Button, PageHeader, EmptyState, Badge, useToast } from "@/components/ui";
 
 type Asset = {
   id: string;
@@ -19,6 +20,7 @@ export default function AssetsPage() {
   const [uploadName, setUploadName] = useState("");
   const [uploadType, setUploadType] = useState("product_photo");
   const fileRef = useRef<HTMLInputElement>(null);
+  const { addToast } = useToast();
 
   const load = useCallback(async () => {
     const res = await fetch("/api/brand-assets");
@@ -43,6 +45,7 @@ export default function AssetsPage() {
     if (fileRef.current) fileRef.current.value = "";
     await load();
     setUploading(false);
+    addToast("Asset uploaded successfully");
   }
 
   const typeLabels: Record<string, string> = {

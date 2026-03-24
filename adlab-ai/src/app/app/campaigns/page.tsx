@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
+import { Button, PageHeader, EmptyState, Badge, CardSkeleton, useToast } from "@/components/ui";
 
 type Campaign = {
   id: string;
@@ -19,11 +20,14 @@ export default function CampaignsPage() {
   const [showCreate, setShowCreate] = useState(false);
   const [form, setForm] = useState({ name: "", description: "", channel: "META", startDate: "", endDate: "" });
   const [loading, setLoading] = useState(false);
+  const [pageLoading, setPageLoading] = useState(true);
+  const { addToast } = useToast();
 
   const load = useCallback(async () => {
     const res = await fetch("/api/campaigns");
     const data = await res.json();
     setCampaigns(data.campaigns ?? []);
+    setPageLoading(false);
   }, []);
 
   useEffect(() => { void load(); }, [load]);
@@ -39,6 +43,7 @@ export default function CampaignsPage() {
     setForm({ name: "", description: "", channel: "META", startDate: "", endDate: "" });
     await load();
     setLoading(false);
+    addToast("Campaign created successfully");
   }
 
   return (
@@ -75,12 +80,12 @@ export default function CampaignsPage() {
         </div>
       )}
 
-      {campaigns.length === 0 ? (
-        <div className="flex flex-col items-center justify-center rounded-xl border border-dashed border-zinc-800 py-20 text-center">
-          <span className="text-4xl">📅</span>
-          <p className="mt-3 text-[15px] font-medium text-zinc-400">No campaigns yet</p>
-          <p className="text-[13px] text-zinc-600">Create your first campaign to start scheduling content.</p>
+      {pageLoading ? (
+        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+          <CardSkeleton /><CardSkeleton /><CardSkeleton />
         </div>
+      ) : campaigns.length === 0 ? (
+        <EmptyState icon="📅" title="No campaigns yet" description="Create your first campaign to start scheduling content." action={<Button onClick={() => setShowCreate(true)}>Create Campaign</Button>} />
       ) : (
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
           {campaigns.map((c) => (
