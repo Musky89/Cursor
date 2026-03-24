@@ -51,7 +51,7 @@ export async function POST(request: Request) {
         workspaceId: auth.workspace.id,
         name: productData.name,
         description: `${productData.description}. ${brand.description}`,
-        price: parseFloat(productData.price.replace(/[^0-9.]/g, "")) || 29.99,
+        price: parseFloat(String(productData.price ?? "29.99").replace(/[^0-9.]/g, "")) || 29.99,
         marginPct: 60,
         landingUrl: url,
       },
