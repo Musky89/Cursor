@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useCallback, useEffect, useState } from "react";
 import { useParams } from "next/navigation";
+import { Button, useToast } from "@/components/ui";
 
 type Post = { id: string; scheduledAt: string; caption: string; hashtags: string | null; channel: string; format: string; imageUrl: string | null; status: string };
 type Campaign = { id: string; name: string; description: string | null; status: string; channel: string | null; startDate: string | null; endDate: string | null };
@@ -14,6 +15,8 @@ export default function CampaignDetailPage() {
   const [showAdd, setShowAdd] = useState(false);
   const [form, setForm] = useState({ scheduledAt: "", caption: "", hashtags: "", channel: "META", format: "1:1" });
   const [loading, setLoading] = useState(false);
+  const [generatingHashtags, setGeneratingHashtags] = useState(false);
+  const { addToast } = useToast();
 
   const load = useCallback(async () => {
     const [campRes, postRes] = await Promise.all([
@@ -39,6 +42,24 @@ export default function CampaignDetailPage() {
     setForm({ scheduledAt: "", caption: "", hashtags: "", channel: "META", format: "1:1" });
     await load();
     setLoading(false);
+    addToast("Post scheduled");
+  }
+
+  async function generateHashtags() {
+    if (!form.caption || !campaign) return;
+    setGeneratingHashtags(true);
+    try {
+      const res = await fetch("/api/hashtags", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ caption: form.caption, brand: campaign.name, channel: form.channel }),
+      });
+      const data = await res.json();
+      const all = [...(data.primary ?? []), ...(data.secondary ?? []).slice(0, 5), ...(data.trending ?? []).slice(0, 3)];
+      setForm((prev) => ({ ...prev, hashtags: all.join(" ") }));
+      addToast(`Generated ${all.length} hashtags`);
+    } catch { addToast("Failed to generate hashtags", "error"); }
+    finally { setGeneratingHashtags(false); }
   }
 
   if (!campaign) return <div className="p-6 text-zinc-500">Loading...</div>;
@@ -82,10 +103,15 @@ export default function CampaignDetailPage() {
               </select>
             </div>
             <textarea rows={3} className="rounded-lg border border-zinc-700 bg-zinc-950 px-3 py-2 text-sm md:col-span-2" placeholder="Caption..." value={form.caption} onChange={(e) => setForm({ ...form, caption: e.target.value })} />
-            <input className="rounded-lg border border-zinc-700 bg-zinc-950 px-3 py-2 text-sm" placeholder="Hashtags (space-separated)" value={form.hashtags} onChange={(e) => setForm({ ...form, hashtags: e.target.value })} />
-            <button onClick={() => void addPost()} disabled={loading || !form.caption || !form.scheduledAt} className="rounded-lg bg-cyan-500 px-4 py-2 text-sm font-semibold text-zinc-950 disabled:opacity-50">
-              {loading ? "Adding..." : "Schedule Post"}
-            </button>
+            <div className="flex gap-2">
+              <input className="flex-1 rounded-lg border border-zinc-700 bg-zinc-950 px-3 py-2 text-sm" placeholder="Hashtags (space-separated)" value={form.hashtags} onChange={(e) => setForm({ ...form, hashtags: e.target.value })} />
+              <button onClick={() => void generateHashtags()} disabled={generatingHashtags || !form.caption} className="rounded-lg border border-cyan-700 px-3 py-2 text-[11px] text-cyan-300 hover:bg-cyan-900/30 disabled:opacity-50">
+                {generatingHashtags ? "..." : "#️⃣ Auto"}
+              </button>
+            </div>
+            <Button onClick={() => void addPost()} disabled={loading || !form.caption || !form.scheduledAt} loading={loading}>
+              Schedule Post
+            </Button>
           </div>
         </div>
       )}

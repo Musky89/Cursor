@@ -1,7 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useCallback, useEffect, useState } from "react";
+import { Button, Badge, useToast } from "@/components/ui";
 
 type ConceptData = {
   id: string;
@@ -25,13 +26,53 @@ type ConceptData = {
 
 type Variation = { imageUrl: string; variationNote: string };
 
-export function ConceptDetail({ concept }: { concept: ConceptData }) {
+export function ConceptDetail({ concept: initialConcept }: { concept: ConceptData }) {
+  const [concept, setConcept] = useState(initialConcept);
   const [heroImage, setHeroImage] = useState<string | null>(null);
+  const [savedImages, setSavedImages] = useState<{ id: string; imageUrl: string }[]>([]);
   const [variations, setVariations] = useState<Variation[]>([]);
   const [isGeneratingHero, setIsGeneratingHero] = useState(false);
   const [isGeneratingVariations, setIsGeneratingVariations] = useState(false);
   const [selectedStyle, setSelectedStyle] = useState("hot-chicken");
   const [error, setError] = useState<string | null>(null);
+  const [editingField, setEditingField] = useState<string | null>(null);
+  const [editValue, setEditValue] = useState("");
+  const [saving, setSaving] = useState(false);
+  const { addToast } = useToast();
+
+  const loadSavedImages = useCallback(async () => {
+    try {
+      const res = await fetch(`/api/concepts/${concept.id}/image`);
+      const data = await res.json();
+      if (data.images?.length > 0) {
+        setSavedImages(data.images.map((img: { id: string; imageUrl: string }) => img));
+        if (!heroImage) setHeroImage(data.images[0].imageUrl);
+      }
+    } catch { /* ignore */ }
+  }, [concept.id, heroImage]);
+
+  useEffect(() => { void loadSavedImages(); }, [loadSavedImages]);
+
+  async function saveEdit(field: string) {
+    setSaving(true);
+    try {
+      const res = await fetch(`/api/concepts/${concept.id}/update`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ [field]: editValue }),
+      });
+      const data = await res.json();
+      if (data.concept) {
+        setConcept((prev) => ({ ...prev, ...data.concept }));
+        addToast("Copy updated");
+      }
+    } catch {
+      addToast("Failed to save", "error");
+    } finally {
+      setSaving(false);
+      setEditingField(null);
+    }
+  }
 
   async function generateHero() {
     setIsGeneratingHero(true);
@@ -45,8 +86,11 @@ export function ConceptDetail({ concept }: { concept: ConceptData }) {
       const data = await res.json();
       if (data.error) throw new Error(data.error);
       setHeroImage(data.imageUrl);
+      addToast("Image generated and saved");
+      void loadSavedImages();
     } catch (err) {
       setError(err instanceof Error ? err.message : "Failed");
+      addToast("Image generation failed", "error");
     } finally {
       setIsGeneratingHero(false);
     }
@@ -129,6 +173,25 @@ export function ConceptDetail({ concept }: { concept: ConceptData }) {
             )}
           </div>
 
+          {/* Saved Images Gallery */}
+          {savedImages.length > 0 && (
+            <div className="rounded-2xl border border-zinc-800 bg-zinc-900/50 p-5">
+              <h3 className="mb-3 text-[14px] font-semibold">Saved Images ({savedImages.length})</h3>
+              <div className="grid grid-cols-4 gap-2">
+                {savedImages.map((img) => (
+                  <button key={img.id} type="button" onClick={() => setHeroImage(img.imageUrl)} className="overflow-hidden rounded-lg border border-zinc-800 transition hover:border-zinc-600">
+                    <img src={img.imageUrl} alt="Saved" className="aspect-square w-full object-cover" />
+                  </button>
+                ))}
+              </div>
+              {savedImages[0] && (
+                <a href={`/api/images/${savedImages[0].id}/download`} className="mt-3 inline-flex items-center gap-1.5 rounded-lg border border-zinc-700 px-3 py-1.5 text-[12px] text-zinc-400 transition hover:text-white">
+                  ⬇ Download latest
+                </a>
+              )}
+            </div>
+          )}
+
           {/* Variations */}
           <div className="rounded-2xl border border-zinc-800 bg-zinc-900/50 p-5">
             <div className="flex items-center justify-between">
@@ -177,13 +240,13 @@ export function ConceptDetail({ concept }: { concept: ConceptData }) {
 
           {/* Ad Copy Fields */}
           <div className="rounded-2xl border border-zinc-800 bg-zinc-900/50 p-5">
-            <h3 className="mb-3 text-[13px] font-semibold uppercase tracking-widest text-zinc-500">Ad Copy</h3>
-            <CopyField label="Hook" value={concept.hook} />
-            <CopyField label="Pain / Desire" value={concept.painDesire} />
-            <CopyField label="Promise" value={concept.promise} />
-            <CopyField label="Proof" value={concept.proof} />
-            <CopyField label="Offer" value={concept.offer} />
-            <CopyField label="CTA" value={concept.cta} />
+            <h3 className="mb-3 text-[13px] font-semibold uppercase tracking-widest text-zinc-500">Ad Copy <span className="text-[10px] font-normal normal-case text-zinc-600">(hover to edit)</span></h3>
+            <EditableCopyField label="Hook" field="hook" value={concept.hook} editingField={editingField} editValue={editValue} setEditingField={setEditingField} setEditValue={setEditValue} saveEdit={saveEdit} saving={saving} />
+            <EditableCopyField label="Pain / Desire" field="painDesire" value={concept.painDesire} editingField={editingField} editValue={editValue} setEditingField={setEditingField} setEditValue={setEditValue} saveEdit={saveEdit} saving={saving} />
+            <EditableCopyField label="Promise" field="promise" value={concept.promise} editingField={editingField} editValue={editValue} setEditingField={setEditingField} setEditValue={setEditValue} saveEdit={saveEdit} saving={saving} />
+            <EditableCopyField label="Proof" field="proof" value={concept.proof} editingField={editingField} editValue={editValue} setEditingField={setEditingField} setEditValue={setEditValue} saveEdit={saveEdit} saving={saving} />
+            <EditableCopyField label="Offer" field="offer" value={concept.offer} editingField={editingField} editValue={editValue} setEditingField={setEditingField} setEditValue={setEditValue} saveEdit={saveEdit} saving={saving} />
+            <EditableCopyField label="CTA" field="cta" value={concept.cta} editingField={editingField} editValue={editValue} setEditingField={setEditingField} setEditValue={setEditValue} saveEdit={saveEdit} saving={saving} />
           </div>
 
           {/* Primary Text */}
@@ -238,11 +301,33 @@ export function ConceptDetail({ concept }: { concept: ConceptData }) {
   );
 }
 
-function CopyField({ label, value }: { label: string; value: string }) {
+function EditableCopyField({ label, field, value, editingField, editValue, setEditingField, setEditValue, saveEdit, saving }: {
+  label: string; field: string; value: string; editingField: string | null; editValue: string;
+  setEditingField: (f: string | null) => void; setEditValue: (v: string) => void;
+  saveEdit: (f: string) => void; saving: boolean;
+}) {
+  const isEditing = editingField === field;
   return (
-    <div className="mb-3 last:mb-0">
-      <p className="text-[11px] font-medium uppercase text-zinc-600">{label}</p>
-      <p className="mt-0.5 text-[13px] leading-relaxed text-zinc-300">{value}</p>
+    <div className="group mb-3 last:mb-0">
+      <div className="flex items-center justify-between">
+        <p className="text-[11px] font-medium uppercase text-zinc-600">{label}</p>
+        {!isEditing && (
+          <button onClick={() => { setEditingField(field); setEditValue(value); }} className="text-[10px] text-zinc-600 opacity-0 transition group-hover:opacity-100 hover:text-cyan-400">
+            Edit
+          </button>
+        )}
+      </div>
+      {isEditing ? (
+        <div className="mt-1 space-y-1.5">
+          <textarea rows={3} className="w-full rounded-lg border border-cyan-500/30 bg-zinc-900 px-2 py-1.5 text-[13px] text-zinc-200 outline-none focus:border-cyan-500" value={editValue} onChange={(e) => setEditValue(e.target.value)} />
+          <div className="flex gap-1.5">
+            <button onClick={() => void saveEdit(field)} disabled={saving} className="rounded bg-cyan-500 px-2 py-1 text-[11px] font-medium text-zinc-950 disabled:opacity-50">{saving ? "..." : "Save"}</button>
+            <button onClick={() => setEditingField(null)} className="rounded bg-zinc-800 px-2 py-1 text-[11px] text-zinc-400">Cancel</button>
+          </div>
+        </div>
+      ) : (
+        <p className="mt-0.5 text-[13px] leading-relaxed text-zinc-300">{value}</p>
+      )}
     </div>
   );
 }
