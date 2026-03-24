@@ -84,7 +84,7 @@ export default function CampaignsPage() {
       ) : (
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
           {campaigns.map((c) => (
-            <div key={c.id} className="rounded-xl border border-zinc-800 bg-zinc-900/50 p-5 transition hover:border-zinc-700">
+            <a href={`/app/campaigns/${c.id}`} key={c.id} className="block rounded-xl border border-zinc-800 bg-zinc-900/50 p-5 transition hover:border-zinc-700">
               <div className="flex items-start justify-between">
                 <div>
                   <h3 className="text-[15px] font-semibold">{c.name}</h3>

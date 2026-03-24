@@ -149,44 +149,92 @@ export async function POST(
   });
 
   try {
+    let imageUrl: string | null = null;
+    let modelUsed = "unknown";
+
     // Priority 1: Fine-tuned model on Replicate
-    if (replicate) {
-      const imageUrl = await generateWithFineTuned(replicate, prompt);
-      if (imageUrl) {
-        return Response.json({ imageUrl, model: `fine-tuned:${process.env.REPLICATE_MODEL}`, brandStyle: brandStyleKey ?? "default" });
-      }
+    if (!imageUrl && replicate) {
+      imageUrl = await generateWithFineTuned(replicate, prompt);
+      if (imageUrl) modelUsed = `fine-tuned:${process.env.REPLICATE_MODEL}`;
     }
 
     // Priority 2: Gemini Nano Banana
-    if (gemini) {
-      const imageUrl = await generateWithGemini(gemini, prompt);
-      if (imageUrl) {
-        return Response.json({ imageUrl, model: "gemini-2.5-flash-image", brandStyle: brandStyleKey ?? "default" });
-      }
+    if (!imageUrl && gemini) {
+      imageUrl = await generateWithGemini(gemini, prompt);
+      if (imageUrl) modelUsed = process.env.GEMINI_IMAGE_MODEL ?? "gemini-3-pro-image-preview";
     }
 
     // Priority 3: DALL-E 3
-    if (openai) {
+    if (!imageUrl && openai) {
       const style = brandStyleKey === "coke-inspired" ? ("natural" as const) : ("vivid" as const);
-      const imageUrl = await generateWithDalle(openai, prompt, style);
-      if (imageUrl) {
-        return Response.json({ imageUrl, model: "dall-e-3", brandStyle: brandStyleKey ?? "default" });
-      }
+      imageUrl = await generateWithDalle(openai, prompt, style);
+      if (imageUrl) modelUsed = "dall-e-3";
     }
 
-    return errorResponse("Image generation returned no results.", 502);
+    if (!imageUrl) return errorResponse("Image generation returned no results.", 502);
+
+    // Save to database for persistence
+    let imageData: Buffer | null = null;
+    let mimeType = "image/png";
+    if (imageUrl.startsWith("data:")) {
+      const [header, base64] = imageUrl.split(",");
+      mimeType = header?.match(/data:([^;]+)/)?.[1] ?? "image/png";
+      imageData = Buffer.from(base64, "base64");
+    } else {
+      try {
+        const res = await fetch(imageUrl);
+        if (res.ok) {
+          imageData = Buffer.from(await res.arrayBuffer());
+          mimeType = res.headers.get("content-type") ?? "image/png";
+        }
+      } catch { /* skip save if fetch fails */ }
+    }
+
+    if (imageData) {
+      await prisma.generatedImage.create({
+        data: {
+          workspaceId: auth.workspace.id,
+          conceptId: id,
+          imageData,
+          mimeType,
+          prompt,
+          model: modelUsed,
+          brandStyle: brandStyleKey,
+        },
+      });
+    }
+
+    return Response.json({ imageUrl, model: modelUsed, brandStyle: brandStyleKey ?? "default" });
   } catch (err) {
     const message = err instanceof Error ? err.message : "Image generation failed.";
     return errorResponse(message, 502);
   }
 }
 
-export async function GET() {
+export async function GET(
+  _request: Request,
+  { params }: { params: Promise<{ id: string }> },
+) {
+  const auth = await getAuthContext();
+  if (!auth) {
+    return Response.json({
+      availableStyles: Object.entries(brandStyles).map(([key, style]) => ({ key, name: style.name, description: style.description })),
+      activeModel: getActiveModel(),
+    });
+  }
+
+  const { id } = await params;
+
+  const images = await prisma.generatedImage.findMany({
+    where: { conceptId: id, workspaceId: auth.workspace.id },
+    select: { id: true, model: true, brandStyle: true, mimeType: true, status: true, createdAt: true },
+    orderBy: { createdAt: "desc" },
+  });
+
   return Response.json({
-    availableStyles: Object.entries(brandStyles).map(([key, style]) => ({
-      key,
-      name: style.name,
-      description: style.description,
+    images: images.map((img) => ({
+      ...img,
+      imageUrl: `/api/images/${img.id}/serve`,
     })),
     activeModel: getActiveModel(),
   });
