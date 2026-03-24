@@ -13,6 +13,7 @@ const TRIGGER_WORD = "RAZZBUZZ_AD";
 const requestSchema = z
   .object({
     brandStyle: z.string().optional(),
+    customDirection: z.string().max(1000).optional(),
   })
   .optional();
 
@@ -117,6 +118,7 @@ export async function POST(
   const body = await request.json().catch(() => ({}));
   const parsed = requestSchema.safeParse(body);
   const brandStyleKey = parsed.success ? parsed.data?.brandStyle : undefined;
+  const customDirection = parsed.success ? parsed.data?.customDirection : undefined;
 
   const concept = await prisma.adConcept.findFirst({
     where: { id, workspaceId: auth.workspace.id },
@@ -146,6 +148,7 @@ export async function POST(
       notes: concept.audience.notes,
     },
     brandStyleKey,
+    customDirection,
   });
 
   try {

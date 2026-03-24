@@ -194,7 +194,7 @@ export function AdLabApp({ initialUser, initialWorkspace }: AdLabAppProps) {
   const [isOptimizing, setIsOptimizing] = useState(false);
   const [conceptImages, setConceptImages] = useState<Record<string, string>>({});
   const [generatingImages, setGeneratingImages] = useState<Record<string, boolean>>({});
-  const [selectedBrandStyle, setSelectedBrandStyle] = useState("pepsi-inspired");
+  const [selectedBrandStyle, setSelectedBrandStyle] = useState("");
 
   const [productForm, setProductForm] = useState({
     name: "",
@@ -424,7 +424,7 @@ export function AdLabApp({ initialUser, initialWorkspace }: AdLabAppProps) {
     try {
       const result = await requestJson<{ imageUrl: string }>(`/api/concepts/${conceptId}/image`, {
         method: "POST",
-        body: JSON.stringify({ brandStyle: selectedBrandStyle }),
+        body: JSON.stringify({ brandStyle: selectedBrandStyle || undefined, customDirection: selectedBrandStyle || undefined }),
       });
       setConceptImages((prev) => ({ ...prev, [conceptId]: result.imageUrl }));
     } catch (error) {
@@ -682,19 +682,17 @@ export function AdLabApp({ initialUser, initialWorkspace }: AdLabAppProps) {
           </div>
         </form>
 
-        <div className="flex items-center gap-4 rounded-lg border border-zinc-800 bg-zinc-950/70 p-3">
-          <span className="text-sm font-medium text-zinc-400">Brand Style:</span>
-          <label className="inline-flex items-center gap-2 cursor-pointer">
-            <input type="radio" name="brandStyle" value="pepsi-inspired" checked={selectedBrandStyle === "pepsi-inspired"} onChange={() => setSelectedBrandStyle("pepsi-inspired")} className="accent-blue-500" />
-            <span className="text-sm text-blue-400">⚡ Pepsi — Electric Youth</span>
-          </label>
-          <label className="inline-flex items-center gap-2 cursor-pointer">
-            <input type="radio" name="brandStyle" value="hot-chicken" checked={selectedBrandStyle === "hot-chicken"} onChange={() => setSelectedBrandStyle("hot-chicken")} className="accent-orange-500" />
-            <span className="text-sm text-orange-400">🍗 Hot Chicken — Streetfood</span>
-          </label>
-          <label className="inline-flex items-center gap-2 cursor-pointer">
-            <input type="radio" name="brandStyle" value="coke-inspired" checked={selectedBrandStyle === "coke-inspired"} onChange={() => setSelectedBrandStyle("coke-inspired")} className="accent-red-500" />
-            <span className="text-sm text-red-400">🔥 Coke — Authentic Moments</span>
+        <div className="rounded-lg border border-zinc-800 bg-zinc-950/70 p-3">
+          <label className="block space-y-1.5">
+            <span className="text-[12px] font-medium text-zinc-400">Art Direction Notes</span>
+            <textarea
+              rows={2}
+              className="w-full rounded-lg border border-zinc-700 bg-zinc-900 px-3 py-2 text-sm text-zinc-200 placeholder-zinc-600 outline-none transition focus:border-cyan-500"
+              placeholder="Describe the visual style you want — e.g. 'warm golden hour, food close-up on dark wood, Nola jar visible, home-cooking aesthetic' or 'dark moody product shot, neon accents, black background'"
+              value={selectedBrandStyle}
+              onChange={(e) => setSelectedBrandStyle(e.target.value)}
+            />
+            <p className="text-[10px] text-zinc-600">These notes will be passed to the AI Art Director alongside the concept. Leave blank for default style.</p>
           </label>
         </div>
 
@@ -760,10 +758,10 @@ export function AdLabApp({ initialUser, initialWorkspace }: AdLabAppProps) {
                     {isImageGenerating ? (
                       <>
                         <span className="inline-block h-4 w-4 animate-spin rounded-full border-2 border-cyan-400 border-t-transparent" />
-                        Generating with {selectedBrandStyle === "pepsi-inspired" ? "⚡ Pepsi" : "🔥 Coke"} style…
+                        Generating image…
                       </>
                     ) : (
-                      <>🎨 Generate Ad Image ({selectedBrandStyle === "pepsi-inspired" ? "⚡ Pepsi Style" : "🔥 Coke Style"})</>
+                      <>🎨 Generate Ad Image</>
                     )}
                   </button>
                 )}

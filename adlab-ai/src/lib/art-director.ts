@@ -33,6 +33,7 @@ type ArtDirectorInput = {
     notes: string | null;
   };
   brandStyleKey: string | undefined;
+  customDirection?: string | undefined;
 };
 
 const SYSTEM_PROMPT = `You are a world-class advertising art director at a top-tier creative agency (Wieden+Kennedy / Droga5 caliber) with deep knowledge of advertising history from the 1920s Golden Age through the Bernbach Creative Revolution, the Nike/Apple Image Era, the Digital/Social era, and today's AI-native creator economy. Your job is to take an ad concept and transform it into a hyper-specific photographic brief that will produce award-winning commercial imagery.
@@ -129,6 +130,11 @@ function buildUserPrompt(input: ArtDirectorInput, style: BrandStyle | null): str
   }
 
   const canonContext = getCanonContext(input.concept.channel);
+
+  if (input.customDirection) {
+    lines.push(``, `CUSTOM ART DIRECTION FROM CLIENT: ${input.customDirection}`);
+    lines.push(`IMPORTANT: The custom direction above takes priority over all other style guidance. Follow it precisely.`);
+  }
 
   lines.push(
     ``,
