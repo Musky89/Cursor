@@ -13,6 +13,8 @@ type Props = {
 
 const navItems = [
   { href: "/app/clients", label: "Clients", icon: "🏢" },
+  { href: "/app/briefs", label: "New Brief", icon: "📝" },
+  { href: "/app/review", label: "Review Queue", icon: "✅" },
   { href: "/app", label: "Creative Studio", icon: "🎨" },
   { href: "/app/campaigns", label: "Campaigns", icon: "📅" },
   { href: "/app/assets", label: "Brand Assets", icon: "📦" },

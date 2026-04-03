@@ -41,6 +41,7 @@ model Workspace {
   ownerId            String
   owner              User                @relation(fields: [ownerId], references: [id], onDelete: Cascade)
   clients            Client[]
+  pipelines          Pipeline[]
   products           Product[]
   audiences          Audience[]
   concepts           AdConcept[]
@@ -84,6 +85,7 @@ model Brand {
   website     String?
   industry    String?
   strategy    BrandStrategy?
+  brandBible  BrandBible?
   briefs      CampaignBrief[]
   quickAssets QuickAsset[]
   logoDesigns LogoDesign[]
@@ -405,4 +407,62 @@ model InfluencerProfile {
   updatedAt   DateTime  @updatedAt
 
   @@index([workspaceId])
+}
+
+// ─── Orchestration Engine ───────────────────────────────────────
+
+model Pipeline {
+  id           String         @id @default(cuid())
+  workspaceId  String
+  workspace    Workspace      @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  clientId     String?
+  brandId      String?
+  title        String
+  briefText    String
+  status       String         @default("active")
+  currentStage String         @default("brief_intake")
+  tasks        PipelineTask[]
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
+
+  @@index([workspaceId, status])
+}
+
+model PipelineTask {
+  id             String    @id @default(cuid())
+  pipelineId     String
+  pipeline       Pipeline  @relation(fields: [pipelineId], references: [id], onDelete: Cascade)
+  agentType      String
+  stage          String
+  title          String
+  status         String    @default("pending")
+  inputContext   String?
+  outputArtifact String?
+  dependencies   String?
+  reviewNote     String?
+  startedAt      DateTime?
+  completedAt    DateTime?
+  createdAt      DateTime  @default(now())
+
+  @@index([pipelineId, status])
+  @@index([status])
+}
+
+// ─── Brand Bible ────────────────────────────────────────────────
+
+model BrandBible {
+  id                String   @id @default(cuid())
+  brandId           String   @unique
+  brand             Brand    @relation(fields: [brandId], references: [id], onDelete: Cascade)
+  visualIdentity    String?
+  toneOfVoice       String?
+  messaging         String?
+  channelGuidelines String?
+  competitiveContext String?
+  promptTemplates   String?
+  performanceData   String?
+  clientPreferences String?
+  version           Int      @default(1)
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
 }
