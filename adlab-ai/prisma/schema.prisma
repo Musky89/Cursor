@@ -69,8 +69,9 @@ model Client {
   website     String?
   logoUrl     String?
   notes       String?
-  brands      Brand[]
-  createdAt   DateTime  @default(now())
+  brands           Brand[]
+  serviceBlueprint ServiceBlueprint?
+  createdAt        DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
 
   @@index([workspaceId])
@@ -463,6 +464,23 @@ model BrandBible {
   performanceData   String?
   clientPreferences String?
   version           Int      @default(1)
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+}
+
+// ─── Service Blueprints ─────────────────────────────────────────
+
+model ServiceBlueprint {
+  id                String   @id @default(cuid())
+  clientId          String   @unique
+  client            Client   @relation(fields: [clientId], references: [id], onDelete: Cascade)
+  templateType      String   @default("full-service")
+  activeServices    String?
+  recurringBriefs   String?
+  qualityThresholds String?
+  specialPipelines  String?
+  agentsAssigned    String?
+  monthlyAssetTarget Int     @default(30)
   createdAt         DateTime @default(now())
   updatedAt         DateTime @updatedAt
 }

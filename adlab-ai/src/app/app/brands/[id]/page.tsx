@@ -21,6 +21,7 @@ export default function BrandHubPage() {
   if (!brand) return <div className="p-6 text-zinc-500">Loading...</div>;
 
   const tools = [
+    { href: `/app/brands/${id}/bible`, icon: "📖", name: "Brand Bible", description: "The living reference document every agent reads — visual identity, tone, messaging" },
     { href: `/app/brands/${id}/strategy`, icon: "🎯", name: "Brand Strategy", description: "Define positioning, territories, and strategic direction", status: brand.strategy?.status === "locked" ? "Locked" : "Draft" },
     { href: `/app/brands/${id}/quick-create`, icon: "⚡", name: "Quick Create", description: "Generate an ad asset in under 60 seconds" },
     { href: `/app/brands/${id}/logo`, icon: "✏️", name: "Logo Studio", description: "Design and iterate on brand logos with AI" },

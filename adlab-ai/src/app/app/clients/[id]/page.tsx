@@ -46,7 +46,12 @@ export default function ClientDetailPage() {
         <span className="text-zinc-300">{client.name}</span>
       </div>
 
-      <PageHeader title={client.name} description={client.industry ?? undefined} actions={<Button onClick={() => setShowCreate(!showCreate)}>+ New Brand</Button>} />
+      <PageHeader title={client.name} description={client.industry ?? undefined} actions={
+        <div className="flex gap-2">
+          <Button variant="secondary" onClick={() => window.location.href = `/app/clients/${id}/blueprint`}>⚙️ Service Blueprint</Button>
+          <Button onClick={() => setShowCreate(!showCreate)}>+ New Brand</Button>
+        </div>
+      } />
 
       {showCreate && (
         <div className="mb-6 rounded-xl border border-zinc-800 bg-zinc-900/50 p-5 animate-fade-in">

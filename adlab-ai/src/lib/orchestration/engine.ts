@@ -1,6 +1,7 @@
 import "server-only";
 
 import { prisma } from "@/lib/prisma";
+import { runBrandGuardian } from "./brand-guardian";
 import OpenAI from "openai";
 
 let _openai: OpenAI | null | undefined;
@@ -85,6 +86,33 @@ export async function executeNextTask(pipelineId: string) {
   for (const t of pipeline.tasks) {
     if ((t.status === "completed" || t.status === "approved") && t.outputArtifact) {
       upstreamOutputs[t.stage] = t.outputArtifact;
+    }
+  }
+
+  // Special handling for Brand Guardian quality review
+  if (readyTask.agentType === "brand_guardian") {
+    try {
+      const scoreCard = await runBrandGuardian(pipeline.brandId, upstreamOutputs);
+      const newStatus = scoreCard.autoAction === "reject" ? "pending" : "awaiting_review";
+      await prisma.pipelineTask.update({
+        where: { id: readyTask.id },
+        data: {
+          status: newStatus,
+          outputArtifact: JSON.stringify({
+            summary: `Quality Score: ${scoreCard.overallScore}/10 — ${scoreCard.autoAction}`,
+            deliverable: scoreCard,
+            notes: scoreCard.recommendations.join(". "),
+            confidence: scoreCard.overallScore,
+            requiresReview: true,
+          }),
+          completedAt: undefined,
+        },
+      });
+      await prisma.pipeline.update({ where: { id: pipelineId }, data: { currentStage: readyTask.stage } });
+      return { taskId: readyTask.id, stage: readyTask.stage, status: newStatus, output: scoreCard };
+    } catch (err) {
+      await prisma.pipelineTask.update({ where: { id: readyTask.id }, data: { status: "pending" } });
+      throw err;
     }
   }
 
