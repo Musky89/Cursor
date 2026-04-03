@@ -94,7 +94,7 @@ export default function ReviewQueuePage() {
       ) : (
         <div className="space-y-4">
           {pipelines.map((p) => (
-            <div key={p.id} className="rounded-xl border border-zinc-800 bg-zinc-900/40 p-5">
+            <a href={`/app/pipelines/${p.id}`} key={p.id} className="block rounded-xl border border-zinc-800 bg-zinc-900/40 p-5 transition hover:border-zinc-600">
               <div className="flex items-start justify-between">
                 <div>
                   <h3 className="text-[15px] font-semibold">{p.title}</h3>
@@ -118,7 +118,7 @@ export default function ReviewQueuePage() {
                   </div>
                 ))}
               </div>
-            </div>
+            </a>
           ))}
         </div>
       )}

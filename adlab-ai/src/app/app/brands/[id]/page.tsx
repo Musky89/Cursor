@@ -26,6 +26,7 @@ export default function BrandHubPage() {
     { href: `/app/brands/${id}/strategy`, icon: "🎯", name: "Brand Strategy", description: "Define positioning, territories, and strategic direction", status: brand.strategy?.status === "locked" ? "Locked" : "Draft" },
     { href: `/app/brands/${id}/quick-create`, icon: "⚡", name: "Quick Create", description: "Generate an ad asset in under 60 seconds" },
     { href: `/app/brands/${id}/logo`, icon: "✏️", name: "Logo Studio", description: "Design and iterate on brand logos with AI" },
+    { href: `/app/brands/${id}/content`, icon: "📦", name: "Content Studio", description: "Carousels, blogs, emails, display ads, website copy, mood boards, naming, repurpose" },
     { href: `/app/brands/${id}/script`, icon: "🎬", name: "Script & Shoot", description: "Generate video production packages — scripts, shot lists, director notes" },
     { href: "/app", icon: "🎨", name: "Full Creative Pipeline", description: "Concepts, art direction, image generation, campaigns" },
     { href: "/app/campaigns", icon: "📅", name: "Campaigns", description: "Plan and schedule content" },

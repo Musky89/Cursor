@@ -163,11 +163,27 @@ export async function executeNextTask(pipelineId: string) {
     }
   }
 
+  // Inject Brand Bible context if available
+  let bibleContext = "";
+  if (pipeline.brandId) {
+    const bible = await prisma.brandBible.findUnique({ where: { brandId: pipeline.brandId } });
+    if (bible) {
+      const tov = bible.toneOfVoice ? `Tone of Voice: ${bible.toneOfVoice}` : "";
+      const msg = bible.messaging ? `Messaging: ${bible.messaging}` : "";
+      const vis = bible.visualIdentity ? `Visual Identity: ${bible.visualIdentity}` : "";
+      bibleContext = `\n\nBRAND BIBLE CONTEXT (follow these rules strictly):\n${tov}\n${msg}\n${vis}`;
+    }
+    const strategy = await prisma.brandStrategy.findUnique({ where: { brandId: pipeline.brandId } });
+    if (strategy?.lockedTerritory) {
+      bibleContext += `\nLOCKED STRATEGY: ${strategy.positioning ?? ""}. Territory: ${strategy.lockedTerritory}. Tone: ${strategy.toneOfVoice ?? ""}.`;
+    }
+  }
+
   const agentPrompts: Record<string, string> = {
-    strategist: `You are a senior brand strategist at a top agency. Analyze the brief and produce strategic output. Be specific, actionable, and grounded in market reality.`,
-    creative_director: `You are an award-winning creative director. Develop bold, distinctive creative directions that are strategically grounded. Think like the best campaigns in advertising history.`,
-    copywriter: `You are a world-class copywriter. Write compelling, on-brand copy that drives action. Every word earns its place.`,
-    designer: `You are a senior designer. Produce detailed visual specifications and art direction briefs that any production team could execute.`,
+    strategist: `You are a senior brand strategist at a top agency. Analyze the brief and produce strategic output. Be specific, actionable, and grounded in market reality.${bibleContext}`,
+    creative_director: `You are an award-winning creative director. Develop bold, distinctive creative directions that are strategically grounded. Think like the best campaigns in advertising history.${bibleContext}`,
+    copywriter: `You are a world-class copywriter. Write compelling, on-brand copy that drives action. Every word earns its place.${bibleContext}`,
+    designer: `You are a senior designer. Produce detailed visual specifications and art direction briefs that any production team could execute.${bibleContext}`,
     brand_guardian: `You are a brand consistency expert. Evaluate all work against brand guidelines. Score rigorously. Flag any inconsistencies.`,
   };
 
