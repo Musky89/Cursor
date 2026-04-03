@@ -87,7 +87,7 @@ export async function POST(request: Request, { params }: { params: Promise<{ id:
   if (!imageData && openai) {
     try {
       const r = await openai.images.generate({ model: "dall-e-3", prompt: logoPrompt, n: 1, size: "1024x1024", quality: "hd" });
-      const url = r.data[0]?.url;
+      const url = r.data?.[0]?.url;
       if (url) {
         const res = await fetch(url);
         imageData = Buffer.from(await res.arrayBuffer());
@@ -103,7 +103,7 @@ export async function POST(request: Request, { params }: { params: Promise<{ id:
       style,
       colorScheme,
       feedback,
-      imageData,
+      imageData: imageData ? new Uint8Array(imageData) : null,
       mimeType,
       version: previousVersion + 1,
     },

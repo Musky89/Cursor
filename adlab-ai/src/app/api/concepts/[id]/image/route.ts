@@ -90,7 +90,7 @@ async function generateWithDalle(openai: OpenAI, prompt: string, style: "vivid" 
     quality: "hd",
     style,
   });
-  return response.data[0]?.url ?? null;
+  return response.data?.[0]?.url ?? null;
 }
 
 function getActiveModel() {
@@ -198,7 +198,7 @@ export async function POST(
         data: {
           workspaceId: auth.workspace.id,
           conceptId: id,
-          imageData,
+          imageData: new Uint8Array(imageData),
           mimeType,
           prompt,
           model: modelUsed,

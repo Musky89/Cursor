@@ -124,7 +124,7 @@ export default function CampaignsPage() {
                   ))}
                 </div>
               )}
-            </div>
+            </a>
           ))}
         </div>
       )}
