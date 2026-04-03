@@ -40,6 +40,7 @@ model Workspace {
   name               String
   ownerId            String
   owner              User                @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  clients            Client[]
   products           Product[]
   audiences          Audience[]
   concepts           AdConcept[]
@@ -54,6 +55,119 @@ model Workspace {
   updatedAt          DateTime            @updatedAt
 
   @@index([ownerId])
+}
+
+// ─── Client / Brand Hierarchy ───────────────────────────────────
+
+model Client {
+  id          String    @id @default(cuid())
+  workspaceId String
+  workspace   Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  name        String
+  industry    String?
+  website     String?
+  logoUrl     String?
+  notes       String?
+  brands      Brand[]
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  @@index([workspaceId])
+}
+
+model Brand {
+  id          String           @id @default(cuid())
+  clientId    String
+  client      Client           @relation(fields: [clientId], references: [id], onDelete: Cascade)
+  name        String
+  description String?
+  website     String?
+  industry    String?
+  strategy    BrandStrategy?
+  briefs      CampaignBrief[]
+  quickAssets QuickAsset[]
+  logoDesigns LogoDesign[]
+  createdAt   DateTime         @default(now())
+  updatedAt   DateTime         @updatedAt
+
+  @@index([clientId])
+}
+
+// ─── Brand Strategy ─────────────────────────────────────────────
+
+model BrandStrategy {
+  id              String    @id @default(cuid())
+  brandId         String    @unique
+  brand           Brand     @relation(fields: [brandId], references: [id], onDelete: Cascade)
+  positioning     String?
+  targetAudience  String?
+  territories     String?   // JSON string of strategic territories
+  lockedTerritory String?   // The chosen strategic direction
+  brandValues     String?
+  toneOfVoice     String?
+  visualIdentity  String?
+  competitiveEdge String?
+  status          String    @default("draft") // draft | locked
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+}
+
+// ─── Campaign Briefs ────────────────────────────────────────────
+
+model CampaignBrief {
+  id          String   @id @default(cuid())
+  brandId     String
+  brand       Brand    @relation(fields: [brandId], references: [id], onDelete: Cascade)
+  name        String
+  objective   String?
+  audience    String?
+  keyMessage  String?
+  channels    String?
+  budget      String?
+  timeline    String?
+  deliverables String?
+  aiSuggestions String? // JSON — AI-generated suggestions per field
+  status      String   @default("draft")
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([brandId])
+}
+
+// ─── Quick Create Assets ────────────────────────────────────────
+
+model QuickAsset {
+  id        String   @id @default(cuid())
+  brandId   String
+  brand     Brand    @relation(fields: [brandId], references: [id], onDelete: Cascade)
+  prompt    String
+  platform  String   // instagram, tiktok, facebook, linkedin, twitter
+  format    String   // 1:1, 4:5, 9:16, 16:9
+  caption   String?
+  hashtags  String?
+  imageData Bytes?
+  mimeType  String?
+  createdAt DateTime @default(now())
+
+  @@index([brandId])
+}
+
+// ─── Logo Designs ───────────────────────────────────────────────
+
+model LogoDesign {
+  id          String   @id @default(cuid())
+  brandId     String
+  brand       Brand    @relation(fields: [brandId], references: [id], onDelete: Cascade)
+  prompt      String
+  style       String?  // minimal, bold, vintage, modern, playful
+  colorScheme String?
+  imageData   Bytes?
+  mimeType    String?
+  feedback    String?  // user's iteration notes
+  version     Int      @default(1)
+  createdAt   DateTime @default(now())
+
+  @@index([brandId])
 }
 
 model Product {
