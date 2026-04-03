@@ -22,9 +22,11 @@ export default function BrandHubPage() {
 
   const tools = [
     { href: `/app/brands/${id}/bible`, icon: "📖", name: "Brand Bible", description: "The living reference document every agent reads — visual identity, tone, messaging" },
+    { href: `/app/brands/${id}/memory`, icon: "🧠", name: "Creative Memory", description: "All generated work, approval patterns, and what's working for this brand" },
     { href: `/app/brands/${id}/strategy`, icon: "🎯", name: "Brand Strategy", description: "Define positioning, territories, and strategic direction", status: brand.strategy?.status === "locked" ? "Locked" : "Draft" },
     { href: `/app/brands/${id}/quick-create`, icon: "⚡", name: "Quick Create", description: "Generate an ad asset in under 60 seconds" },
     { href: `/app/brands/${id}/logo`, icon: "✏️", name: "Logo Studio", description: "Design and iterate on brand logos with AI" },
+    { href: `/app/brands/${id}/script`, icon: "🎬", name: "Script & Shoot", description: "Generate video production packages — scripts, shot lists, director notes" },
     { href: "/app", icon: "🎨", name: "Full Creative Pipeline", description: "Concepts, art direction, image generation, campaigns" },
     { href: "/app/campaigns", icon: "📅", name: "Campaigns", description: "Plan and schedule content" },
     { href: "/app/assets", icon: "📦", name: "Brand Assets", description: "Upload product photos, logos, references" },

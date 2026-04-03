@@ -21,14 +21,26 @@ const PIPELINE_STAGES = [
   { stage: "assembly", agentType: "designer", title: "Assembly & Export", dependsOn: ["quality_review"] },
 ] as const;
 
-export async function createPipeline(workspaceId: string, clientId: string | null, brandId: string | null, title: string, briefText: string) {
+export async function createPipeline(workspaceId: string, clientId: string | null, brandId: string | null, title: string, briefText: string, useSmartDecomp: boolean = true) {
+  const client = getClient();
+
+  let stages = PIPELINE_STAGES as readonly { stage: string; agentType: string; title: string; dependsOn: readonly string[] }[];
+
+  if (useSmartDecomp && client) {
+    try {
+      const decomposed = await decomposeBrief(client, briefText);
+      if (decomposed.length >= 2) stages = decomposed;
+    } catch { /* fall back to fixed stages */ }
+  }
+
+  const firstStage = stages[0]?.stage ?? "research";
   const pipeline = await prisma.pipeline.create({
-    data: { workspaceId, clientId, brandId, title, briefText, status: "active", currentStage: "research" },
+    data: { workspaceId, clientId, brandId, title, briefText, status: "active", currentStage: firstStage },
   });
 
   const taskMap: Record<string, string> = {};
 
-  for (const stage of PIPELINE_STAGES) {
+  for (const stage of stages) {
     const task = await prisma.pipelineTask.create({
       data: {
         pipelineId: pipeline.id,
@@ -36,7 +48,7 @@ export async function createPipeline(workspaceId: string, clientId: string | nul
         stage: stage.stage,
         title: stage.title,
         status: stage.dependsOn.length === 0 ? "pending" : "blocked",
-        dependencies: JSON.stringify(stage.dependsOn.map((d) => taskMap[d]).filter(Boolean)),
+        dependencies: JSON.stringify(stage.dependsOn.map((d: string) => taskMap[d]).filter(Boolean)),
         inputContext: JSON.stringify({ brief: briefText, stage: stage.stage }),
       },
     });
@@ -44,6 +56,41 @@ export async function createPipeline(workspaceId: string, clientId: string | nul
   }
 
   return pipeline;
+}
+
+async function decomposeBrief(client: OpenAI, briefText: string): Promise<{ stage: string; agentType: string; title: string; dependsOn: string[] }[]> {
+  const completion = await client.chat.completions.create({
+    model: process.env.OPENAI_MODEL ?? "gpt-4.1-mini",
+    temperature: 0.4,
+    response_format: { type: "json_object" },
+    messages: [
+      {
+        role: "system",
+        content: `You are a project manager decomposing a creative brief into a task pipeline. Analyze the brief and determine which stages are actually needed.
+
+Available agents: strategist, creative_director, copywriter, designer, brand_guardian
+Available stages: research, strategy, concepting, copy, art_direction, visual_production, quality_review, assembly, naming, identity_design, print_production, video_scripting
+
+Rules:
+- Every pipeline MUST end with quality_review then assembly
+- If the brief mentions strategy/positioning, include research + strategy
+- If it's just content creation (social posts, ads), skip research/strategy, start with concepting
+- If it mentions video, add video_scripting after concepting
+- If it mentions print/newspaper/OOH, add print_production after visual_production
+- If it mentions brand identity/naming, add naming + identity_design early
+- Each stage must specify its dependencies (which stages must complete before it can start)
+
+Return JSON: { "stages": [{ "stage": string, "agentType": string, "title": string, "dependsOn": string[] }] }`,
+      },
+      { role: "user", content: briefText },
+    ],
+  });
+
+  const content = completion.choices[0]?.message?.content;
+  if (!content) return [];
+
+  const parsed = JSON.parse(content);
+  return parsed.stages ?? [];
 }
 
 export async function executeNextTask(pipelineId: string) {
